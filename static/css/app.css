@@ -1,0 +1,115 @@
+:root {
+  --coral: #fd8c5a;
+  --rust: #9c381c;
+  --peach: #fdb18f;
+  --ember: #d9530d;
+  --apricot: #ffae7a;
+  --amber: #ffd495;
+  --lilac: #f9edff;
+  --blush: #ffe7ed;
+  --rose: #e6b1b5;
+  --dark: #0d0b0a;
+  --surface: #151210;
+  --card: #1c1714;
+  --border: rgba(253, 140, 90, 0.12);
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  background: var(--dark);
+  color: #f7f2ee;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0e0c0b; }
+::-webkit-scrollbar-thumb {
+  background: #6e2713;
+  border-radius: 9999px;
+  border: 2px solid #0e0c0b;
+}
+
+.text-gradient-orvelion {
+  background: linear-gradient(135deg, #ffe4b5 0%, #fca677 45%, #d45b20 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #ffffff 0%, #ffd495 55%, #efa76b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glass-card {
+  background: rgba(22, 18, 15, 0.65);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(253, 140, 90, 0.12);
+}
+
+.glass-nav {
+  background: rgba(13, 11, 10, 0.88);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(253, 140, 90, 0.1);
+}
+
+#site-header {
+  transition: all 0.3s ease;
+}
+#site-header.is-scrolled {
+  background: rgba(13, 11, 10, 0.88);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(253, 140, 90, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+[data-tab-target].is-active,
+[data-category].is-active {
+  background-image: linear-gradient(to right, #9c381c, #d9530d);
+  color: #fff;
+  border-color: transparent;
+}
+
+[data-cabinet].is-selected {
+  background-image: linear-gradient(to right, #1c1714, #000);
+  border-color: #fd8c5a;
+  transform: scale(1.02);
+  box-shadow: 0 10px 24px rgba(253, 140, 90, 0.2);
+}
+
+.icon {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.spin-slow {
+  animation: spin 12s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

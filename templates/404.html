@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Halaman tidak ditemukan | {{ site.name }}{% endblock %}
+{% block content %}
+<section class="min-h-[70vh] flex items-center justify-center px-4">
+  <div class="max-w-lg text-center space-y-4">
+    <p class="text-orvelion-amber font-mono text-sm">404</p>
+    <h1 class="text-3xl font-black text-white">Halaman tidak ditemukan</h1>
+    <p class="text-sm text-orvelion-peach/80">Tautan yang dibuka tidak tersedia di portal Orvélion.</p>
+    <a href="/" class="inline-flex px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider text-black bg-gradient-to-r from-orvelion-amber to-orvelion-coral">Kembali ke Beranda</a>
+  </div>
+</section>
+{% endblock %}
