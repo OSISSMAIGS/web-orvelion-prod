@@ -15,6 +15,7 @@ SITE = {
 
 NAV_LINKS = [
     {"name": "Beranda", "href": "/", "id": "home"},
+    {"name": "Nordelia", "href": "/nordelia", "id": "nordelia"},
     {"name": "Event", "href": "/event", "id": "event"},
     {"name": "Before Us", "href": "/before-us", "id": "before-us"},
     {"name": "Kontak", "href": "#footer", "id": "footer"},

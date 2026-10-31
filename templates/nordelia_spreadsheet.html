@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+{% block title %}Live Spreadsheet Pendaftaran | Nordelia 2026{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+
+  <!-- Header Banner -->
+  <div class="rounded-3xl p-6 sm:p-8 border backdrop-blur-xl relative overflow-hidden"
+       style="background: linear-gradient(135deg, rgba(255,183,197,0.15) 0%, rgba(255,229,180,0.12) 50%, rgba(174,198,207,0.15) 100%); border-color: rgba(255, 229, 180, 0.35);">
+    
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div class="space-y-3 max-w-2xl">
+        <div class="flex items-center gap-2">
+          <a href="/nordelia" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#FFE5B4] hover:underline">
+            &larr; Kembali ke Beranda Nordelia
+          </a>
+          <span class="text-white/40">•</span>
+          <span class="text-xs font-bold uppercase tracking-wider text-[#AEC6CF]">Real-Time Google Sheets</span>
+        </div>
+        
+        <h1 class="text-3xl sm:text-4xl font-black text-white">
+          Spreadsheet Pendaftaran <span class="bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] bg-clip-text text-transparent">Nordelia 2026</span>
+        </h1>
+        <p class="text-xs sm:text-sm text-stone-200">
+          Data pendaftaran lomba diklasifikasikan secara real-time berdasarkan 4 kategori utama (Akademik, Bahasa, Seni, dan Olahraga) serta tersinkronisasi langsung ke Google Spreadsheet.
+        </p>
+      </div>
+
+      <!-- Mascot & Direct Link -->
+      <div class="flex items-center gap-4">
+        <div class="hidden sm:block w-20 h-20 relative">
+          <img src="{{ url_for('static', filename='images/gumball.svg') }}" alt="Gumball" class="w-full h-full object-contain filter drop-shadow-md" />
+        </div>
+        <div class="space-y-2">
+          <a href="{{ spreadsheet_url }}" target="_blank" rel="noopener noreferrer"
+             class="px-5 py-3 rounded-2xl font-black text-xs uppercase tracking-wider text-black bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] hover:brightness-110 shadow-lg flex items-center gap-2 transition-transform hover:scale-105">
+            <svg class="w-4 h-4 text-stone-900"><use href="#i-external"></use></svg>
+            <span>Buka Google Spreadsheet</span>
+          </a>
+          <a href="/api/nordelia/export.csv?category={{ selected_category }}"
+             class="w-full px-4 py-2.5 rounded-xl font-bold text-xs text-white bg-black/60 border border-white/20 hover:bg-white/10 flex items-center justify-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-[#FFE5B4]"><use href="#i-download"></use></svg>
+            <span>Ekspor CSV</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Stat Counters -->
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mt-6 pt-6 border-t border-white/10 text-center font-mono">
+      <div class="p-3 rounded-2xl bg-black/40 border border-white/10">
+        <div class="text-xl sm:text-2xl font-black text-white">{{ summary.counts.total }}</div>
+        <div class="text-[10px] uppercase tracking-wider text-stone-400 font-sans">Total Peserta</div>
+      </div>
+      <div class="p-3 rounded-2xl bg-[#AEC6CF]/10 border border-[#AEC6CF]/30">
+        <div class="text-xl sm:text-2xl font-black text-[#AEC6CF]">{{ summary.counts.akademik }}</div>
+        <div class="text-[10px] uppercase tracking-wider text-stone-300 font-sans">Akademik</div>
+      </div>
+      <div class="p-3 rounded-2xl bg-[#FFB7C5]/10 border border-[#FFB7C5]/30">
+        <div class="text-xl sm:text-2xl font-black text-[#FFB7C5]">{{ summary.counts.bahasa }}</div>
+        <div class="text-[10px] uppercase tracking-wider text-stone-300 font-sans">Bahasa</div>
+      </div>
+      <div class="p-3 rounded-2xl bg-[#FFE5B4]/10 border border-[#FFE5B4]/30">
+        <div class="text-xl sm:text-2xl font-black text-[#FFE5B4]">{{ summary.counts.seni }}</div>
+        <div class="text-[10px] uppercase tracking-wider text-stone-300 font-sans">Seni</div>
+      </div>
+      <div class="p-3 rounded-2xl bg-[#FFC0CB]/10 border border-[#FFC0CB]/30">
+        <div class="text-xl sm:text-2xl font-black text-[#FFC0CB]">{{ summary.counts.olahraga }}</div>
+        <div class="text-[10px] uppercase tracking-wider text-stone-300 font-sans">Olahraga</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLASSIFICATION TABS & CONTROLS -->
+  <div class="p-4 rounded-2xl bg-[#161210] border border-white/10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+    <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
+      <a href="/nordelia/spreadsheet?category=semua"
+         class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'semua' %}bg-gradient-to-r from-[#FFB7C5] to-[#FFE5B4] text-black{% else %}bg-stone-900 text-stone-300 hover:text-white border border-white/10{% endif %}">
+        Master (Semua)
+      </a>
+      <a href="/nordelia/spreadsheet?category=akademik"
+         class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'akademik' %}bg-[#AEC6CF] text-black{% else %}bg-stone-900 text-[#AEC6CF] hover:text-white border border-[#AEC6CF]/30{% endif %}">
+        Akademik
+      </a>
+      <a href="/nordelia/spreadsheet?category=bahasa"
+         class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'bahasa' %}bg-[#FFB7C5] text-black{% else %}bg-stone-900 text-[#FFB7C5] hover:text-white border border-[#FFB7C5]/30{% endif %}">
+        Bahasa
+      </a>
+      <a href="/nordelia/spreadsheet?category=seni"
+         class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'seni' %}bg-[#FFE5B4] text-black{% else %}bg-stone-900 text-[#FFE5B4] hover:text-white border border-[#FFE5B4]/30{% endif %}">
+        Seni
+      </a>
+      <a href="/nordelia/spreadsheet?category=olahraga"
+         class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'olahraga' %}bg-[#FFC0CB] text-black{% else %}bg-stone-900 text-[#FFC0CB] hover:text-white border border-[#FFC0CB]/30{% endif %}">
+        Olahraga
+      </a>
+      <a href="/nordelia/spreadsheet?category=format"
+         class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'format' %}bg-white text-black{% else %}bg-stone-900 text-stone-300 hover:text-white border border-white/10{% endif %}">
+        Sheet 2: Format Pendaftaran
+      </a>
+    </div>
+
+    <div class="relative min-w-[240px]">
+      <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400"><use href="#i-search"></use></svg>
+      <input id="table-search" type="text" placeholder="Filter nama peserta, kelas, atau lomba..."
+             class="w-full pl-9 pr-4 py-2 text-xs rounded-xl bg-black border border-white/20 text-white placeholder-stone-500 focus:outline-none focus:border-[#FFE5B4]" />
+    </div>
+  </div>
+
+  <!-- CONTENT VIEW -->
+  {% if selected_category == 'format' %}
+    <!-- SHEET 2 FORMAT VIEW -->
+    <div class="rounded-3xl p-6 bg-[#161210] border border-[#FFE5B4]/30 space-y-6">
+      <div class="space-y-1">
+        <h3 class="text-xl font-black text-[#FFE5B4]">Sheet 2: Format Resmi Pendaftaran Lomba</h3>
+        <p class="text-xs text-stone-300">Struktur pengisian formulir sesuai ketetapan koordinator lomba Nordelia 2026.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {% for fmt in sheet2_formats %}
+          <div class="p-5 rounded-2xl bg-black/60 border border-white/10 space-y-3">
+            <h4 class="text-xs font-black uppercase text-[#FFB7C5] tracking-wider">{{ fmt.kategori_lomba }}</h4>
+            <div class="p-3 rounded-xl bg-stone-900 font-mono text-xs text-stone-200 space-y-1 border-l-2 border-[#FFE5B4]">
+              {% for line in fmt.format_isi %}
+                <div>{{ line }}</div>
+              {% endfor %}
+            </div>
+            <p class="text-[11px] text-stone-400">{{ fmt.catatan }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  {% else %}
+    <!-- LIVE SPREADSHEET TABLE -->
+    <div class="rounded-3xl border border-white/10 bg-[#161210] overflow-hidden shadow-2xl">
+      <div class="overflow-x-auto max-h-[600px]">
+        <table class="w-full text-left text-xs text-stone-200">
+          <thead class="text-[11px] uppercase tracking-wider text-stone-300 bg-stone-900 border-b border-white/10 sticky top-0 backdrop-blur-md">
+            <tr>
+              <th class="py-3.5 px-4 font-black">ID</th>
+              <th class="py-3.5 px-4 font-black">Waktu Masuk</th>
+              <th class="py-3.5 px-4 font-black">Kategori</th>
+              <th class="py-3.5 px-4 font-black">Cabang Lomba</th>
+              <th class="py-3.5 px-4 font-black">Nama Peserta / Tim</th>
+              <th class="py-3.5 px-4 font-black">Kelas</th>
+              <th class="py-3.5 px-4 font-black">WhatsApp</th>
+              <th class="py-3.5 px-4 font-black">Detail / Format Khusus</th>
+              <th class="py-3.5 px-4 font-black">Status Sync</th>
+            </tr>
+          </thead>
+          <tbody id="spreadsheet-full-tbody" class="divide-y divide-white/5 font-mono">
+            {% if registrations %}
+              {% for r in registrations %}
+                <tr class="hover:bg-white/5 transition-colors" data-table-row>
+                  <td class="py-3 px-4 text-stone-500 font-mono">#{{ r.id }}</td>
+                  <td class="py-3 px-4 text-stone-400 whitespace-nowrap">{{ r.created_at }}</td>
+                  <td class="py-3 px-4">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase
+                                 {% if r.category_id == 'akademik' %}bg-[#AEC6CF]/20 text-[#AEC6CF]
+                                 {% elif r.category_id == 'bahasa' %}bg-[#FFB7C5]/20 text-[#FFB7C5]
+                                 {% elif r.category_id == 'seni' %}bg-[#FFE5B4]/20 text-[#FFE5B4]
+                                 {% else %}bg-[#FFC0CB]/20 text-[#FFC0CB]{% endif %}">
+                      {{ r.category_id }}
+                    </span>
+                  </td>
+                  <td class="py-3 px-4 font-sans font-bold text-white whitespace-nowrap">{{ r.cabang_name }}</td>
+                  <td class="py-3 px-4 font-sans text-stone-100 font-semibold">{{ r.participant_name }}</td>
+                  <td class="py-3 px-4 whitespace-nowrap">{{ r.kelas }}</td>
+                  <td class="py-3 px-4 whitespace-nowrap">{{ r.whatsapp }}</td>
+                  <td class="py-3 px-4 font-sans text-[11px] text-stone-300 max-w-xs truncate">
+                    {% if r.details %}
+                      {{ r.details | tojson }}
+                    {% else %}
+                      -
+                    {% endif %}
+                  </td>
+                  <td class="py-3 px-4 whitespace-nowrap font-sans">
+                    {% if r.synced_to_sheets %}
+                      <span class="inline-flex items-center gap-1 text-[11px] text-emerald-400 font-bold">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Synced Google Sheet
+                      </span>
+                    {% else %}
+                      <span class="inline-flex items-center gap-1 text-[11px] text-amber-300">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Tersimpan Real-Time
+                      </span>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td colspan="9" class="py-16 text-center text-stone-400 font-sans">
+                  Belum ada data pendaftaran di kategori ini.
+                </td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="p-4 border-t border-white/10 bg-black/40 flex items-center justify-between text-xs text-stone-400">
+        <span>Menampilkan {{ registrations|length }} entri pendaftaran.</span>
+        <a href="/nordelia#section-cabang" class="text-[#FFE5B4] font-bold hover:underline">
+          + Tambah Pendaftaran Baru
+        </a>
+      </div>
+    </div>
+  {% endif %}
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const searchInput = document.getElementById("table-search");
+  const rows = Array.from(document.querySelectorAll("[data-table-row]"));
+
+  searchInput?.addEventListener("input", function () {
+    const q = (this.value || "").toLowerCase().trim();
+    rows.forEach(function (row) {
+      const text = row.textContent.toLowerCase();
+      row.classList.toggle("hidden", q && !text.includes(q));
+    });
+  });
+});
+</script>
+{% endblock %}

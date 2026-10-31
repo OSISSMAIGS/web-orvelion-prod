@@ -53,7 +53,35 @@
   </div>
 </section>
 
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
+<!-- NORDELIA 2026 SPECIAL BANNER -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+  <div class="relative rounded-3xl p-6 sm:p-7 border overflow-hidden backdrop-blur-md"
+       style="background: linear-gradient(135deg, rgba(255,183,197,0.18) 0%, rgba(255,229,180,0.14) 50%, rgba(174,198,207,0.18) 100%); border-color: rgba(255, 229, 180, 0.4);">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-4">
+        <div class="w-16 h-16 sm:w-20 sm:h-20 shrink-0">
+          <img src="{{ url_for('static', filename='images/gumball.svg') }}" alt="Gumball Mascot" class="w-full h-full object-contain filter drop-shadow-md" />
+        </div>
+        <div class="space-y-1">
+          <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-black/40 text-[#FFE5B4] border border-[#FFE5B4]/30">
+            Festival Baru • Bulan Bahasa 2026
+          </div>
+          <h3 class="text-xl sm:text-2xl font-black text-white">NORDELIA 2026: 4 Bidang Talenta & 49+ Cabang Lomba</h3>
+          <p class="text-xs text-stone-200 max-w-2xl">
+            Nike (kemenangan), sports, academic, dan arts. Terhubung langsung ke spreadsheet real-time dengan klasifikasi otomatis.
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 shrink-0 w-full md:w-auto">
+        <a href="/nordelia" class="w-full md:w-auto px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider text-black bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] hover:brightness-110 shadow-lg text-center transition-transform hover:scale-105">
+          <strong>Buka Halaman Nordelia</strong> &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
   <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
     <div class="flex items-center gap-1.5 overflow-x-auto pb-2">
       {% for cat in categories %}
@@ -90,7 +118,11 @@
         </div>
         <div class="pt-5 mt-4 border-t border-orvelion-coral/15 flex items-center justify-between">
           <span class="text-[11px] text-orvelion-peach/60 truncate max-w-[150px]">{{ ev.target }}</span>
-          <button type="button" data-open-event="{{ ev.id }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-orvelion-amber">Detail Acara <svg class="w-4 h-4 text-orvelion-coral"><use href="#i-chevron"></use></svg></button>
+          {% if ev.custom_url %}
+            <a href="{{ ev.custom_url }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#FFE5B4]">Buka Nordelia <svg class="w-4 h-4 text-[#FFB7C5]"><use href="#i-chevron"></use></svg></a>
+          {% else %}
+            <button type="button" data-open-event="{{ ev.id }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-orvelion-amber">Detail Acara <svg class="w-4 h-4 text-orvelion-coral"><use href="#i-chevron"></use></svg></button>
+          {% endif %}
         </div>
       </article>
     {% endfor %}
@@ -108,7 +140,7 @@
         <span class="text-xs font-mono font-bold text-orvelion-amber">{{ item.label }}</span>
         <h4 class="font-bold text-sm text-white mt-1 mb-2">{{ item.title }}</h4>
         <ul class="text-xs text-orvelion-peach/80 space-y-1">
-          {% for line in item.items %}<li>• {{ line }}</li>{% endfor %}
+          {% for line in item['items'] %}<li>• {{ line }}</li>{% endfor %}
         </ul>
       </div>
     {% endfor %}
@@ -120,29 +152,24 @@
     <button type="button" data-close-modal class="absolute top-5 right-5 p-2 rounded-full bg-black/40 text-orvelion-peach/70" aria-label="Tutup">
       <svg class="w-5 h-5"><use href="#i-x"></use></svg>
     </button>
-    <div class="space-y-5">
-      <div id="modal-kicker" class="inline-flex px-3 py-1 rounded-full text-xs font-semibold bg-orvelion-rust/40 text-orvelion-amber border border-orvelion-coral/30"></div>
+    <div class="space-y-4">
+      <div id="modal-kicker" class="text-xs font-bold uppercase tracking-wider text-orvelion-coral"></div>
       <h3 id="modal-title" class="text-2xl font-black text-white"></h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-2xl bg-black/40 border border-orvelion-coral/20 text-xs">
-        <div id="modal-date"></div>
-        <div id="modal-time"></div>
-        <div id="modal-location" class="sm:col-span-2"></div>
+      <p id="modal-desc" class="text-xs sm:text-sm text-orvelion-peach/80 leading-relaxed"></p>
+      <div class="p-4 rounded-xl bg-black/40 border border-orvelion-coral/20 text-xs space-y-2">
+        <div class="flex justify-between"><span class="text-orvelion-peach/60">Waktu:</span><span id="modal-date" class="font-bold text-white"></span></div>
+        <div class="flex justify-between"><span class="text-orvelion-peach/60">Jam:</span><span id="modal-time" class="font-bold text-white"></span></div>
+        <div class="flex justify-between"><span class="text-orvelion-peach/60">Lokasi:</span><span id="modal-location" class="font-bold text-white"></span></div>
       </div>
-      <div>
-        <h4 class="text-xs font-bold uppercase tracking-wider text-orvelion-amber">Deskripsi Lengkap</h4>
-        <p id="modal-desc" class="text-sm text-orvelion-peach/85 leading-relaxed mt-2"></p>
+      <div class="p-3 rounded-xl bg-orvelion-ember/20 border border-orvelion-ember/30 text-xs text-orvelion-amber">
+        <strong class="font-bold">Highlight:</strong> <span id="modal-highlight"></span>
       </div>
-      <div class="p-3.5 rounded-xl bg-orvelion-coral/10 border border-orvelion-coral/30">
-        <p class="text-xs font-semibold text-orvelion-amber">Sorotan Utama:</p>
-        <p id="modal-highlight" class="text-xs text-orvelion-peach/90 mt-0.5"></p>
+      <div id="modal-actions" class="pt-2 flex items-center gap-3">
+        <button type="button" id="modal-register" class="flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-black bg-gradient-to-r from-orvelion-amber to-orvelion-coral">Daftar Sekarang</button>
+        <button type="button" data-close-modal class="px-5 py-3 rounded-xl text-xs font-semibold text-orvelion-peach/70 bg-orvelion-card border border-orvelion-coral/20">Tutup</button>
       </div>
-      <div id="modal-success" class="hidden p-4 rounded-2xl bg-emerald-950/60 border border-emerald-500/40 text-center">
-        <p class="text-sm font-bold text-emerald-300">Konfirmasi Pendaftaran Terkirim!</p>
-        <p class="text-xs text-emerald-200/80 mt-1">Panitia OSIS Orvelion akan menghubungi kontak yang didaftarkan dalam waktu 1x24 jam.</p>
-      </div>
-      <div id="modal-actions" class="pt-2 flex flex-col sm:flex-row gap-3">
-        <button id="modal-register" type="button" class="flex-1 py-3 rounded-full font-bold text-xs uppercase tracking-wider text-black bg-gradient-to-r from-orvelion-coral to-orvelion-amber">Daftar Sekarang (Simulasi)</button>
-        <button type="button" data-close-modal class="px-6 py-3 rounded-full font-semibold text-xs text-orvelion-peach/80 bg-black/40 border border-orvelion-coral/25">Tutup</button>
+      <div id="modal-success" class="hidden p-4 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 text-xs text-center font-bold">
+        Pendaftaran berhasil dicatat! Tim panitia OSIS akan segera menghubungi Anda.
       </div>
     </div>
   </div>
