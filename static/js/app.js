@@ -139,7 +139,7 @@ function initCabinets() {
     list.innerHTML = cab.achievements
       .map(
         (item) =>
-          `<div class="p-3 rounded-xl bg-[#1c1714]/80 border border-[rgba(253,140,90,0.15)] flex items-start gap-2.5 text-xs text-[#fdb18f]/85"><span class="w-1.5 h-1.5 rounded-full bg-[#FD8C5A] mt-1.5 shrink-0"></span><span>${item}</span></div>`
+          `<div class="relative"><div class="absolute -left-4 top-1.5 w-3 h-3 rounded-full bg-[#FD8C5A] border-2 border-[#161210]"></div><div class="p-3 rounded-xl bg-[#1c1714]/80 border border-[rgba(253,140,90,0.15)] text-xs text-[#fdb18f]/85">${item}</div></div>`
       )
       .join("");
     $$("[data-cabinet]").forEach((btn) => {

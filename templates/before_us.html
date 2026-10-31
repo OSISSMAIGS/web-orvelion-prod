@@ -7,13 +7,13 @@
     <div class="space-y-4 max-w-3xl">
       <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orvelion-card border border-orvelion-coral/30 text-xs font-semibold text-orvelion-amber">Hall of Legacy • Jejak Kabinet OSIS SMA IGS</div>
       <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight">Before Us: <span class="text-gradient-orvelion">Menghargai Jejak, Mengobarkan Langkah</span></h1>
-      <p class="text-sm sm:text-base text-orvelion-peach/85">Kenali tiga generasi pemimpin sebelum Orvelion: <strong class="text-white">Ardraxis</strong>, <strong class="text-white">Crecenden</strong>, dan <strong class="text-white">Asteration</strong>.</p>
+      <p class="text-sm sm:text-base text-orvelion-peach/85">Kenali empat generasi pemimpin sebelum Orvelion: <strong class="text-white">Credence</strong>, <strong class="text-white">Asteration</strong>, <strong class="text-white">Valiance</strong>, dan <strong class="text-white">Ardraxis</strong>.</p>
     </div>
   </div>
 </section>
 
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6">
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
     {% for cab in cabinets %}
       <button type="button" data-cabinet="{{ cab.id }}" class="{% if loop.first %}is-selected{% endif %} text-left p-4 sm:p-5 rounded-2xl border border-orvelion-coral/20 glass-card flex items-center gap-4">
         <div class="w-14 h-14 rounded-xl bg-black/60 border border-orvelion-coral/30 p-1.5 shrink-0 overflow-hidden">
@@ -51,13 +51,16 @@
           <div class="text-xs font-bold uppercase tracking-wider text-orvelion-amber mb-2">Makna Filosofi Lambang</div>
           <p id="cab-philosophy" class="text-xs sm:text-sm text-orvelion-peach/90 leading-relaxed">{{ cabinets[0].philosophy }}</p>
         </div>
-        <div class="space-y-3">
+        <div class="space-y-4">
           <h4 class="text-xs font-bold uppercase tracking-wider text-orvelion-amber">Karya & Tonggak Prestasi Utama</h4>
-          <div id="cab-achievements" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div id="cab-achievements" class="relative pl-6 space-y-4">
+            <div class="absolute left-2 top-2 bottom-2 w-0.5 bg-gradient-to-b from-orvelion-coral/50 via-orvelion-amber/30 to-transparent"></div>
             {% for ach in cabinets[0].achievements %}
-              <div class="p-3 rounded-xl bg-orvelion-card/80 border border-orvelion-coral/15 flex items-start gap-2.5 text-xs text-orvelion-peach/85">
-                <span class="w-1.5 h-1.5 rounded-full bg-orvelion-coral mt-1.5 shrink-0"></span>
-                <span>{{ ach }}</span>
+              <div class="relative">
+                <div class="absolute -left-4 top-1.5 w-3 h-3 rounded-full bg-orvelion-coral border-2 border-[#161210]"></div>
+                <div class="p-3 rounded-xl bg-orvelion-card/80 border border-orvelion-coral/15 text-xs text-orvelion-peach/85">
+                  {{ ach }}
+                </div>
               </div>
             {% endfor %}
           </div>
@@ -76,7 +79,7 @@
     <span class="text-xs font-bold tracking-widest uppercase text-orvelion-coral">Estafet Kepemimpinan</span>
     <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-2">Garis Waktu Regenerasi OSIS SMA IGS</h2>
   </div>
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
     {% for step in timeline %}
       <div class="glass-card rounded-2xl p-5 flex flex-col justify-between {% if step.current %}border-2 border-orvelion-coral bg-gradient-to-b from-orvelion-card to-orvelion-surface{% endif %}">
         <div>

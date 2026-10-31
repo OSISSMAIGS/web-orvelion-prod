@@ -121,43 +121,6 @@
   </div>
 </section>
 
-<section class="py-16 bg-[#130f0d] border-y border-orvelion-coral/15">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-3xl mx-auto mb-8">
-      <span class="text-xs font-bold tracking-widest uppercase text-orvelion-amber">Arah Langkah {{ site.period }}</span>
-      <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-2">Visi & Misi Kabinet Orvélion</h2>
-    </div>
-    <div class="flex justify-center mb-8">
-      <div class="inline-flex p-1 rounded-full bg-[#181310] border border-white/10">
-        <button type="button" data-tab-target="visi" class="is-active px-5 py-2 rounded-full text-xs sm:text-sm font-semibold text-orvelion-peach/60">Visi Orvélion</button>
-        <button type="button" data-tab-target="misi" class="px-5 py-2 rounded-full text-xs sm:text-sm font-semibold text-orvelion-peach/60">Misi Strategis</button>
-      </div>
-    </div>
-    <div class="glass-card rounded-2xl p-7 sm:p-9">
-      <div data-tab-panel="visi" class="space-y-5 text-center max-w-3xl mx-auto">
-        <h3 class="text-2xl font-bold text-gradient-orvelion">Visi Besar Orvélion {{ site.period }}</h3>
-        <blockquote class="text-base sm:text-lg font-medium italic border-x-2 border-orvelion-coral/30 px-6 py-2">
-          “Menjadikan OSIS SMA Ignatius Global School sebagai wadah penggerak yang progresif, inklusif, dan berintegritas tinggi—membangkitkan keberanian serta potensi tiap insan pelajar untuk berprestasi di tingkat nasional maupun internasional.”
-        </blockquote>
-      </div>
-      <div data-tab-panel="misi" class="hidden space-y-4 max-w-4xl mx-auto">
-        <h3 class="text-xl font-bold text-center text-gradient-orvelion mb-5">4 Misi Inti Pelaksanaan</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {% for mission in missions %}
-            <div class="p-4 rounded-xl bg-[#171310] border border-white/5 flex gap-3.5 items-start">
-              <svg class="w-5 h-5 text-orvelion-amber shrink-0 mt-0.5"><use href="#i-check"></use></svg>
-              <div>
-                <h4 class="font-bold text-sm text-white mb-1">{{ mission.title }}</h4>
-                <p class="text-xs text-orvelion-peach/75">{{ mission.desc }}</p>
-              </div>
-            </div>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <section class="py-16">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
@@ -191,11 +154,11 @@
         <div class="lg:col-span-7 space-y-3.5">
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orvelion-rust/20 text-orvelion-amber text-xs font-semibold border border-orvelion-coral/20">Jejak Warisan Kabinet Pendahulu</div>
           <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Menghormati Jejak “Before Us”</h2>
-          <p class="text-xs sm:text-sm text-orvelion-peach/80">Perjalanan Orvélion berdiri tegak di atas dedikasi kabinet terdahulu: <strong class="text-white">Ardraxis</strong>, <strong class="text-white">Crecenden</strong>, dan <strong class="text-white">Asteration</strong>.</p>
+          <p class="text-xs sm:text-sm text-orvelion-peach/80">Perjalanan Orvélion berdiri tegak di atas dedikasi kabinet terdahulu: <strong class="text-white">Credence</strong>, <strong class="text-white">Asteration</strong>, <strong class="text-white">Valiance</strong>, dan <strong class="text-white">Ardraxis</strong>.</p>
           <a href="/before-us" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider text-black bg-gradient-to-r from-orvelion-amber via-orvelion-coral to-orvelion-apricot">Masuk ke Halaman Before Us</a>
         </div>
         <div class="lg:col-span-5 flex items-center justify-center gap-4">
-          {% for name, file in [("Asteration","asteration.png"),("Crecenden","crecenden.png"),("Ardraxis","ardraxis.png")] %}
+          {% for name, file in [("Credence","credence.png"),("Asteration","asteration.png"),("Valiance","valiance.png"),("Ardraxis","ardraxis.png")] %}
             <div class="flex flex-col items-center">
               <div class="w-20 h-20 rounded-xl bg-[#120e0c] border border-white/5 p-2 overflow-hidden">
                 <img src="{{ url_for('static', filename='images/' + file) }}" alt="Logo {{ name }}" class="w-full h-full object-contain" />
