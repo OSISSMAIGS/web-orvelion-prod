@@ -12,3 +12,4 @@ node_modules/
 .next/
 _extracted_src/
 *.pyc
+*.backup

@@ -15,7 +15,6 @@ SITE = {
 
 NAV_LINKS = [
     {"name": "Beranda", "href": "/", "id": "home"},
-    {"name": "Nordelia", "href": "/nordelia", "id": "nordelia"},
     {"name": "Event", "href": "/event", "id": "event"},
     {"name": "Before Us", "href": "/before-us", "id": "before-us"},
     {"name": "Kontak", "href": "#footer", "id": "footer"},
@@ -87,16 +86,18 @@ MISSIONS = [
 
 EVENTS = [
     {
-        "id": "igs-cup",
-        "title": "IGS CUP 2026/2027: Rise of the Champions",
+        "id": "nordelia",
+        "title": "NORDELIA 2026: Festival Kompetisi IGS",
         "category": "Unggulan",
-        "date": "14 - 21 November 2026",
+        "date": "13 - 14 Oktober 2026",
         "time": "08:00 - 17:00 WIB",
-        "location": "Sport Complex & Hall SMA IGS",
+        "location": "SMA Ignatius Global School",
         "status": "Pendaftaran Dibuka",
-        "description": "Kompetisi olahraga dan e-sports tahunan bergengsi antar pelajar se-Sumatera Selatan. Mempertandingkan basket, futsal, bulu tangkis, dan Mobile Legends.",
-        "highlight": "Total Hadiah Puluhan Juta Rupiah & Piala Bergilir IGS",
-        "target": "Siswa SMA/SMK se-Sumatera Selatan",
+        "description": "Festival kompetisi akademik dan non-akademik terbesar SMA IGS mencakup Literasi, Olimpiade, Bahasa, Seni, dan Olahraga.",
+        "highlight": "43 Cabang Lomba - Literasi, Olimpiade, Bahasa Asing, FLS3N, O2SN",
+        "target": "Seluruh Siswa SMA IGS",
+        "isNordelia": True,
+        "custom_url": "/nordelia",
     },
     {
         "id": "bulan-bahasa",

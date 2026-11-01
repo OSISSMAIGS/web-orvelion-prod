@@ -17,23 +17,15 @@
              class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all
                     {% if active_page == link.id %}bg-gradient-to-r from-orvelion-rust to-orvelion-ember text-white shadow-md{% else %}text-orvelion-lilac/80 hover:text-white hover:bg-white/5{% endif %}">
             {% if link.id == 'home' %}<svg class="w-4 h-4"><use href="#i-flame"></use></svg>
-            {% elif link.id == 'nordelia' %}<svg class="w-4 h-4 text-[#FFB7C5]"><use href="#i-trophy"></use></svg>
             {% elif link.id == 'event' %}<svg class="w-4 h-4"><use href="#i-calendar"></use></svg>
             {% elif link.id == 'before-us' %}<svg class="w-4 h-4"><use href="#i-history"></use></svg>
             {% else %}<svg class="w-4 h-4"><use href="#i-message"></use></svg>{% endif %}
             <span>{{ link.name }}</span>
-            {% if link.id == 'nordelia' %}
-              <span class="text-[9px] px-1.5 py-0.2 rounded-full bg-[#FFB7C5]/30 text-[#FFE5B4] font-bold uppercase tracking-wider">New</span>
-            {% endif %}
           </a>
         {% endfor %}
       </nav>
 
       <div class="hidden md:flex items-center gap-2.5">
-        <a href="/nordelia" class="px-4 py-2 text-xs font-bold uppercase tracking-wider text-black bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] rounded-full hover:brightness-105 shadow-md flex items-center gap-1.5 transition-transform hover:scale-105">
-          <svg class="w-3.5 h-3.5 text-stone-900"><use href="#i-trophy"></use></svg>
-          <span>Festival Nordelia</span>
-        </a>
         <a href="/event" class="px-3.5 py-2 text-xs font-semibold uppercase tracking-wider text-white bg-orvelion-card border border-orvelion-coral/30 rounded-full hover:bg-white/10 shadow-md">
           Agenda
         </a>
@@ -52,15 +44,11 @@
            class="flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium
                   {% if active_page == link.id %}bg-gradient-to-r from-orvelion-rust/80 to-orvelion-ember/80 text-white border border-orvelion-coral/40{% else %}text-orvelion-lilac hover:bg-white/5{% endif %}">
           <div class="flex items-center gap-2.5">
-            {% if link.id == 'nordelia' %}<svg class="w-5 h-5 text-[#FFB7C5]"><use href="#i-trophy"></use></svg>
-            {% elif link.id == 'home' %}<svg class="w-5 h-5"><use href="#i-flame"></use></svg>
+            {% if link.id == 'home' %}<svg class="w-5 h-5"><use href="#i-flame"></use></svg>
             {% elif link.id == 'event' %}<svg class="w-5 h-5"><use href="#i-calendar"></use></svg>
             {% elif link.id == 'before-us' %}<svg class="w-5 h-5"><use href="#i-history"></use></svg>
             {% else %}<svg class="w-5 h-5"><use href="#i-message"></use></svg>{% endif %}
             <span>{{ link.name }}</span>
-            {% if link.id == 'nordelia' %}
-              <span class="text-[10px] px-2 py-0.5 rounded-full bg-[#FFB7C5]/30 text-[#FFE5B4] font-bold">Baru</span>
-            {% endif %}
           </div>
           <svg class="w-4 h-4 text-orvelion-peach/50"><use href="#i-chevron"></use></svg>
         </a>

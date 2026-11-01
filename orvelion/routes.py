@@ -1,5 +1,6 @@
 import time
 import json
+import os
 from flask import Blueprint, Response, jsonify, redirect, render_template, request, url_for
 
 from orvelion.content import (
@@ -28,6 +29,14 @@ from orvelion.sheets_service import (
     get_config,
     storage,
 )
+
+# Load Nordelia events JSON
+def load_nordelia_events():
+    try:
+        with open(os.path.join(os.path.dirname(__file__), '..', 'nordelia_events.json'), 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except:
+        return {"categories": []}
 
 bp = Blueprint("pages", __name__)
 
@@ -59,6 +68,7 @@ def home():
 
 @bp.get("/event")
 def event():
+    nordelia_data = load_nordelia_events()
     return render_template(
         "event.html",
         **_ctx(
@@ -66,34 +76,11 @@ def event():
             events=EVENTS,
             categories=EVENT_CATEGORIES,
             roadmap=ROADMAP,
+            nordelia_events=nordelia_data,
         ),
     )
 
 
-@bp.get("/nordelia")
-@bp.get("/event/nordelia")
-def nordelia():
-    summary = storage.get_summary_stats()
-    all_regs = storage.get_all_registrations()
-    spreadsheet_url = get_config(
-        "NORDELIA_SPREADSHEET_URL",
-        "https://docs.google.com/spreadsheets/d/" + get_config("NORDELIA_SPREADSHEET_ID", "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms") + "/edit"
-    )
-    return render_template(
-        "nordelia.html",
-        **_ctx(
-            active_page="nordelia",
-            nordelia=NORDELIA_INFO,
-            categories=CATEGORIES,
-            cabang_lomba=CABANG_LOMBA,
-            sheet2_formats=SHEET2_FORMAT_SPEC,
-            format_registrasi=FORMAT_REGISTRASI,
-            summary=summary,
-            registrations=all_regs[:10],
-            spreadsheet_url=spreadsheet_url,
-            spreadsheet_id=get_config("NORDELIA_SPREADSHEET_ID"),
-        ),
-    )
 
 
 @bp.get("/nordelia/spreadsheet")

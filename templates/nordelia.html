@@ -144,47 +144,44 @@
     </div>
   </section>
 
-  <!-- 4 MAIN CATEGORIES SELECTOR (BUTTON KLIK -> MASUK KE CHILDREN CABANG LOMBA) -->
+  <!-- 9 MAIN CATEGORIES SELECTOR (BUTTON KLIK -> MASUK KE CHILDREN CABANG LOMBA) -->
   <section id="section-categories" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8 scroll-mt-24">
     <div class="text-center max-w-3xl mx-auto mb-10 space-y-2">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest text-[#FFE5B4] bg-[#FFE5B4]/10 border border-[#FFE5B4]/30">
-        Empat Pilar Kompetisi Nordelia
+        Sembilan Kategori Kompetisi Nordelia
       </div>
       <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight">
         Pilih Kategori untuk Melihat <span class="bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] bg-clip-text text-transparent">Cabang-Cabangnya</span>
       </h2>
       <p class="text-xs sm:text-sm text-stone-300">
-        Klik salah satu tombol kategori di bawah ini untuk membuka detail cabang lomba anak (children), kuota peserta, PIC, dan formulir pendaftaran.
+        Klik salah satu tombol kategori di bawah ini. Kategori dengan sub-cabang akan masuk ke halaman pemilihan cabang.
       </p>
     </div>
 
-    <!-- Category Buttons Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {% for cat in categories %}
+    <!-- Category Buttons Grid - 9 Categories -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {% for cat in nordelia_categories %}
         <button type="button"
                 data-category-select="{{ cat.id }}"
+                data-has-sub="{{ 'true' if cat.hasSubEvents else 'false' }}"
                 class="category-btn text-left p-5 rounded-2xl border transition-all duration-300 relative overflow-hidden group hover:-translate-y-1"
-                style="background: {{ cat.bg_soft }}; border-color: {{ cat.border_soft }};">
+                style="background: rgba(22, 18, 15, 0.75); border-color: rgba(255, 255, 255, 0.15);">
           <div class="flex items-center justify-between mb-3">
             <span class="text-xs font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-black/40 text-white border border-white/15">
-              {{ cat.badge }}
+              {% if cat.hasSubEvents %}{{ cat.subEvents|length }} Cabang{% else %}Direct{% endif %}
             </span>
-            <div class="w-8 h-8 rounded-full flex items-center justify-center bg-black/40 text-white group-hover:scale-110 transition-transform"
-                 style="color: {{ cat.color }};">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center bg-black/40 text-white group-hover:scale-110 transition-transform">
               <svg class="w-4 h-4"><use href="#i-chevron"></use></svg>
             </div>
           </div>
-          <h3 class="text-xl font-black text-white tracking-tight flex items-center gap-2">
-            <span>{{ cat.name }}</span>
-            <span class="text-xs font-medium text-stone-400">({{ cat.code }})</span>
+          <h3 class="text-lg font-black text-white tracking-tight leading-snug">
+            {{ cat.name }}
           </h3>
           <p class="text-xs text-stone-300 mt-2 line-clamp-2 leading-relaxed">
-            {{ cat.description }}
+            {% if cat.description %}{{ cat.description }}{% else %}Klik untuk melihat cabang lomba{% endif %}
           </p>
-          <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold"
-               style="color: {{ cat.color }};">
-            <!-- Teks bold instruksi -->
-            <span><strong>Buka Cabang {{ cat.name }}</strong></span>
+          <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#FFE5B4]">
+            <span><strong>{% if cat.hasSubEvents %}Pilih Cabang{% else %}Daftar Langsung{% endif %}</strong></span>
             <span>&rarr;</span>
           </div>
         </button>
@@ -561,31 +558,39 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Category Buttons click handler (Smooth scroll to children)
+  // Category Buttons click handler (Navigate to sub-page if has sub-events)
   document.querySelectorAll("[data-category-select]").forEach(function (btn) {
     btn.addEventListener("click", function () {
       const catId = btn.getAttribute("data-category-select");
-      activeCategory = catId;
-      
-      // Update Pills
-      document.querySelectorAll(".cat-pill").forEach(function (p) {
-        const isMatch = p.getAttribute("data-filter-cat") === catId;
-        p.classList.toggle("is-active", isMatch);
-        if (isMatch) {
-          p.className = "cat-pill is-active px-4 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap bg-gradient-to-r from-[#FFB7C5] to-[#FFE5B4] text-black";
-        } else {
-          p.className = "cat-pill px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-stone-900/80 text-stone-300 hover:text-white border border-white/10";
+      const hasSub = btn.getAttribute("data-has-sub") === "true";
+
+      if (hasSub) {
+        // Navigate to sub-page for categories with sub-events
+        window.location.href = "/nordelia/" + catId;
+      } else {
+        // Direct registration for categories without sub-events
+        activeCategory = catId;
+
+        // Update Pills
+        document.querySelectorAll(".cat-pill").forEach(function (p) {
+          const isMatch = p.getAttribute("data-filter-cat") === catId;
+          p.classList.toggle("is-active", isMatch);
+          if (isMatch) {
+            p.className = "cat-pill is-active px-4 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap bg-gradient-to-r from-[#FFB7C5] to-[#FFE5B4] text-black";
+          } else {
+            p.className = "cat-pill px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-stone-900/80 text-stone-300 hover:text-white border border-white/10";
+          }
+        });
+
+        if (currentCategoryName) {
+          currentCategoryName.textContent = catId.toUpperCase();
         }
-      });
 
-      if (currentCategoryName) {
-        currentCategoryName.textContent = catId.toUpperCase();
+        applyFilter();
+
+        // Scroll to children cabang section
+        document.getElementById("section-cabang")?.scrollIntoView({ behavior: "smooth" });
       }
-
-      applyFilter();
-
-      // Scroll to children cabang section
-      document.getElementById("section-cabang")?.scrollIntoView({ behavior: "smooth" });
     });
   });
 

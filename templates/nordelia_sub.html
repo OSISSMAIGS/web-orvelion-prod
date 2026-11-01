@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+{% block title %}{{ category.name }} | Nordelia 2026 | {{ site.name }}{% endblock %}
+{% block content %}
+<!-- Ambient Pastel Mesh Gradient -->
+<div class="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-40">
+  <div class="absolute -top-40 -left-40 w-[550px] h-[550px] rounded-full blur-[120px]" style="background: radial-gradient(circle, #FFB7C5 0%, rgba(255,183,197,0) 70%);"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-1/4 w-[600px] h-[450px] rounded-full blur-[140px]" style="background: radial-gradient(circle, #FFE5B4 0%, rgba(255,229,180,0) 70%);"></div>
+  <div class="absolute -top-32 -right-32 w-[550px] h-[550px] rounded-full blur-[720px]" style="background: radial-gradient(circle, #AEC6CF 0%, rgba(174,198,207,0) 70%);"></div>
+</div>
+
+<div class="relative z-10">
+  <!-- HEADER -->
+  <section class="relative pt-6 pb-10 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center gap-3 mb-4">
+        <a href="/nordelia" class="inline-flex items-center gap-2 text-xs font-bold text-[#FFE5B4] hover:text-white transition-colors">
+          <svg class="w-4 h-4"><use href="#i-arrow"></use></svg>
+          Kembali ke Nordelia
+        </a>
+      </div>
+      
+      <div class="space-y-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-black/40 text-[#FFE5B4] border border-[#FFE5B4]/30">
+          <svg class="w-3.5 h-3.5 text-[#FFB7C5]"><use href="#i-trophy"></use></svg>
+          Kategori Nordelia
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight">
+          {{ category.name }}
+        </h1>
+        <p class="text-sm text-stone-300 max-w-2xl">
+          {% if category.description %}{{ category.description }}{% else %}Pilih cabang lomba yang ingin Anda ikuti{% endif %}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUB-EVENTS GRID -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {% for sub in category.subEvents %}
+        <article class="group rounded-2xl p-5 border backdrop-blur-md flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                 style="background: rgba(22, 18, 15, 0.75); border-color: rgba(255, 255, 255, 0.15);">
+          
+          <div class="space-y-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md bg-[#FFE5B4]/15 text-[#FFE5B4] border border-[#FFE5B4]/30">
+                Cabang Lomba
+              </span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-950/60 text-emerald-300 border border-emerald-500/30">
+                Pendaftaran Buka
+              </span>
+            </div>
+
+            <h4 class="text-base sm:text-lg font-black text-white group-hover:text-[#FFE5B4] transition-colors leading-snug">
+              {{ sub.name }}
+            </h4>
+
+            <div class="space-y-1.5 text-xs text-stone-300 pt-2 border-t border-white/10">
+              <div class="flex items-start justify-between gap-2">
+                <span class="text-stone-400">Format:</span>
+                <span class="font-bold text-right text-stone-200">
+                  {% for field in sub.registrationFormat %}
+                    {{ field }}{% if not loop.last %}, {% endif %}
+                  {% endfor %}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-4 mt-4 border-t border-white/10 flex items-center justify-between gap-3">
+            <span class="text-[11px] text-stone-400">Klik untuk daftar</span>
+            <button type="button"
+                    data-register-sub="{{ sub.id }}"
+                    data-sub-name="{{ sub.name }}"
+                    class="px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider text-black bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] hover:brightness-110 shadow-md transition-transform hover:scale-105 flex items-center gap-1.5">
+              <span><strong>Daftar</strong></span>
+              <svg class="w-3.5 h-3.5 text-black"><use href="#i-chevron"></use></svg>
+            </button>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+<!-- REGISTRATION FORM MODAL -->
+<div id="modal-register" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+  <div class="relative w-full max-w-xl rounded-3xl p-6 sm:p-8 bg-[#181311] border border-[#FFB7C5]/40 max-h-[92vh] overflow-y-auto shadow-2xl">
+    
+    <button type="button" id="btn-close-register-modal" class="absolute top-5 right-5 p-2 rounded-full bg-white/10 text-stone-300 hover:text-white" aria-label="Tutup">
+      <svg class="w-5 h-5"><use href="#i-x"></use></svg>
+    </button>
+
+    <div class="flex items-center gap-3 mb-4">
+      <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-gradient-to-tr from-[#FFB7C5] to-[#FFE5B4] text-black font-black">
+        <svg class="w-5 h-5"><use href="#i-trophy"></use></svg>
+      </div>
+      <div>
+        <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-white/10 text-[#FFE5B4]">
+          {{ category.name }}
+        </span>
+        <h3 id="form-sub-title" class="text-xl sm:text-2xl font-black text-white">Formulir Pendaftaran</h3>
+      </div>
+    </div>
+
+    <div class="p-3 rounded-xl bg-black/40 border border-white/10 text-xs text-stone-300 mb-5">
+      <p class="font-bold text-[#FFE5B4]">Kategori:</p>
+      <p>{{ category.name }}</p>
+    </div>
+
+    <!-- Alert status -->
+    <div id="form-alert" class="hidden p-3 rounded-xl mb-4 text-xs font-bold"></div>
+
+    <form id="nordelia-sub-reg-form" class="space-y-4">
+      <input type="hidden" name="category_id" value="{{ category.id }}" />
+      <input type="hidden" name="sub_event_id" id="input-sub-event-id" value="" />
+
+      <!-- Dynamic Form Fields -->
+      <div id="dynamic-form-fields" class="space-y-4"></div>
+
+      <div class="pt-2">
+        <button type="submit" id="btn-submit-registration"
+                class="w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-wider text-black bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] hover:brightness-110 shadow-lg transition-transform hover:scale-[1.01] flex items-center justify-center gap-2">
+          <svg class="w-4 h-4 text-stone-900"><use href="#i-spreadsheet"></use></svg>
+          <span><strong>Kirim Pendaftaran</strong></span>
+        </button>
+      </div>
+
+      <p class="text-[11px] text-center text-stone-400">
+        Data akan langsung disimpan ke spreadsheet.
+      </p>
+    </form>
+  </div>
+</div>
+
+<script id="nordelia-sub-data" type="application/json">{{ category.subEvents[0].registrationFormat | tojson | safe }}</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const modalReg = document.getElementById("modal-register");
+  const closeRegBtn = document.getElementById("btn-close-register-modal");
+  const formSubTitle = document.getElementById("form-sub-title");
+  const inputSubEventId = document.getElementById("input-sub-event-id");
+  const dynamicFormFields = document.getElementById("dynamic-form-fields");
+  const formAlert = document.getElementById("form-alert");
+  const regForm = document.getElementById("nordelia-sub-reg-form");
+
+  // Registration format from category
+  const registrationFormat = JSON.parse(document.getElementById("nordelia-sub-data").textContent);
+
+  function openRegisterModal(subId, subName) {
+    inputSubEventId.value = subId;
+    formSubTitle.textContent = subName;
+    
+    // Generate form fields based on registration format
+    let html = "";
+    registrationFormat.forEach(field => {
+      const fieldName = field.toLowerCase().replace(/[^a-z0-9]/g, '_');
+      html += `
+        <div>
+          <label class="block text-xs font-bold text-stone-200 mb-1">${field} <span class="text-rose-400">*</span></label>
+          <input type="text" name="${fieldName}" required placeholder="Masukkan ${field}"
+                 class="w-full px-3.5 py-2.5 rounded-xl bg-stone-900 border border-white/20 text-xs text-white placeholder-stone-500 focus:outline-none focus:border-[#FFE5B4]" />
+        </div>
+      `;
+    });
+
+    dynamicFormFields.innerHTML = html;
+    formAlert.classList.add("hidden");
+    modalReg.classList.remove("hidden");
+    document.body.classList.add("overflow-hidden");
+  }
+
+  function closeRegisterModal() {
+    modalReg.classList.add("hidden");
+    document.body.classList.remove("overflow-hidden");
+  }
+
+  document.querySelectorAll("[data-register-sub]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      openRegisterModal(btn.getAttribute("data-register-sub"), btn.getAttribute("data-sub-name"));
+    });
+  });
+
+  closeRegBtn?.addEventListener("click", closeRegisterModal);
+  modalReg?.addEventListener("click", (e) => {
+    if (e.target === modalReg) closeRegisterModal();
+  });
+
+  // Handle Form Submission
+  regForm?.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    
+    const formData = new FormData(regForm);
+    const data = Object.fromEntries(formData.entries());
+    
+    try {
+      const response = await fetch("/api/nordelia/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      
+      if (response.ok) {
+        formAlert.textContent = "Pendaftaran berhasil! Data telah disimpan.";
+        formAlert.className = "p-3 rounded-xl mb-4 text-xs font-bold bg-emerald-950/70 border border-emerald-500/40 text-emerald-300";
+        formAlert.classList.remove("hidden");
+        regForm.reset();
+        setTimeout(closeRegisterModal, 2000);
+      } else {
+        throw new Error("Gagal menyimpan pendaftaran");
+      }
+    } catch (error) {
+      formAlert.textContent = "Terjadi kesalahan. Silakan coba lagi.";
+      formAlert.className = "p-3 rounded-xl mb-4 text-xs font-bold bg-rose-950/70 border border-rose-500/40 text-rose-300";
+      formAlert.classList.remove("hidden");
+    }
+  });
+});
+</script>
+{% endblock %}

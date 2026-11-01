@@ -2,6 +2,7 @@
 {% block title %}Event | {{ site.name }}{% endblock %}
 {% block content %}
 <script id="events-data" type="application/json">{{ events | tojson | safe }}</script>
+<script id="nordelia-data" type="application/json">{{ nordelia_events | tojson | safe if nordelia_events else '{}' }}</script>
 <section class="relative pt-6 pb-14 border-b border-orvelion-coral/15">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="space-y-4 max-w-3xl">
@@ -10,168 +11,194 @@
         Kalender Program Akbar {{ site.period }}
       </div>
       <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight">Event & Program <span class="text-gradient-orvelion">Kabinet Orvelion</span></h1>
-      <p class="text-sm sm:text-base text-orvelion-peach/85">Jelajahi rangkaian agenda akbar OSIS {{ site.school }}: olahraga, festival seni, hingga lokakarya kepemimpinan.</p>
+      <p class="text-sm sm:text-base text-orvelion-peach/85">Jelajahi rangkaian agenda akbar OSIS {{ site.school }}.</p>
     </div>
   </div>
 </section>
 
+<!-- NORDELIA 2026 MAIN SECTION -->
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6">
-  <div class="relative rounded-2xl p-6 sm:p-8 bg-[#161210] border border-orvelion-coral/20 overflow-hidden">
+  <div class="relative rounded-3xl p-8 sm:p-12 border overflow-hidden backdrop-blur-xl"
+       style="background: linear-gradient(135deg, rgba(255,183,197,0.18) 0%, rgba(255,229,180,0.14) 50%, rgba(174,198,207,0.18) 100%); border-color: rgba(255, 229, 180, 0.4);">
+    
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
       <div class="lg:col-span-7 space-y-4">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-orvelion-ember/30 text-orvelion-amber border border-orvelion-ember/50">Featured Flagship Event</div>
-        <h2 class="text-2xl sm:text-3xl font-black text-white">IGS CUP 2026/2027: Rise of the Champions</h2>
-        <p class="text-xs sm:text-sm text-orvelion-peach/85 max-w-xl">Pesta olahraga dan e-sport terbesar SMA IGS kembali hadir. Daftarkan delegasi tim dan jadilah saksi lahirnya para juara.</p>
-        <div id="countdown" class="pt-2">
-          <span class="text-xs uppercase tracking-wider text-orvelion-peach/70 block mb-2 font-mono">Menuju Pembukaan Kompetisi:</span>
-          <div class="grid grid-cols-4 gap-2 sm:gap-3 max-w-sm">
-            {% for label, key in [("Hari","days"),("Jam","hours"),("Menit","minutes"),("Detik","seconds")] %}
-              <div class="p-2 sm:p-3 rounded-2xl bg-black/60 border border-orvelion-coral/30 text-center">
-                <div class="text-xl sm:text-3xl font-extrabold text-white" data-{{ key }}>0</div>
-                <div class="text-[10px] sm:text-xs text-orvelion-peach/70 uppercase">{{ label }}</div>
-              </div>
-            {% endfor %}
+        <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-black/40 text-[#FFE5B4] border border-[#FFE5B4]/30">
+          Festival Bulan Bahasa 2026
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-black text-white">NORDELIA 2026: Festival Kompetisi IGS</h2>
+        <p class="text-sm text-stone-200 max-w-xl">
+          Festival kompetisi akademik dan non-akademik terbesar SMA IGS mencakup Literasi, Olimpiade, Bahasa, Seni, dan Olahraga.
+        </p>
+        <div class="space-y-2 pt-2 text-sm text-stone-300">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-[#FFE5B4]"><use href="#i-calendar"></use></svg>
+            <span>13 - 14 Oktober 2026</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-[#FFE5B4]"><use href="#i-clock"></use></svg>
+            <span>08:00 - 17:00 WIB</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-[#FFE5B4]"><use href="#i-location"></use></svg>
+            <span>SMA Ignatius Global School</span>
           </div>
         </div>
+        <button type="button" id="btn-open-nordelia-modal" class="mt-4 px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-wider text-black bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] hover:brightness-110 shadow-lg transition-transform hover:scale-105">
+          <strong>Daftar Lomba Sekarang</strong> &rarr;
+        </button>
       </div>
-      <div class="lg:col-span-5">
-        <div class="w-full sm:max-w-xs ml-auto p-5 rounded-2xl bg-black/60 border border-orvelion-coral/25 space-y-3">
-          <div class="flex items-center gap-2 text-xs font-semibold text-orvelion-amber">
-            <svg class="w-4 h-4 text-orvelion-coral"><use href="#i-trophy"></use></svg>
-            Kategori Lomba
-          </div>
-          <div class="text-xs text-orvelion-peach/80 space-y-1">
-            <p>• Basket 5x5 Putra & Putri</p>
-            <p>• Futsal Championship</p>
-            <p>• Bulu Tangkis Single & Ganda</p>
-            <p>• E-Sport Mobile Legends & Valorant</p>
-          </div>
-          <button type="button" data-open-event="igs-cup" class="w-full py-3 rounded-xl font-bold text-xs uppercase tracking-wider text-black bg-gradient-to-r from-orvelion-amber to-orvelion-coral">Daftar / Lihat Panduan Lomba</button>
+      
+      <div class="lg:col-span-5 flex items-center justify-center">
+        <div class="w-full max-w-sm p-4 rounded-3xl border backdrop-blur-xl text-center"
+             style="background: rgba(22, 18, 15, 0.6); border-color: rgba(255, 229, 180, 0.3);">
+          <img src="{{ url_for('static', filename='images/gumball.svg') }}" alt="Gumball Mascot" class="w-full h-64 object-contain filter drop-shadow-md" />
+          <p class="text-xs text-stone-300 mt-3">Semangat Sang Pemenang!</p>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- NORDELIA 2026 SPECIAL BANNER -->
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
-  <div class="relative rounded-3xl p-6 sm:p-7 border overflow-hidden backdrop-blur-md"
-       style="background: linear-gradient(135deg, rgba(255,183,197,0.18) 0%, rgba(255,229,180,0.14) 50%, rgba(174,198,207,0.18) 100%); border-color: rgba(255, 229, 180, 0.4);">
-    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-      <div class="flex items-center gap-4">
-        <div class="w-16 h-16 sm:w-20 sm:h-20 shrink-0">
-          <img src="{{ url_for('static', filename='images/gumball.svg') }}" alt="Gumball Mascot" class="w-full h-full object-contain filter drop-shadow-md" />
-        </div>
-        <div class="space-y-1">
-          <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-black/40 text-[#FFE5B4] border border-[#FFE5B4]/30">
-            Festival Baru • Bulan Bahasa 2026
-          </div>
-          <h3 class="text-xl sm:text-2xl font-black text-white">NORDELIA 2026: 4 Bidang Talenta & 49+ Cabang Lomba</h3>
-          <p class="text-xs text-stone-200 max-w-2xl">
-            Nike (kemenangan), sports, academic, dan arts. Terhubung langsung ke spreadsheet real-time dengan klasifikasi otomatis.
-          </p>
-        </div>
-      </div>
-      <div class="flex items-center gap-3 shrink-0 w-full md:w-auto">
-        <a href="/nordelia" class="w-full md:w-auto px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider text-black bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] hover:brightness-110 shadow-lg text-center transition-transform hover:scale-105">
-          <strong>Buka Halaman Nordelia</strong> &rarr;
-        </a>
       </div>
     </div>
   </div>
 </section>
 
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
-  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-    <div class="flex items-center gap-1.5 overflow-x-auto pb-2">
-      {% for cat in categories %}
-        <button type="button" data-category="{{ cat }}" class="{% if cat == 'Semua' %}is-active{% endif %} px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap bg-orvelion-card text-orvelion-peach/70 border border-orvelion-coral/20">{{ cat }}</button>
-      {% endfor %}
-    </div>
-    <div class="relative min-w-[260px]">
-      <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-orvelion-peach/50"><use href="#i-search"></use></svg>
-      <input id="event-search" type="text" placeholder="Cari nama atau lokasi event..." class="w-full pl-10 pr-4 py-2 text-xs rounded-full bg-orvelion-card border border-orvelion-coral/30 text-white placeholder-orvelion-peach/40 focus:outline-none focus:border-orvelion-amber" />
-    </div>
-  </div>
-</section>
-
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
-  <div id="event-empty" class="hidden text-center py-16 glass-card rounded-2xl">
-    <h3 class="text-base font-bold text-white">Tidak ada event ditemukan</h3>
-    <p class="text-xs text-orvelion-peach/70 mt-1">Coba sesuaikan kata kunci pencarian atau ubah pilihan kategori.</p>
-  </div>
-  <div id="event-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    {% for ev in events %}
-      <article data-event-card data-category="{{ ev.category }}" data-title="{{ ev.title }}" data-desc="{{ ev.description }}" data-location="{{ ev.location }}" class="glass-card rounded-2xl p-6 flex flex-col justify-between hover:-translate-y-1 transition-transform">
-        <div class="space-y-4">
-          <div class="flex items-center justify-between gap-2">
-            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-orvelion-rust/40 text-orvelion-amber border border-orvelion-coral/30">{{ ev.category }}</span>
-            <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full {% if ev.status == 'Pendaftaran Dibuka' %}bg-emerald-950/70 text-emerald-300 border border-emerald-500/30{% else %}bg-orvelion-surface text-orvelion-peach/70 border border-orvelion-coral/20{% endif %}">{{ ev.status }}</span>
-          </div>
-          <h3 class="text-lg font-bold text-white line-clamp-2">{{ ev.title }}</h3>
-          <p class="text-xs text-orvelion-peach/80 line-clamp-3 leading-relaxed">{{ ev.description }}</p>
-          <div class="space-y-1.5 pt-3 border-t border-orvelion-coral/15 text-xs text-orvelion-peach/70">
-            <div>{{ ev.date }}</div>
-            <div>{{ ev.time }}</div>
-            <div>{{ ev.location }}</div>
-          </div>
-        </div>
-        <div class="pt-5 mt-4 border-t border-orvelion-coral/15 flex items-center justify-between">
-          <span class="text-[11px] text-orvelion-peach/60 truncate max-w-[150px]">{{ ev.target }}</span>
-          {% if ev.custom_url %}
-            <a href="{{ ev.custom_url }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#FFE5B4]">Buka Nordelia <svg class="w-4 h-4 text-[#FFB7C5]"><use href="#i-chevron"></use></svg></a>
-          {% else %}
-            <button type="button" data-open-event="{{ ev.id }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-orvelion-amber">Detail Acara <svg class="w-4 h-4 text-orvelion-coral"><use href="#i-chevron"></use></svg></button>
-          {% endif %}
-        </div>
-      </article>
-    {% endfor %}
-  </div>
-</section>
-
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-24">
-  <div class="text-center max-w-2xl mx-auto mb-12">
-    <span class="text-xs font-bold tracking-widest uppercase text-orvelion-coral">Alur Periode 26–27</span>
-    <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-2">Roadmap Program Kerja Tahunan</h2>
-  </div>
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-    {% for item in roadmap %}
-      <div class="glass-card rounded-2xl p-5 {% if item.highlight %}border-orvelion-coral/40 bg-orvelion-coral/5{% endif %}">
-        <span class="text-xs font-mono font-bold text-orvelion-amber">{{ item.label }}</span>
-        <h4 class="font-bold text-sm text-white mt-1 mb-2">{{ item.title }}</h4>
-        <ul class="text-xs text-orvelion-peach/80 space-y-1">
-          {% for line in item['items'] %}<li>• {{ line }}</li>{% endfor %}
-        </ul>
-      </div>
-    {% endfor %}
-  </div>
-</section>
-
-<div id="event-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-  <div class="relative w-full max-w-xl rounded-3xl p-6 sm:p-8 bg-orvelion-surface border border-orvelion-coral/50 max-h-[90vh] overflow-y-auto">
-    <button type="button" data-close-modal class="absolute top-5 right-5 p-2 rounded-full bg-black/40 text-orvelion-peach/70" aria-label="Tutup">
+<!-- NORDELIA CATEGORIES MODAL -->
+<div id="nordelia-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+  <div class="relative w-full max-w-4xl rounded-3xl p-6 sm:p-8 bg-[#181311] border border-[#FFB7C5]/40 max-h-[90vh] overflow-y-auto">
+    <button type="button" id="btn-close-nordelia-modal" class="absolute top-5 right-5 p-2 rounded-full bg-white/10 text-stone-300 hover:text-white" aria-label="Tutup">
       <svg class="w-5 h-5"><use href="#i-x"></use></svg>
     </button>
-    <div class="space-y-4">
-      <div id="modal-kicker" class="text-xs font-bold uppercase tracking-wider text-orvelion-coral"></div>
-      <h3 id="modal-title" class="text-2xl font-black text-white"></h3>
-      <p id="modal-desc" class="text-xs sm:text-sm text-orvelion-peach/80 leading-relaxed"></p>
-      <div class="p-4 rounded-xl bg-black/40 border border-orvelion-coral/20 text-xs space-y-2">
-        <div class="flex justify-between"><span class="text-orvelion-peach/60">Waktu:</span><span id="modal-date" class="font-bold text-white"></span></div>
-        <div class="flex justify-between"><span class="text-orvelion-peach/60">Jam:</span><span id="modal-time" class="font-bold text-white"></span></div>
-        <div class="flex justify-between"><span class="text-orvelion-peach/60">Lokasi:</span><span id="modal-location" class="font-bold text-white"></span></div>
+
+    <div class="space-y-4 mb-6">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#FFE5B4]/15 text-[#FFE5B4] border border-[#FFE5B4]/30">
+        <svg class="w-3.5 h-3.5 text-[#FFB7C5]"><use href="#i-trophy"></use></svg>
+        Nordelia 2026
       </div>
-      <div class="p-3 rounded-xl bg-orvelion-ember/20 border border-orvelion-ember/30 text-xs text-orvelion-amber">
-        <strong class="font-bold">Highlight:</strong> <span id="modal-highlight"></span>
+      <h3 class="text-2xl sm:text-3xl font-black text-white">9 Kategori Kompetisi</h3>
+      <p class="text-xs sm:text-sm text-stone-300">
+        Pilih kategori untuk melihat cabang lomba yang tersedia dan daftar.
+      </p>
+    </div>
+
+    <div id="nordelia-categories-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- Categories will be injected here by JavaScript -->
+    </div>
+
+    <!-- Sub-events section (hidden initially) -->
+    <div id="nordelia-sub-events" class="hidden mt-6 pt-6 border-t border-white/10">
+      <div class="flex items-center gap-2 mb-4">
+        <button type="button" id="btn-back-to-categories" class="text-xs font-bold text-[#FFE5B4] hover:text-white flex items-center gap-1">
+          <svg class="w-4 h-4"><use href="#i-arrow"></use></svg>
+          Kembali
+        </button>
+        <h4 id="sub-events-title" class="text-xl font-black text-white"></h4>
       </div>
-      <div id="modal-actions" class="pt-2 flex items-center gap-3">
-        <button type="button" id="modal-register" class="flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-black bg-gradient-to-r from-orvelion-amber to-orvelion-coral">Daftar Sekarang</button>
-        <button type="button" data-close-modal class="px-5 py-3 rounded-xl text-xs font-semibold text-orvelion-peach/70 bg-orvelion-card border border-orvelion-coral/20">Tutup</button>
-      </div>
-      <div id="modal-success" class="hidden p-4 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 text-xs text-center font-bold">
-        Pendaftaran berhasil dicatat! Tim panitia OSIS akan segera menghubungi Anda.
+      <div id="nordelia-sub-events-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Sub-events will be injected here by JavaScript -->
       </div>
     </div>
   </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // Nordelia Modal Logic
+  const nordeliaModal = document.getElementById("nordelia-modal");
+  const btnOpenNordelia = document.getElementById("btn-open-nordelia-modal");
+  const btnCloseNordelia = document.getElementById("btn-close-nordelia-modal");
+  const categoriesGrid = document.getElementById("nordelia-categories-grid");
+  const subEventsSection = document.getElementById("nordelia-sub-events");
+  const subEventsGrid = document.getElementById("nordelia-sub-events-grid");
+  const subEventsTitle = document.getElementById("sub-events-title");
+  const btnBackToCategories = document.getElementById("btn-back-to-categories");
+
+  // Load Nordelia data
+  let nordeliaData = {};
+  try {
+    nordeliaData = JSON.parse(document.getElementById("nordelia-data").textContent);
+  } catch (e) {
+    console.error("Failed to load Nordelia data:", e);
+  }
+
+  function openNordeliaModal() {
+    nordeliaModal.classList.remove("hidden");
+    document.body.classList.add("overflow-hidden");
+    renderCategories();
+  }
+
+  function closeNordeliaModal() {
+    nordeliaModal.classList.add("hidden");
+    document.body.classList.remove("overflow-hidden");
+    subEventsSection.classList.add("hidden");
+    categoriesGrid.classList.remove("hidden");
+  }
+
+  function renderCategories() {
+    const categories = nordeliaData.categories || [];
+    categoriesGrid.innerHTML = categories.map(cat => `
+      <button type="button"
+              data-category-id="${cat.id}"
+              data-has-sub="${cat.hasSubEvents ? 'true' : 'false'}"
+              class="text-left p-4 rounded-xl border transition-all hover:-translate-y-1"
+              style="background: rgba(22, 18, 15, 0.75); border-color: rgba(255, 255, 255, 0.15);">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-black/40 text-white border border-white/15">
+            ${cat.hasSubEvents ? cat.subEvents.length + ' Cabang' : 'Direct'}
+          </span>
+          <svg class="w-4 h-4 text-white"><use href="#i-chevron"></use></svg>
+        </div>
+        <h4 class="text-base font-black text-white leading-snug">${cat.name}</h4>
+        <p class="text-xs text-stone-300 mt-1 line-clamp-2">${cat.description || 'Klik untuk melihat cabang lomba'}</p>
+      </button>
+    `).join('');
+
+    // Add click handlers
+    categoriesGrid.querySelectorAll("[data-category-id]").forEach(btn => {
+      btn.addEventListener("click", function () {
+        const catId = this.getAttribute("data-category-id");
+        const hasSub = this.getAttribute("data-has-sub") === "true";
+        
+        if (hasSub) {
+          showSubEvents(catId);
+        } else {
+          // Direct registration - handle as needed
+          alert("Pendaftaran langsung untuk kategori ini akan segera tersedia.");
+        }
+      });
+    });
+  }
+
+  function showSubEvents(catId) {
+    const category = nordeliaData.categories.find(c => c.id === catId);
+    if (!category) return;
+
+    subEventsTitle.textContent = category.name;
+    subEventsGrid.innerHTML = category.subEvents.map(sub => `
+      <div class="p-4 rounded-xl border"
+           style="background: rgba(22, 18, 15, 0.75); border-color: rgba(255, 255, 255, 0.15);">
+        <h5 class="text-sm font-black text-white mb-2">${sub.name}</h5>
+        <p class="text-xs text-stone-300 mb-3">
+          Format: ${sub.registrationFormat.join(", ")}
+        </p>
+        <button type="button"
+                class="w-full py-2 rounded-lg text-xs font-bold text-black bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF]">
+          Daftar
+        </button>
+      </div>
+    `).join("");
+
+    categoriesGrid.classList.add("hidden");
+    subEventsSection.classList.remove("hidden");
+  }
+
+  btnOpenNordelia?.addEventListener("click", openNordeliaModal);
+  btnCloseNordelia?.addEventListener("click", closeNordeliaModal);
+  btnBackToCategories?.addEventListener("click", function () {
+    subEventsSection.classList.add("hidden");
+    categoriesGrid.classList.remove("hidden");
+  });
+
+  nordeliaModal?.addEventListener("click", function (e) {
+    if (e.target === nordeliaModal) closeNordeliaModal();
+  });
+});
+</script>
 {% endblock %}
