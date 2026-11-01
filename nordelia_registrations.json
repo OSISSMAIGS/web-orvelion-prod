@@ -498,5 +498,24 @@
       "category_id": "akademik"
     },
     "synced_to_sheets": false
+  },
+  {
+    "id": 27,
+    "created_at": "2026-11-01 22:18:46",
+    "category_id": "akademik",
+    "cabang_id": "olimpiade-biologi",
+    "cabang_name": "Olimpiade Biologi",
+    "participant_name": "Alien",
+    "kelas": "10.Manusia",
+    "whatsapp": "111111",
+    "details": {
+      "cabang_id": "olimpiade-biologi",
+      "nama_lengkap": "Alien",
+      "kelas": "10.Manusia",
+      "whatsapp": "111111",
+      "cabang_name": "Olimpiade Biologi",
+      "category_id": "akademik"
+    },
+    "synced_to_sheets": false
   }
 ]
