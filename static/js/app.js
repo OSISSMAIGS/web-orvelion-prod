@@ -198,7 +198,283 @@ function initWaitingRoom() {
   });
 }
 
+function initNordelia() {
+  console.log("initNordelia called");
+  console.log("Current URL:", window.location.href);
+  console.log("Checking for nordelia-data-cabang element...");
+
+  const cabangDataEl = document.getElementById("nordelia-data-cabang");
+  const formatDataEl = document.getElementById("nordelia-data-formats");
+
+  console.log("cabangDataEl:", cabangDataEl);
+  console.log("formatDataEl:", formatDataEl);
+
+  if (!cabangDataEl || !formatDataEl) {
+    console.log("Nordelia data elements not found - not on Nordelia page");
+    return;
+  }
+
+  console.log("=== NORDelia PAGE SCRIPT START ===");
+
+  let cabangList, formatList;
+  try {
+    cabangList = JSON.parse(cabangDataEl.textContent);
+    formatList = JSON.parse(formatDataEl.textContent);
+  } catch (e) {
+    console.error("Gagal parse JSON:", e);
+    return;
+  }
+
+  console.log("Data loaded:", {
+    cabangCount: cabangList.length,
+    formatKeys: Object.keys(formatList),
+    sampleCabang: cabangList.slice(0, 3),
+  });
+
+  const cabangCards = Array.from(document.querySelectorAll("[data-cabang-card]"));
+  const emptyNotice = document.getElementById("cabang-empty");
+  const searchInput = document.getElementById("cabang-search");
+  const currentCategoryName = document.getElementById("current-category-name");
+
+  // Filter logic
+  let activeCategory = "semua";
+  function applyFilter() {
+    const q = (searchInput?.value || "").toLowerCase().trim();
+    let visibleCount = 0;
+
+    cabangCards.forEach(function (card) {
+      const matchCat = activeCategory === "semua" || card.dataset.category === activeCategory;
+      const haystack = (card.dataset.name + " " + card.dataset.pic + " " + card.dataset.tempat + " " + card.dataset.category).toLowerCase();
+      const matchQ = !q || haystack.includes(q);
+      const isVisible = matchCat && matchQ;
+
+      card.classList.toggle("hidden", !isVisible);
+      if (isVisible) visibleCount++;
+    });
+
+    if (emptyNotice) {
+      emptyNotice.classList.toggle("hidden", visibleCount > 0);
+    }
+  }
+
+  // Category Buttons click handler
+  document.querySelectorAll("[data-category-select]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      const catId = btn.getAttribute("data-category-select");
+      const hasSub = btn.getAttribute("data-has-sub") === "true";
+
+      if (hasSub) {
+        window.location.href = "/nordelia/" + catId;
+      } else {
+        activeCategory = catId;
+
+        document.querySelectorAll(".cat-pill").forEach(function (p) {
+          const isMatch = p.getAttribute("data-filter-cat") === catId;
+          p.classList.toggle("is-active", isMatch);
+          if (isMatch) {
+            p.className = "cat-pill is-active px-4 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap bg-gradient-to-r from-[#FFB7C5] to-[#FFE5B4] text-black";
+          } else {
+            p.className = "cat-pill px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-stone-900/80 text-stone-300 hover:text-white border border-white/10";
+          }
+        });
+
+        if (currentCategoryName) {
+          currentCategoryName.textContent = catId.toUpperCase();
+        }
+
+        applyFilter();
+
+        document.getElementById("section-cabang")?.scrollIntoView({ behavior: "smooth" });
+      }
+    });
+  });
+
+  // Filter pills handler
+  document.querySelectorAll(".cat-pill").forEach(function (pill) {
+    pill.addEventListener("click", function () {
+      const cat = pill.getAttribute("data-filter-cat");
+      activeCategory = cat;
+
+      document.querySelectorAll(".cat-pill").forEach(function (p) {
+        p.className = "cat-pill px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-stone-900/80 text-stone-300 hover:text-white border border-white/10";
+      });
+      pill.className = "cat-pill is-active px-4 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap bg-gradient-to-r from-[#FFB7C5] to-[#FFE5B4] text-black";
+
+      if (currentCategoryName) {
+        currentCategoryName.textContent = cat === "semua" ? "Semua Kategori" : cat.toUpperCase();
+      }
+
+      applyFilter();
+    });
+  });
+
+  searchInput?.addEventListener("input", applyFilter);
+
+  // MODAL REGISTER & DYNAMIC FIELDS
+  const modalReg = document.getElementById("modal-register");
+  const closeRegBtn = document.getElementById("btn-close-register-modal");
+  const formCabangTitle = document.getElementById("form-cabang-title");
+  const formBadgeCategory = document.getElementById("form-badge-category");
+  const formRuleBox = document.getElementById("form-rule-box");
+  const inputCabangId = document.getElementById("input-cabang-id");
+  const dynamicFormFields = document.getElementById("dynamic-form-fields");
+  const formAlert = document.getElementById("form-alert");
+  const regForm = document.getElementById("nordelia-reg-form");
+
+  console.log("Modal elements:", {
+    modalReg: !!modalReg,
+    closeRegBtn: !!closeRegBtn,
+    formCabangTitle: !!formCabangTitle,
+    formBadgeCategory: !!formBadgeCategory,
+    formRuleBox: !!formRuleBox,
+    inputCabangId: !!inputCabangId,
+    dynamicFormFields: !!dynamicFormFields,
+    formAlert: !!formAlert,
+    regForm: !!regForm,
+  });
+
+  function openRegisterModal(cabangId) {
+    console.log("openRegisterModal dipanggil dengan cabangId:", cabangId);
+    const c = cabangList.find(item => item.id === cabangId);
+    console.log("Cabang ditemukan:", c ? c.name : "tidak ditemukan");
+    if (!c) {
+      console.error("Cabang tidak ditemukan untuk ID:", cabangId);
+      return;
+    }
+
+    inputCabangId.value = c.id;
+    formCabangTitle.textContent = c.name;
+    formBadgeCategory.textContent = c.category.toUpperCase() + " • NO. " + c.no;
+    formRuleBox.innerHTML = `
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-stone-400">Lokasi: ${c.tempat}</span>
+      </div>
+      <p class="text-[11px] text-stone-300"><strong class="text-white">Ketentuan:</strong> ${c.note}</p>
+    `;
+
+    // Dynamic field generation based on format_type
+    const fmtKey = c.format_type || "olimpiade_akademik";
+    const fmt = formatList[fmtKey] || formatList["olimpiade_akademik"];
+
+    let html = "";
+    fmt.fields.forEach(field => {
+      if (field.type === "textarea") {
+        html += `
+          <div>
+            <label class="block text-xs font-bold text-stone-200 mb-1">${field.label} ${field.required ? '<span class="text-rose-400">*</span>' : ''}</label>
+            <textarea name="${field.name}" ${field.required ? 'required' : ''} placeholder="${field.placeholder}" rows="3"
+                      class="w-full px-3.5 py-2.5 rounded-xl bg-stone-900 border border-white/20 text-xs text-white placeholder-stone-500 focus:outline-none focus:border-[#FFE5B4]"></textarea>
+          </div>
+        `;
+      } else {
+        html += `
+          <div>
+            <label class="block text-xs font-bold text-stone-200 mb-1">${field.label} ${field.required ? '<span class="text-rose-400">*</span>' : ''}</label>
+            <input type="${field.type}" name="${field.name}" ${field.required ? 'required' : ''} placeholder="${field.placeholder}"
+                   class="w-full px-3.5 py-2.5 rounded-xl bg-stone-900 border border-white/20 text-xs text-white placeholder-stone-500 focus:outline-none focus:border-[#FFE5B4]" />
+          </div>
+        `;
+      }
+    });
+
+    dynamicFormFields.innerHTML = html;
+    formAlert.classList.add("hidden");
+    modalReg.classList.remove("hidden");
+    document.body.classList.add("overflow-hidden");
+    console.log("Modal pendaftaran berhasil dibuka");
+  }
+
+  function closeRegisterModal() {
+    modalReg.classList.add("hidden");
+    document.body.classList.remove("overflow-hidden");
+  }
+
+  const registerButtons = document.querySelectorAll("[data-register-cabang]");
+  console.log("Tombol daftar ditemukan:", registerButtons.length);
+
+  if (registerButtons.length === 0) {
+    console.warn("Tidak ada tombol daftar yang ditemukan dengan attribute data-register-cabang");
+  } else {
+    console.log("Detail tombol daftar:", Array.from(registerButtons).map(btn => ({
+      cabangId: btn.getAttribute("data-register-cabang"),
+      text: btn.textContent.trim(),
+    })));
+  }
+
+  registerButtons.forEach((btn, index) => {
+    console.log(`Event listener dipasang pada tombol ${index + 1} dengan cabangId:`, btn.getAttribute("data-register-cabang"));
+    btn.addEventListener("click", (e) => {
+      console.log("=== CLICK EVENT TRIGGERED ===");
+      e.preventDefault();
+      e.stopPropagation();
+      const cabangId = btn.getAttribute("data-register-cabang");
+      console.log("Tombol daftar diklik untuk cabang:", cabangId);
+      console.log("cabangList tersedia:", cabangList ? cabangList.length : "tidak ada");
+      openRegisterModal(cabangId);
+    });
+  });
+
+  closeRegBtn?.addEventListener("click", closeRegisterModal);
+  modalReg?.addEventListener("click", (e) => {
+    if (e.target === modalReg) closeRegisterModal();
+  });
+
+  // Handle Form Submission
+  regForm?.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const btnSubmit = document.getElementById("btn-submit-registration");
+    const originalText = btnSubmit.innerHTML;
+
+    btnSubmit.disabled = true;
+    btnSubmit.innerHTML = `
+      <svg class="w-4 h-4 animate-spin text-black" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25"></circle><path fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+      <span>Menyimpan ke Spreadsheet Real-Time...</span>
+    `;
+
+    try {
+      const formData = new FormData(regForm);
+      const payload = {};
+      formData.forEach((val, key) => { payload[key] = val; });
+
+      const res = await fetch("/api/nordelia/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        formAlert.className = "p-3 rounded-xl mb-4 text-xs font-bold bg-emerald-950/80 text-emerald-300 border border-emerald-500/40";
+        formAlert.textContent = data.message || "Pendaftaran berhasil dicatat!";
+        formAlert.classList.remove("hidden");
+
+        setTimeout(() => {
+          closeRegisterModal();
+          regForm.reset();
+        }, 1500);
+
+      } else {
+        formAlert.className = "p-3 rounded-xl mb-4 text-xs font-bold bg-rose-950/80 text-rose-300 border border-rose-500/40";
+        formAlert.textContent = data.error || "Gagal memproses pendaftaran. Silakan coba lagi.";
+        formAlert.classList.remove("hidden");
+      }
+    } catch (err) {
+      formAlert.className = "p-3 rounded-xl mb-4 text-xs font-bold bg-rose-950/80 text-rose-300 border border-rose-500/40";
+      formAlert.textContent = "Terjadi kesalahan jaringan: " + err.message;
+      formAlert.classList.remove("hidden");
+    } finally {
+      btnSubmit.disabled = false;
+      btnSubmit.innerHTML = originalText;
+    }
+  });
+
+  console.log("=== NORDelia PAGE SCRIPT END ===");
+}
+
+console.log("app.js loaded");
+
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOMContentLoaded fired in app.js");
   initNav();
   initTabs();
   initScrollTop();
@@ -206,4 +482,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initEvents();
   initCabinets();
   initWaitingRoom();
+  initNordelia();
 });

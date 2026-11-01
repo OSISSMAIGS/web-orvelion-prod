@@ -1,6 +1,6 @@
-import time
 import json
 import os
+import time
 from flask import Blueprint, Response, jsonify, redirect, render_template, request, url_for
 
 from orvelion.content import (
@@ -21,6 +21,7 @@ from orvelion.nordelia_data import (
     CATEGORIES,
     FORMAT_REGISTRASI,
     NORDELIA_INFO,
+    OLIMPIADE_9_DAN_AI_IDS,
     SHEET2_FORMAT_SPEC,
     get_cabang_by_id,
 )
@@ -30,13 +31,17 @@ from orvelion.sheets_service import (
     storage,
 )
 
-# Load Nordelia events JSON
+
 def load_nordelia_events():
     try:
-        with open(os.path.join(os.path.dirname(__file__), '..', 'nordelia_events.json'), 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except:
-        return {"categories": []}
+        events_path = os.path.join(os.path.dirname(__file__), "..", "nordelia_events.json")
+        if os.path.exists(events_path):
+            with open(events_path, "r", encoding="utf-8") as f:
+                return json.load(f)
+    except Exception:
+        pass
+    return {"categories": []}
+
 
 bp = Blueprint("pages", __name__)
 
@@ -81,6 +86,83 @@ def event():
     )
 
 
+@bp.get("/nordelia")
+@bp.get("/event/nordelia")
+def nordelia():
+    summary = storage.get_summary_stats()
+    all_regs = storage.get_all_registrations()
+    spreadsheet_url = get_config(
+        "NORDELIA_SPREADSHEET_URL",
+        "https://docs.google.com/spreadsheets/d/" + get_config("NORDELIA_SPREADSHEET_ID", "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms") + "/edit",
+    )
+    nordelia_json = load_nordelia_events()
+    return render_template(
+        "nordelia.html",
+        **_ctx(
+            active_page="nordelia",
+            nordelia=NORDELIA_INFO,
+            categories=CATEGORIES,
+            nordelia_categories=nordelia_json.get("categories", []),
+            cabang_lomba=CABANG_LOMBA,
+            sheet2_formats=SHEET2_FORMAT_SPEC,
+            format_registrasi=FORMAT_REGISTRASI,
+            summary=summary,
+            registrations=all_regs[:10],
+            spreadsheet_url=spreadsheet_url,
+            spreadsheet_id=get_config("NORDELIA_SPREADSHEET_ID"),
+        ),
+    )
+
+
+@bp.get("/nordelia/<category_id>")
+def nordelia_category(category_id: str):
+    # Cari di nordelia_events.json
+    nordelia_json = load_nordelia_events()
+    cat_match = None
+    for c in nordelia_json.get("categories", []):
+        if c.get("id") == category_id:
+            cat_match = c
+            break
+
+    # Jika tidak ada di nordelia_events.json, cari di CATEGORIES utama
+    if not cat_match:
+        for c in CATEGORIES:
+            if c.get("id") == category_id:
+                sub_events = [
+                    {
+                        "id": cb["id"],
+                        "name": cb["name"],
+                        "pic": cb["pic"],
+                        "tempat": cb["tempat"],
+                        "peserta_max": cb["peserta_max"],
+                        "is_olimpiade_or_ai": cb["is_olimpiade_or_ai"],
+                        "registrationFormat": ["Nama Lengkap", "Kelas"],
+                    }
+                    for cb in CABANG_LOMBA
+                    if cb["category"] == category_id
+                ]
+                cat_match = {
+                    "id": c["id"],
+                    "name": c["name"],
+                    "description": c["description"],
+                    "hasSubEvents": True,
+                    "subEvents": sub_events,
+                }
+                break
+
+    if not cat_match:
+        return redirect(url_for("pages.nordelia"))
+
+    return render_template(
+        "nordelia_sub.html",
+        **_ctx(
+            active_page="nordelia",
+            category=cat_match,
+            format_registrasi=FORMAT_REGISTRASI,
+            cabang_lomba=CABANG_LOMBA,
+            summary=storage.get_summary_stats(),
+        ),
+    )
 
 
 @bp.get("/nordelia/spreadsheet")
@@ -90,7 +172,7 @@ def nordelia_spreadsheet():
     summary = storage.get_summary_stats()
     spreadsheet_url = get_config(
         "NORDELIA_SPREADSHEET_URL",
-        "https://docs.google.com/spreadsheets/d/" + get_config("NORDELIA_SPREADSHEET_ID", "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms") + "/edit"
+        "https://docs.google.com/spreadsheets/d/" + get_config("NORDELIA_SPREADSHEET_ID", "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms") + "/edit",
     )
     return render_template(
         "nordelia_spreadsheet.html",
@@ -129,6 +211,18 @@ def api_nordelia_register():
                 "error": "Cabang lomba tidak ditemukan atau belum dipilih.",
             }), 400
 
+        # ATURAN 2: Olimpiade 9 cabang + artificial intelligence maksimal 20 orang per cabang
+        if cabang_id in OLIMPIADE_9_DAN_AI_IDS:
+            current_count = storage.get_cabang_count(cabang_id)
+            if current_count >= 20:
+                return jsonify({
+                    "success": False,
+                    "error": f"Pendaftaran cabang '{cabang_info['name']}' sudah PENUH! Kuota maksimal adalah 20 orang per cabang (terisi {current_count}/20).",
+                    "quota_full": True,
+                    "current_count": current_count,
+                    "max_quota": 20,
+                }), 400
+
         # Validasi nama peserta / tim
         nama = data.get("nama_lengkap") or data.get("nama_tim") or data.get("nama", "").strip()
         if not nama:
@@ -152,10 +246,21 @@ def api_nordelia_register():
         # Simpan ke storage dan sinkronisasikan real-time ke Google Spreadsheet
         saved_entry = storage.save_registration(data)
 
+        # Hitung sisa kuota jika cabang olimpiade
+        quota_info = None
+        if cabang_id in OLIMPIADE_9_DAN_AI_IDS:
+            new_count = storage.get_cabang_count(cabang_id)
+            quota_info = {
+                "max": 20,
+                "filled": new_count,
+                "remaining": max(0, 20 - new_count),
+            }
+
         return jsonify({
             "success": True,
-            "message": f"Pendaftaran cabang '{cabang_info['name']}' berhasil dicatat secara real-time!",
+            "message": f"Pendaftaran cabang '{cabang_info['name']}' berhasil dicatat secara real-time ke Google Spreadsheet!",
             "entry": saved_entry,
+            "quota_info": quota_info,
         })
 
     except Exception as e:
@@ -163,6 +268,22 @@ def api_nordelia_register():
             "success": False,
             "error": f"Terjadi kendala saat memproses pendaftaran: {str(e)}",
         }), 500
+
+
+@bp.get("/api/nordelia/cabang-quota")
+def api_nordelia_cabang_quota():
+    cabang_id = request.args.get("cabang_id", "")
+    if not cabang_id:
+        return jsonify({"error": "cabang_id is required"}), 400
+    count = storage.get_cabang_count(cabang_id)
+    is_limited = cabang_id in OLIMPIADE_9_DAN_AI_IDS
+    return jsonify({
+        "cabang_id": cabang_id,
+        "count": count,
+        "is_limited": is_limited,
+        "max_quota": 20 if is_limited else None,
+        "is_full": (count >= 20) if is_limited else False,
+    })
 
 
 @bp.get("/api/nordelia/registrations")
@@ -189,7 +310,7 @@ def api_nordelia_stats():
 def api_nordelia_export_csv():
     cat = request.args.get("category")
     csv_content = export_registrations_csv(cat)
-    filename = f"pendaftaran_nordelia_{cat or 'semua'}_{int(time.time())}.csv" if 'time' in globals() else f"pendaftaran_nordelia_{cat or 'semua'}.csv"
+    filename = f"pendaftaran_nordelia_{cat or 'semua'}_{int(time.time())}.csv" if "time" in globals() else f"pendaftaran_nordelia_{cat or 'semua'}.csv"
     return Response(
         csv_content,
         mimetype="text/csv; charset=utf-8",

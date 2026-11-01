@@ -224,6 +224,18 @@ class NordeliaStorage:
                     results = []
         return results
 
+    def get_cabang_count(self, cabang_id: str) -> int:
+        try:
+            conn = sqlite3.connect(self.db_path)
+            c = conn.cursor()
+            c.execute('SELECT COUNT(*) FROM registrations WHERE cabang_id = ?', (cabang_id,))
+            res = c.fetchone()
+            conn.close()
+            return res[0] if res else 0
+        except Exception:
+            regs = self.get_all_registrations()
+            return sum(1 for r in regs if r.get('cabang_id') == cabang_id)
+
     def get_summary_stats(self) -> Dict[str, Any]:
         all_regs = self.get_all_registrations()
         counts = {

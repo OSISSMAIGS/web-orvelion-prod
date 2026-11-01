@@ -69,23 +69,6 @@
             </div>
           </div>
 
-          <!-- PROMINENT SPREADSHEET BUTTON (BOLD) SESUAI REQUEST USER -->
-          <div class="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-            <button type="button" id="btn-explore-branches"
-                    class="group px-6 py-4 rounded-2xl font-black text-sm uppercase tracking-wider text-black bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] shadow-[0_10px_25px_rgba(255,183,197,0.35)] hover:shadow-[0_15px_30px_rgba(174,198,207,0.5)] transition-all hover:scale-[1.02] flex items-center justify-center gap-3">
-              <svg class="w-5 h-5 text-stone-900 group-hover:rotate-12 transition-transform"><use href="#i-spreadsheet"></use></svg>
-              <!-- Tulisan di BOLD yang Spreadsheet -->
-              <span><strong>BUKA SPREADSHEET & CABANG LOMBA NORDELIA</strong></span>
-              <svg class="w-4 h-4 text-stone-900 group-hover:translate-x-1 transition-transform"><use href="#i-chevron"></use></svg>
-            </button>
-
-            <a href="/nordelia/spreadsheet"
-               class="px-5 py-3.5 rounded-2xl font-extrabold text-xs uppercase tracking-wider text-white bg-black/60 border border-white/20 hover:border-[#FFE5B4] transition-all flex items-center justify-center gap-2 hover:bg-white/5">
-              <svg class="w-4 h-4 text-[#FFE5B4]"><use href="#i-external"></use></svg>
-              <span><strong>Tabel Live Spreadsheet Penuh</strong></span>
-            </a>
-          </div>
-
           <!-- Quick Stats Pills -->
           <div class="flex flex-wrap items-center gap-2 pt-2 text-xs text-stone-300">
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/40 border border-[#FFB7C5]/30">
@@ -95,10 +78,6 @@
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/40 border border-[#AEC6CF]/30">
               <svg class="w-3.5 h-3.5 text-[#AEC6CF]"><use href="#i-check"></use></svg>
               <span id="stat-total-reg">{{ summary.counts.total }} Peserta Terdaftar</span>
-            </span>
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/40 border border-[#FFE5B4]/30">
-              <svg class="w-3.5 h-3.5 text-[#FFE5B4]"><use href="#i-refresh"></use></svg>
-              <span>Real-Time Sync Aktif</span>
             </span>
           </div>
         </div>
@@ -129,13 +108,10 @@
             </div>
 
             <!-- Quick Action from Mascot -->
-            <div class="mt-3 grid grid-cols-2 gap-2 text-xs font-bold">
-              <a href="#section-categories" class="p-2 rounded-xl bg-black/40 hover:bg-white/10 text-[#FFB7C5] border border-[#FFB7C5]/30">
+            <div class="mt-3">
+              <a href="#section-categories" class="p-2 rounded-xl bg-black/40 hover:bg-white/10 text-[#FFB7C5] border border-[#FFB7C5]/30 text-xs font-bold block text-center">
                 Lihat 4 Kategori
               </a>
-              <button type="button" data-open-sheet2-modal class="p-2 rounded-xl bg-black/40 hover:bg-white/10 text-[#AEC6CF] border border-[#AEC6CF]/30">
-                Format Pendaftaran
-              </button>
             </div>
           </div>
         </div>
@@ -203,7 +179,7 @@
 
       <div class="relative min-w-[260px] sm:w-80">
         <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400"><use href="#i-search"></use></svg>
-        <input id="cabang-search" type="text" placeholder="Cari cabang lomba, PIC, atau tempat..." 
+        <input id="cabang-search" type="text" placeholder="Cari cabang lomba atau tempat..."
                class="w-full pl-10 pr-4 py-2 text-xs rounded-xl bg-stone-900 border border-white/20 text-white placeholder-stone-400 focus:outline-none focus:border-[#FFE5B4]" />
       </div>
     </div>
@@ -269,14 +245,6 @@
             <!-- Information list -->
             <div class="space-y-1.5 text-xs text-stone-300 pt-2 border-t border-white/10">
               <div class="flex items-start justify-between gap-2">
-                <span class="text-stone-400">Penghargaan:</span>
-                <span class="font-bold text-right text-stone-200">{{ c.penghargaan }} ({{ c.juara }})</span>
-              </div>
-              <div class="flex items-start justify-between gap-2">
-                <span class="text-stone-400">Penanggung Jawab (PIC):</span>
-                <span class="font-bold text-right text-stone-200">{{ c.pic }}</span>
-              </div>
-              <div class="flex items-start justify-between gap-2">
                 <span class="text-stone-400">Tempat Lomba:</span>
                 <span class="font-bold text-right text-stone-200">{{ c.tempat }}</span>
               </div>
@@ -294,7 +262,16 @@
 
           <!-- Bottom Button to Register -->
           <div class="pt-4 mt-4 border-t border-white/10 flex items-center justify-between gap-3">
-            <span class="text-[11px] text-stone-400 truncate">Format: {{ c.format_type | replace('_', ' ') | capitalize }}</span>
+            <div>
+              {% if c.is_olimpiade_or_ai %}
+                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                  Maks. 20 Peserta
+                </span>
+              {% else %}
+                <span class="text-[11px] text-stone-400 font-medium">Batas: {{ c.peserta_max }}</span>
+              {% endif %}
+            </div>
             <button type="button"
                     data-register-cabang="{{ c.id }}"
                     class="px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider text-black bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] hover:brightness-110 shadow-md transition-transform hover:scale-105 flex items-center gap-1.5">
@@ -305,128 +282,6 @@
 
         </article>
       {% endfor %}
-    </div>
-  </section>
-
-  <!-- LIVE SPREADSHEET PREVIEW & CLASSIFICATION VIEWER -->
-  <section id="section-spreadsheet-preview" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="rounded-3xl p-6 sm:p-8 border backdrop-blur-xl relative overflow-hidden"
-         style="background: linear-gradient(180deg, rgba(22,18,15,0.9) 0%, rgba(13,11,10,0.95) 100%); border-color: rgba(255, 183, 197, 0.25);">
-      
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/10">
-        <div class="space-y-1">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#AEC6CF]/15 text-[#AEC6CF] border border-[#AEC6CF]/30">
-            <svg class="w-3.5 h-3.5"><use href="#i-spreadsheet"></use></svg>
-            Real-Time Google Spreadsheet Connection
-          </div>
-          <h3 class="text-2xl sm:text-3xl font-black text-white">
-            Data Pendaftaran Real-Time <span class="bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] bg-clip-text text-transparent">(Terkasifikasi)</span>
-          </h3>
-          <p class="text-xs text-stone-300">
-            Pendaftaran yang masuk otomatis diklasifikasikan ke tab masing-masing (Akademik, Bahasa, Seni, Olahraga) dan tersinkronisasi instan.
-          </p>
-        </div>
-
-        <div class="flex items-center gap-2.5">
-          <a href="/api/nordelia/export.csv"
-             class="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-stone-800 border border-white/20 hover:bg-stone-700 flex items-center gap-1.5 shadow">
-            <svg class="w-4 h-4 text-[#FFE5B4]"><use href="#i-download"></use></svg>
-            <span>Unduh CSV</span>
-          </a>
-          <a href="{{ spreadsheet_url }}" target="_blank" rel="noopener noreferrer"
-             class="px-4 py-2.5 rounded-xl text-xs font-bold text-black bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] hover:brightness-110 flex items-center gap-1.5 shadow-md">
-            <svg class="w-4 h-4 text-stone-900"><use href="#i-external"></use></svg>
-            <span><strong>Buka Google Spreadsheet</strong></span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Tab Classification Switcher -->
-      <div class="flex items-center gap-2 overflow-x-auto pt-5 pb-3">
-        <button type="button" data-sheet-tab="semua" class="sheet-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-white/20 text-white border border-white/30">
-          Master (Semua)
-        </button>
-        <button type="button" data-sheet-tab="akademik" class="sheet-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-stone-900/80 text-stone-300 border border-white/10 hover:text-white">
-          Tab 1: Akademik
-        </button>
-        <button type="button" data-sheet-tab="bahasa" class="sheet-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-stone-900/80 text-stone-300 border border-white/10 hover:text-white">
-          Tab 2: Bahasa
-        </button>
-        <button type="button" data-sheet-tab="seni" class="sheet-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-stone-900/80 text-stone-300 border border-white/10 hover:text-white">
-          Tab 3: Seni
-        </button>
-        <button type="button" data-sheet-tab="olahraga" class="sheet-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-stone-900/80 text-stone-300 border border-white/10 hover:text-white">
-          Tab 4: Olahraga
-        </button>
-        <button type="button" data-open-sheet2-modal class="sheet-tab-btn px-4 py-2 rounded-xl text-xs font-bold text-[#FFB7C5] bg-[#FFB7C5]/10 border border-[#FFB7C5]/30">
-          Tab 5: Sheet 2 Format Pendaftaran
-        </button>
-      </div>
-
-      <!-- Live Table Container -->
-      <div class="mt-4 overflow-x-auto rounded-2xl border border-white/10 bg-black/60 max-h-96">
-        <table class="w-full text-left text-xs text-stone-200">
-          <thead class="text-[11px] uppercase tracking-wider text-stone-400 bg-stone-900/90 border-b border-white/10 sticky top-0 backdrop-blur-md">
-            <tr>
-              <th class="py-3 px-4">Waktu</th>
-              <th class="py-3 px-4">Kategori</th>
-              <th class="py-3 px-4">Cabang Lomba</th>
-              <th class="py-3 px-4">Nama Peserta / Tim</th>
-              <th class="py-3 px-4">Kelas</th>
-              <th class="py-3 px-4">WhatsApp</th>
-              <th class="py-3 px-4">Status Sync</th>
-            </tr>
-          </thead>
-          <tbody id="spreadsheet-tbody" class="divide-y divide-white/5 font-mono">
-            {% if registrations %}
-              {% for r in registrations %}
-                <tr class="hover:bg-white/5 transition-colors" data-row-category="{{ r.category_id }}">
-                  <td class="py-3 px-4 text-stone-400 whitespace-nowrap">{{ r.created_at }}</td>
-                  <td class="py-3 px-4">
-                    <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase
-                                 {% if r.category_id == 'akademik' %}bg-[#AEC6CF]/20 text-[#AEC6CF]
-                                 {% elif r.category_id == 'bahasa' %}bg-[#FFB7C5]/20 text-[#FFB7C5]
-                                 {% elif r.category_id == 'seni' %}bg-[#FFE5B4]/20 text-[#FFE5B4]
-                                 {% else %}bg-[#FFC0CB]/20 text-[#FFC0CB]{% endif %}">
-                      {{ r.category_id }}
-                    </span>
-                  </td>
-                  <td class="py-3 px-4 font-sans font-bold text-white whitespace-nowrap">{{ r.cabang_name }}</td>
-                  <td class="py-3 px-4 font-sans text-stone-200">{{ r.participant_name }}</td>
-                  <td class="py-3 px-4">{{ r.kelas }}</td>
-                  <td class="py-3 px-4">{{ r.whatsapp }}</td>
-                  <td class="py-3 px-4 whitespace-nowrap">
-                    {% if r.synced_to_sheets %}
-                      <span class="inline-flex items-center gap-1 text-[11px] text-emerald-400 font-sans font-bold">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Synced Google Sheet
-                      </span>
-                    {% else %}
-                      <span class="inline-flex items-center gap-1 text-[11px] text-amber-300 font-sans">
-                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Tersimpan Real-Time
-                      </span>
-                    {% endif %}
-                  </td>
-                </tr>
-              {% endfor %}
-            {% else %}
-              <tr id="row-empty">
-                <td colspan="7" class="py-12 text-center text-stone-400 font-sans">
-                  Belum ada data pendaftaran yang masuk. Jadilah yang pertama mendaftar!
-                </td>
-              </tr>
-            {% endif %}
-          </tbody>
-        </table>
-      </div>
-
-      <div class="mt-4 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-400 gap-2">
-        <span id="table-record-count">Menampilkan data pendaftaran terbaru. Tersinkronisasi secara real-time.</span>
-        <button type="button" id="btn-refresh-table" class="inline-flex items-center gap-1.5 text-stone-300 hover:text-white font-bold">
-          <svg class="w-3.5 h-3.5"><use href="#i-refresh"></use></svg>
-          Segarkan Data Real-Time
-        </button>
-      </div>
-
     </div>
   </section>
 </div>
@@ -469,8 +324,7 @@
       <div class="pt-2">
         <button type="submit" id="btn-submit-registration"
                 class="w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-wider text-black bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] hover:brightness-110 shadow-lg transition-transform hover:scale-[1.01] flex items-center justify-center gap-2">
-          <svg class="w-4 h-4 text-stone-900"><use href="#i-spreadsheet"></use></svg>
-          <span><strong>Kirim Pendaftaran & Simpan ke Spreadsheet Real-Time</strong></span>
+          <span><strong>Kirim Pendaftaran</strong></span>
         </button>
       </div>
 
@@ -481,370 +335,7 @@
   </div>
 </div>
 
-<!-- ========================================================================= -->
-<!-- MODAL SHEET 2: FORMAT PENDAFTARAN RESMI -->
-<!-- ========================================================================= -->
-<div id="modal-sheet2" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-  <div class="relative w-full max-w-2xl rounded-3xl p-6 sm:p-8 bg-[#181311] border border-[#FFE5B4]/40 max-h-[90vh] overflow-y-auto shadow-2xl">
-    
-    <button type="button" id="btn-close-sheet2-modal" class="absolute top-5 right-5 p-2 rounded-full bg-white/10 text-stone-300 hover:text-white" aria-label="Tutup">
-      <svg class="w-5 h-5"><use href="#i-x"></use></svg>
-    </button>
-
-    <div class="space-y-2 mb-6">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#FFE5B4]/15 text-[#FFE5B4] border border-[#FFE5B4]/30">
-        Dokumen Sheet 2
-      </div>
-      <h3 class="text-2xl font-black text-white">Format Pendaftaran Resmi Nordelia</h3>
-      <p class="text-xs text-stone-300">
-        Berikut adalah format pengisian data resmi pendaftaran lomba sesuai lembar "Sheet 2" yang telah ditentukan panitia:
-      </p>
-    </div>
-
-    <div class="space-y-4">
-      {% for fmt in sheet2_formats %}
-        <div class="p-4 rounded-2xl bg-black/50 border border-white/10 space-y-2">
-          <h4 class="text-xs font-black uppercase text-[#FFE5B4]">{{ fmt.kategori_lomba }}</h4>
-          <ul class="text-xs text-stone-200 font-mono space-y-1 pl-2 border-l-2 border-[#FFB7C5]">
-            {% for item in fmt.format_isi %}
-              <li>{{ item }}</li>
-            {% endfor %}
-          </ul>
-          <p class="text-[11px] text-stone-400 italic pt-1">{{ fmt.catatan }}</p>
-        </div>
-      {% endfor %}
-    </div>
-
-    <div class="mt-6 pt-4 border-t border-white/10 text-center">
-      <button type="button" id="btn-close-sheet2-bottom" class="px-6 py-2.5 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/20 text-white">
-        Tutup Panduan Format
-      </button>
-    </div>
-  </div>
-</div>
-
 <!-- DATA JSON SCRIPT FOR INTERACTION -->
 <script id="nordelia-data-cabang" type="application/json">{{ cabang_lomba | tojson | safe }}</script>
 <script id="nordelia-data-formats" type="application/json">{{ format_registrasi | tojson | safe }}</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const cabangList = JSON.parse(document.getElementById("nordelia-data-cabang").textContent);
-  const formatList = JSON.parse(document.getElementById("nordelia-data-formats").textContent);
-
-  const cabangCards = Array.from(document.querySelectorAll("[data-cabang-card]"));
-  const emptyNotice = document.getElementById("cabang-empty");
-  const searchInput = document.getElementById("cabang-search");
-  const currentCategoryName = document.getElementById("current-category-name");
-
-  // Filter logic
-  let activeCategory = "semua";
-  function applyFilter() {
-    const q = (searchInput?.value || "").toLowerCase().trim();
-    let visibleCount = 0;
-
-    cabangCards.forEach(function (card) {
-      const matchCat = activeCategory === "semua" || card.dataset.category === activeCategory;
-      const haystack = (card.dataset.name + " " + card.dataset.pic + " " + card.dataset.tempat + " " + card.dataset.category).toLowerCase();
-      const matchQ = !q || haystack.includes(q);
-      const isVisible = matchCat && matchQ;
-
-      card.classList.toggle("hidden", !isVisible);
-      if (isVisible) visibleCount++;
-    });
-
-    if (emptyNotice) {
-      emptyNotice.classList.toggle("hidden", visibleCount > 0);
-    }
-  }
-
-  // Category Buttons click handler (Navigate to sub-page if has sub-events)
-  document.querySelectorAll("[data-category-select]").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      const catId = btn.getAttribute("data-category-select");
-      const hasSub = btn.getAttribute("data-has-sub") === "true";
-
-      if (hasSub) {
-        // Navigate to sub-page for categories with sub-events
-        window.location.href = "/nordelia/" + catId;
-      } else {
-        // Direct registration for categories without sub-events
-        activeCategory = catId;
-
-        // Update Pills
-        document.querySelectorAll(".cat-pill").forEach(function (p) {
-          const isMatch = p.getAttribute("data-filter-cat") === catId;
-          p.classList.toggle("is-active", isMatch);
-          if (isMatch) {
-            p.className = "cat-pill is-active px-4 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap bg-gradient-to-r from-[#FFB7C5] to-[#FFE5B4] text-black";
-          } else {
-            p.className = "cat-pill px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-stone-900/80 text-stone-300 hover:text-white border border-white/10";
-          }
-        });
-
-        if (currentCategoryName) {
-          currentCategoryName.textContent = catId.toUpperCase();
-        }
-
-        applyFilter();
-
-        // Scroll to children cabang section
-        document.getElementById("section-cabang")?.scrollIntoView({ behavior: "smooth" });
-      }
-    });
-  });
-
-  // Filter pills handler
-  document.querySelectorAll(".cat-pill").forEach(function (pill) {
-    pill.addEventListener("click", function () {
-      const cat = pill.getAttribute("data-filter-cat");
-      activeCategory = cat;
-
-      document.querySelectorAll(".cat-pill").forEach(function (p) {
-        p.className = "cat-pill px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-stone-900/80 text-stone-300 hover:text-white border border-white/10";
-      });
-      pill.className = "cat-pill is-active px-4 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap bg-gradient-to-r from-[#FFB7C5] to-[#FFE5B4] text-black";
-
-      if (currentCategoryName) {
-        currentCategoryName.textContent = cat === "semua" ? "Semua Kategori" : cat.toUpperCase();
-      }
-
-      applyFilter();
-    });
-  });
-
-  searchInput?.addEventListener("input", applyFilter);
-
-  // Big Prominent Spreadsheet Button in Hero
-  document.getElementById("btn-explore-branches")?.addEventListener("click", function () {
-    document.getElementById("section-categories")?.scrollIntoView({ behavior: "smooth" });
-  });
-
-  // ==================== MODAL REGISTER & DYNAMIC FIELDS ====================
-  const modalReg = document.getElementById("modal-register");
-  const closeRegBtn = document.getElementById("btn-close-register-modal");
-  const formCabangTitle = document.getElementById("form-cabang-title");
-  const formBadgeCategory = document.getElementById("form-badge-category");
-  const formRuleBox = document.getElementById("form-rule-box");
-  const inputCabangId = document.getElementById("input-cabang-id");
-  const dynamicFormFields = document.getElementById("dynamic-form-fields");
-  const formAlert = document.getElementById("form-alert");
-  const regForm = document.getElementById("nordelia-reg-form");
-
-  function openRegisterModal(cabangId) {
-    const c = cabangList.find(item => item.id === cabangId);
-    if (!c) return;
-
-    inputCabangId.value = c.id;
-    formCabangTitle.textContent = c.name;
-    formBadgeCategory.textContent = c.category.toUpperCase() + " • NO. " + c.no;
-    formRuleBox.innerHTML = `
-      <div class="flex items-center justify-between mb-1">
-        <span class="font-bold text-[#FFE5B4]">PIC: ${c.pic}</span>
-        <span class="text-stone-400">Lokasi: ${c.tempat}</span>
-      </div>
-      <p class="text-[11px] text-stone-300"><strong class="text-white">Ketentuan:</strong> ${c.note}</p>
-      <div class="mt-1 text-[11px] text-stone-400">Penghargaan: <strong>${c.penghargaan} (${c.juara})</strong></div>
-    `;
-
-    // Dynamic field generation based on format_type
-    const fmtKey = c.format_type || "olimpiade_akademik";
-    const fmt = formatList[fmtKey] || formatList["olimpiade_akademik"];
-    
-    let html = "";
-    fmt.fields.forEach(field => {
-      if (field.type === "textarea") {
-        html += `
-          <div>
-            <label class="block text-xs font-bold text-stone-200 mb-1">${field.label} ${field.required ? '<span class="text-rose-400">*</span>' : ''}</label>
-            <textarea name="${field.name}" ${field.required ? 'required' : ''} placeholder="${field.placeholder}" rows="3"
-                      class="w-full px-3.5 py-2.5 rounded-xl bg-stone-900 border border-white/20 text-xs text-white placeholder-stone-500 focus:outline-none focus:border-[#FFE5B4]"></textarea>
-          </div>
-        `;
-      } else {
-        html += `
-          <div>
-            <label class="block text-xs font-bold text-stone-200 mb-1">${field.label} ${field.required ? '<span class="text-rose-400">*</span>' : ''}</label>
-            <input type="${field.type}" name="${field.name}" ${field.required ? 'required' : ''} placeholder="${field.placeholder}"
-                   class="w-full px-3.5 py-2.5 rounded-xl bg-stone-900 border border-white/20 text-xs text-white placeholder-stone-500 focus:outline-none focus:border-[#FFE5B4]" />
-          </div>
-        `;
-      }
-    });
-
-    dynamicFormFields.innerHTML = html;
-    formAlert.classList.add("hidden");
-    modalReg.classList.remove("hidden");
-    document.body.classList.add("overflow-hidden");
-  }
-
-  function closeRegisterModal() {
-    modalReg.classList.add("hidden");
-    document.body.classList.remove("overflow-hidden");
-  }
-
-  document.querySelectorAll("[data-register-cabang]").forEach(btn => {
-    btn.addEventListener("click", () => openRegisterModal(btn.getAttribute("data-register-cabang")));
-  });
-
-  closeRegBtn?.addEventListener("click", closeRegisterModal);
-  modalReg?.addEventListener("click", (e) => {
-    if (e.target === modalReg) closeRegisterModal();
-  });
-
-  // Handle Form Submission with Real-Time Push to Backend & Sheets
-  regForm?.addEventListener("submit", async function (e) {
-    e.preventDefault();
-    const btnSubmit = document.getElementById("btn-submit-registration");
-    const originalText = btnSubmit.innerHTML;
-
-    btnSubmit.disabled = true;
-    btnSubmit.innerHTML = `
-      <svg class="w-4 h-4 animate-spin text-black" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25"></circle><path fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
-      <span>Menyimpan ke Spreadsheet Real-Time...</span>
-    `;
-
-    try {
-      const formData = new FormData(regForm);
-      const payload = {};
-      formData.forEach((val, key) => { payload[key] = val; });
-
-      const res = await fetch("/api/nordelia/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
-
-      if (data.success) {
-        formAlert.className = "p-3 rounded-xl mb-4 text-xs font-bold bg-emerald-950/80 text-emerald-300 border border-emerald-500/40";
-        formAlert.textContent = data.message || "Pendaftaran berhasil dicatat!";
-        formAlert.classList.remove("hidden");
-
-        // Prepend to preview table in real time
-        appendRowToPreviewTable(data.entry);
-
-        setTimeout(() => {
-          closeRegisterModal();
-          regForm.reset();
-          document.getElementById("section-spreadsheet-preview")?.scrollIntoView({ behavior: "smooth" });
-        }, 1500);
-
-      } else {
-        formAlert.className = "p-3 rounded-xl mb-4 text-xs font-bold bg-rose-950/80 text-rose-300 border border-rose-500/40";
-        formAlert.textContent = data.error || "Gagal memproses pendaftaran. Silakan coba lagi.";
-        formAlert.classList.remove("hidden");
-      }
-    } catch (err) {
-      formAlert.className = "p-3 rounded-xl mb-4 text-xs font-bold bg-rose-950/80 text-rose-300 border border-rose-500/40";
-      formAlert.textContent = "Terjadi kesalahan jaringan: " + err.message;
-      formAlert.classList.remove("hidden");
-    } finally {
-      btnSubmit.disabled = false;
-      btnSubmit.innerHTML = originalText;
-    }
-  });
-
-  function appendRowToPreviewTable(entry) {
-    const tbody = document.getElementById("spreadsheet-tbody");
-    if (!tbody) return;
-
-    document.getElementById("row-empty")?.remove();
-
-    const tr = document.createElement("tr");
-    tr.className = "hover:bg-white/5 transition-colors bg-emerald-950/30";
-    tr.setAttribute("data-row-category", entry.category_id);
-
-    const badgeColor = entry.category_id === "akademik" ? "bg-[#AEC6CF]/20 text-[#AEC6CF]" :
-                       entry.category_id === "bahasa" ? "bg-[#FFB7C5]/20 text-[#FFB7C5]" :
-                       entry.category_id === "seni" ? "bg-[#FFE5B4]/20 text-[#FFE5B4]" : "bg-[#FFC0CB]/20 text-[#FFC0CB]";
-
-    tr.innerHTML = `
-      <td class="py-3 px-4 text-stone-400 whitespace-nowrap">${entry.created_at}</td>
-      <td class="py-3 px-4">
-        <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase ${badgeColor}">${entry.category_id}</span>
-      </td>
-      <td class="py-3 px-4 font-sans font-bold text-white whitespace-nowrap">${entry.cabang_name}</td>
-      <td class="py-3 px-4 font-sans text-stone-200">${entry.participant_name}</td>
-      <td class="py-3 px-4">${entry.kelas}</td>
-      <td class="py-3 px-4">${entry.whatsapp}</td>
-      <td class="py-3 px-4 whitespace-nowrap">
-        <span class="inline-flex items-center gap-1 text-[11px] text-emerald-400 font-sans font-bold">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Baru Masuk
-        </span>
-      </td>
-    `;
-    tbody.insertBefore(tr, tbody.firstChild);
-
-    // Update counter
-    const statCounter = document.getElementById("stat-total-reg");
-    if (statCounter) {
-      const match = statCounter.textContent.match(/\d+/);
-      const curr = match ? parseInt(match[0]) : 0;
-      statCounter.textContent = `${curr + 1} Peserta Terdaftar`;
-    }
-  }
-
-  // ==================== SHEET 2 MODAL ====================
-  const modalSheet2 = document.getElementById("modal-sheet2");
-  const closeSheet2Btn = document.getElementById("btn-close-sheet2-modal");
-  const closeSheet2Bottom = document.getElementById("btn-close-sheet2-bottom");
-
-  document.querySelectorAll("[data-open-sheet2-modal]").forEach(b => {
-    b.addEventListener("click", () => {
-      modalSheet2.classList.remove("hidden");
-      document.body.classList.add("overflow-hidden");
-    });
-  });
-
-  const closeSheet2 = () => {
-    modalSheet2.classList.add("hidden");
-    document.body.classList.remove("overflow-hidden");
-  };
-  closeSheet2Btn?.addEventListener("click", closeSheet2);
-  closeSheet2Bottom?.addEventListener("click", closeSheet2);
-  modalSheet2?.addEventListener("click", (e) => {
-    if (e.target === modalSheet2) closeSheet2();
-  });
-
-  // ==================== SPREADSHEET TABS CLASSIFICATION ====================
-  document.querySelectorAll("[data-sheet-tab]").forEach(btn => {
-    btn.addEventListener("click", function () {
-      const tab = btn.getAttribute("data-sheet-tab");
-      document.querySelectorAll("[data-sheet-tab]").forEach(b => {
-        b.className = "sheet-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-stone-900/80 text-stone-300 border border-white/10 hover:text-white";
-      });
-      btn.className = "sheet-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-white/20 text-white border border-white/30";
-
-      document.querySelectorAll("#spreadsheet-tbody tr[data-row-category]").forEach(tr => {
-        const rowCat = tr.getAttribute("data-row-category");
-        const show = tab === "semua" || rowCat === tab;
-        tr.classList.toggle("hidden", !show);
-      });
-    });
-  });
-
-  // Table Refresh Button
-  document.getElementById("btn-refresh-table")?.addEventListener("click", async function () {
-    const icon = this.querySelector("svg");
-    icon?.classList.add("animate-spin");
-    try {
-      const res = await fetch("/api/nordelia/registrations");
-      const d = await res.json();
-      if (d.success && d.data) {
-        const tbody = document.getElementById("spreadsheet-tbody");
-        if (tbody && d.data.length > 0) {
-          tbody.innerHTML = "";
-          d.data.forEach(entry => appendRowToPreviewTable(entry));
-        }
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setTimeout(() => icon?.classList.remove("animate-spin"), 500);
-    }
-  });
-
-});
-</script>
 {% endblock %}
