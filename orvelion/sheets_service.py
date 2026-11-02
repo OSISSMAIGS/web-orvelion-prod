@@ -273,6 +273,7 @@ def push_to_google_sheet(entry: Dict[str, Any]) -> bool:
                 "spreadsheet_id": sheet_id,
                 "timestamp": entry.get("created_at"),
                 "category": entry.get("category_id", "").upper(),
+                "target_sheet": entry.get("category_id", "").lower(),
                 "cabang": entry.get("cabang_name"),
                 "nama": entry.get("participant_name"),
                 "kelas": entry.get("kelas"),
