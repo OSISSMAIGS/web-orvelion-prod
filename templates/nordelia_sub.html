@@ -38,7 +38,6 @@
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
       {% for sub in category.subEvents %}
-        {% set is_olimp = ('olimpiade' in sub.id or 'matematika' in sub.id or 'fisika' in sub.id or 'kimia' in sub.id or 'biologi' in sub.id or 'astronomi' in sub.id or 'geografi' in sub.id or 'informatika' in sub.id or 'ekonomi' in sub.id or 'kebumian' in sub.id or 'ai' in sub.id) %}
         <article class="group rounded-2xl p-5 border backdrop-blur-md flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                  style="background: rgba(22, 18, 15, 0.75); border-color: rgba(255, 255, 255, 0.15);">
           
@@ -47,13 +46,19 @@
               <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md bg-[#FFE5B4]/15 text-[#FFE5B4] border border-[#FFE5B4]/30">
                 Cabang Lomba
               </span>
-              {% if is_olimp %}
-                <span class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40">
-                  Maks. 20 Peserta
-                </span>
+              {% if sub.is_olimpiade_or_ai %}
+                {% if sub.is_full %}
+                  <span class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40">
+                    Kuota Penuh
+                  </span>
+                {% else %}
+                  <span class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40">
+                    Sisa {{ sub.remaining_quota if sub.remaining_quota is not none else (20 - (sub.registered_count or 0)) }} Kuota
+                  </span>
+                {% endif %}
               {% else %}
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-950/60 text-emerald-300 border border-emerald-500/30">
-                  Pendaftaran Buka
+                <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-950/60 text-emerald-300 border border-emerald-500/30">
+                  Kuota Terbuka
                 </span>
               {% endif %}
             </div>
@@ -62,25 +67,66 @@
               {{ sub.name }}
             </h4>
 
-            <div class="space-y-1 text-xs text-stone-300 pt-2 border-t border-white/10">
-              <div class="flex items-center justify-between text-stone-400">
-                <span>Status Kuota:</span>
-                <span class="font-bold {% if is_olimp %}text-amber-300{% else %}text-emerald-400{% endif %}">
-                  {% if is_olimp %}Maksimal 20 Orang{% else %}Terbuka{% endif %}
+            <!-- Information list (Hanya Olimpiade & Literasi yang ada min/max) -->
+            <div class="space-y-1.5 text-xs text-stone-300 pt-2 border-t border-white/10">
+              {% if sub.tempat and sub.tempat != '-' %}
+                <div class="flex items-start justify-between gap-2">
+                  <span class="text-stone-400">Tempat Lomba:</span>
+                  <span class="font-bold text-right text-stone-200">{{ sub.tempat }}</span>
+                </div>
+              {% endif %}
+              {% if sub.is_olimpiade_or_ai %}
+                <div class="flex items-start justify-between gap-2">
+                  <span class="text-stone-400">Peserta Min / Max:</span>
+                  <span class="font-bold text-amber-300">5 / Kelas • Maks. 20</span>
+                </div>
+              {% elif sub.is_literasi %}
+                <div class="flex items-start justify-between gap-2">
+                  <span class="text-stone-400">Peserta Minimal:</span>
+                  <span class="font-bold text-[#FFE5B4]">2 / Kelas</span>
+                </div>
+              {% endif %}
+            </div>
+
+            <!-- Informasi Pendaftar & Sisa Kuota (DI SELURUH LOMBA) -->
+            <div class="p-3 rounded-xl bg-black/60 border border-white/10 space-y-1.5">
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-stone-400 flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                  Terdaftar Saat Ini:
                 </span>
+                <span class="font-black text-white bg-white/10 px-2 py-0.5 rounded-md">
+                  {{ sub.registered_count }} Orang
+                </span>
+              </div>
+              <div class="flex items-center justify-between text-xs pt-1 border-t border-white/10">
+                <span class="text-stone-400">Sisa Kuota:</span>
+                {% if sub.is_olimpiade_or_ai %}
+                  <span class="font-black {% if sub.is_full %}text-rose-400{% else %}text-amber-300{% endif %}">
+                    {% if sub.is_full %}Kuota Penuh (20/20){% else %}Sisa {{ sub.remaining_quota if sub.remaining_quota is not none else (20 - (sub.registered_count or 0)) }} dari 20 Kuota{% endif %}
+                  </span>
+                {% else %}
+                  <span class="font-bold text-emerald-400">Kuota Terbuka</span>
+                {% endif %}
               </div>
             </div>
           </div>
 
-          <div class="pt-4 mt-4 border-t border-white/10 flex items-center justify-between gap-3">
-            <span class="text-[11px] text-stone-400">Klik untuk daftar</span>
-            <button type="button"
-                    data-register-sub="{{ sub.id }}"
-                    data-sub-name="{{ sub.name }}"
-                    class="px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider text-black bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] hover:brightness-110 shadow-md transition-transform hover:scale-105 flex items-center gap-1.5">
-              <span><strong>Daftar Lomba</strong></span>
-              <svg class="w-3.5 h-3.5 text-black"><use href="#i-chevron"></use></svg>
-            </button>
+          <div class="pt-4 mt-4 border-t border-white/10">
+            {% if sub.is_full %}
+              <button type="button" disabled
+                      class="w-full py-2.5 rounded-xl text-xs font-black uppercase tracking-wider text-stone-400 bg-stone-800 cursor-not-allowed flex items-center justify-center gap-1.5">
+                <span>Kuota Penuh (20/20)</span>
+              </button>
+            {% else %}
+              <button type="button"
+                      data-register-sub="{{ sub.id }}"
+                      data-sub-name="{{ sub.name }}"
+                      class="w-full py-2.5 rounded-xl text-xs font-black uppercase tracking-wider text-black bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] hover:brightness-110 shadow-md transition-transform hover:scale-[1.02] flex items-center justify-center gap-1.5">
+                <span><strong>Daftar Lomba</strong></span>
+                <svg class="w-3.5 h-3.5 text-black"><use href="#i-chevron"></use></svg>
+              </button>
+            {% endif %}
           </div>
         </article>
       {% endfor %}
@@ -113,8 +159,11 @@
     <!-- Info Kuota Khusus Olimpiade 9 Cabang + AI -->
     <div id="form-quota-banner" class="hidden p-3 rounded-xl bg-amber-950/50 border border-amber-500/40 text-xs text-amber-200 mb-4 flex items-center gap-2">
       <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-      <span><strong>Aturan Kuota:</strong> Cabang ini dibatasi <strong>maksimal 20 orang</strong> per cabang.</span>
+      <span><strong>Aturan Kuota:</strong> Minimal <strong>5 peserta per kelas</strong>, maksimal <strong>20 peserta</strong> per cabang.</span>
     </div>
+
+    <!-- Status Kuota & Info Realtime -->
+    <div id="form-sub-rule-box" class="p-3 rounded-xl bg-black/40 border border-white/10 text-xs text-stone-300 mb-4"></div>
 
     <!-- Alert status -->
     <div id="form-alert" class="hidden p-3 rounded-xl mb-4 text-xs font-bold"></div>
@@ -129,8 +178,8 @@
       <div class="pt-2">
         <button type="submit" id="btn-submit-registration"
                 class="w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-wider text-black bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] hover:brightness-110 shadow-lg transition-transform hover:scale-[1.01] flex items-center justify-center gap-2">
-          <svg class="w-4 h-4 text-stone-900"><use href="#i-spreadsheet"></use></svg>
-          <span><strong>Kirim Pendaftaran & Simpan ke Spreadsheet</strong></span>
+          <svg class="w-4 h-4 text-stone-900"><use href="#i-check"></use></svg>
+          <span><strong>Kirim Pendaftaran</strong></span>
         </button>
       </div>
 
@@ -142,6 +191,7 @@
 </div>
 
 <script id="nordelia-formats-json" type="application/json">{{ format_registrasi | tojson | safe }}</script>
+<script id="nordelia-cabang-json" type="application/json">{{ cabang_lomba | tojson | safe }}</script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
@@ -155,6 +205,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const regForm = document.getElementById("nordelia-sub-reg-form");
 
   const formatList = JSON.parse(document.getElementById("nordelia-formats-json").textContent);
+  const cabangList = JSON.parse(document.getElementById("nordelia-cabang-json")?.textContent || "[]");
 
   const olimpiade9DanAI = [
     "olimpiade-matematika", "olimpiade-fisika", "olimpiade-biologi", "olimpiade-kimia",
@@ -166,21 +217,68 @@ document.addEventListener("DOMContentLoaded", function () {
     inputCabangId.value = subId;
     formSubTitle.textContent = subName;
 
-    const isOlimpOrAI = olimpiade9DanAI.includes(subId) || subId.includes("olimpiade") || subId.includes("ai");
+    const isOlimpOrAI = olimpiade9DanAI.includes(subId) || subId.includes("olimpiade") || subId.includes("ai") || subName.toLowerCase().includes("artifisial");
     quotaBanner.classList.toggle("hidden", !isOlimpOrAI);
 
     // Tentukan format type sesuai Sheet 2
     let fmtKey = "olimpiade_akademik";
-    if (subId.includes("debat") || subId.includes("ldbi") || subId.includes("nsdc")) {
+    let cMatch = cabangList.find(x => x.id === subId);
+    if (!cMatch) {
+      cMatch = cabangList.find(x => 
+        (subId.includes("ai") && (x.id.includes("ai") || x.name.toLowerCase().includes("artifisial"))) ||
+        x.name.toLowerCase().includes(subId.toLowerCase())
+      );
+    }
+
+    const regCount = (cMatch && typeof cMatch.registered_count === "number") ? cMatch.registered_count : 0;
+    const isLit = (cMatch && cMatch.is_literasi) || subName.toLowerCase().startsWith("literasi") || subId.startsWith("literasi");
+    
+    let quotaDisplay = "";
+    if (isOlimpOrAI) {
+      const rem = (cMatch && typeof cMatch.remaining_quota === "number") ? cMatch.remaining_quota : Math.max(0, 20 - regCount);
+      const isFull = rem <= 0 || (cMatch && cMatch.is_full);
+      quotaDisplay = `<span class="${isFull ? 'text-rose-400' : 'text-amber-300'} font-bold">${isFull ? 'Kuota Penuh (20/20)' : 'Sisa ' + rem + ' dari 20 Kuota'}</span>`;
+    } else {
+      quotaDisplay = `<span class="text-emerald-400 font-bold">Kuota Terbuka</span>`;
+    }
+
+    let minMaxDisplay = "";
+    if (isOlimpOrAI) {
+      minMaxDisplay = `<span class="text-amber-300 font-bold">Min: 5/Kelas • Maks: 20</span>`;
+    } else if (isLit) {
+      minMaxDisplay = `<span class="text-[#FFE5B4] font-bold">Min: 2/Kelas</span>`;
+    }
+
+    const ruleBox = document.getElementById("form-sub-rule-box");
+    if (ruleBox) {
+      ruleBox.innerHTML = `
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-stone-400">Lokasi: ${(cMatch && cMatch.tempat) ? cMatch.tempat : '-'}</span>
+          ${minMaxDisplay}
+        </div>
+        <div class="flex items-center justify-between py-1 my-1 border-t border-b border-white/10 text-[11px]">
+          <span class="text-stone-300">Terdaftar: <strong class="text-white">${regCount} Orang</strong></span>
+          ${quotaDisplay}
+        </div>
+        <p class="text-[11px] text-stone-300"><strong class="text-white">Ketentuan:</strong> ${(cMatch && cMatch.note) ? cMatch.note : '-'}</p>
+      `;
+    }
+    if (cMatch && cMatch.format_type) {
+      fmtKey = cMatch.format_type;
+    } else if (subId.includes("debat") || subId.includes("ldbi") || subId.includes("nsdc")) {
       fmtKey = "debat";
     } else if (subId.includes("vokal") || subId.includes("menyanyi")) {
       fmtKey = "vokal_solo";
+    } else if (subId.includes("cosplay")) {
+      fmtKey = "cosplay";
+    } else if (subId.includes("basket")) {
+      fmtKey = "basket";
+    } else if (subId.includes("futsal")) {
+      fmtKey = "futsal";
+    } else if (subId.includes("voli")) {
+      fmtKey = "voli";
     } else if (subId.includes("komik") || subId.includes("poster") || subId.includes("foto") || subId.includes("kriya")) {
       fmtKey = "komik_digital";
-    } else if (subId.includes("basket") || subId.includes("futsal") || subId.includes("voli") || subId.includes("tari")) {
-      fmtKey = "olahraga_beregu";
-    } else if (subId.includes("silat") || subId.includes("atletik") || subId.includes("catur")) {
-      fmtKey = "olahraga_individu";
     }
 
     const fmt = formatList[fmtKey] || formatList["olimpiade_akademik"];
@@ -228,7 +326,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (e.target === modalReg) closeRegisterModal();
   });
 
-  // Handle Form Submission dengan real-time push ke Google Spreadsheet
+  // Handle Form Submission
   regForm?.addEventListener("submit", async function (e) {
     e.preventDefault();
     const btnSubmit = document.getElementById("btn-submit-registration");
@@ -237,7 +335,7 @@ document.addEventListener("DOMContentLoaded", function () {
     btnSubmit.disabled = true;
     btnSubmit.innerHTML = `
       <svg class="w-4 h-4 animate-spin text-black" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25"></circle><path fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
-      <span>Menyimpan ke Spreadsheet Real-Time...</span>
+      <span>Memproses Pendaftaran...</span>
     `;
 
     try {
@@ -260,7 +358,8 @@ document.addEventListener("DOMContentLoaded", function () {
         setTimeout(() => {
           closeRegisterModal();
           regForm.reset();
-        }, 1500);
+          window.location.reload();
+        }, 1200);
 
       } else {
         formAlert.className = "p-3 rounded-xl mb-4 text-xs font-bold bg-rose-950/80 text-rose-300 border border-rose-500/40";
@@ -276,6 +375,15 @@ document.addEventListener("DOMContentLoaded", function () {
       btnSubmit.innerHTML = originalText;
     }
   });
+
+
+  // Auto open jika hanya 1 sub event (misal Literasi Numerasi)
+  const allSubBtns = document.querySelectorAll("[data-register-sub]");
+  if (allSubBtns.length === 1) {
+    setTimeout(() => {
+      allSubBtns[0].click();
+    }, 250);
+  }
 
 });
 </script>

@@ -86,6 +86,55 @@ def event():
     )
 
 
+
+def build_decorated_cabang_list():
+    counts = storage.get_counts_by_cabang()
+    decorated = []
+    for c in CABANG_LOMBA:
+        c_copy = dict(c)
+        cid = c["id"]
+        reg_count = counts.get(cid, 0)
+        c_copy["registered_count"] = reg_count
+        
+        # 1. Aturan Olimpiade 9 Cabang + AI: Max 20 Orang, Min 5 / Kelas
+        if c.get("is_olimpiade_or_ai") or cid in OLIMPIADE_9_DAN_AI_IDS:
+            c_copy["is_olimpiade_or_ai"] = True
+            c_copy["peserta_min"] = "5 / Kelas"
+            c_copy["peserta_max"] = "20"
+            c_copy["max_quota"] = 20
+            remaining = max(0, 20 - reg_count)
+            c_copy["remaining_quota"] = remaining
+            c_copy["is_full"] = reg_count >= 20
+            c_copy["quota_text"] = f"Sisa {remaining} dari 20 Kuota" if remaining > 0 else "Kuota Penuh (20/20)"
+            c_copy["quota_badge"] = f"Sisa {remaining} Kuota" if remaining > 0 else "Kuota Penuh"
+        # 2. Aturan Literasi: Min 2 / Kelas, Max tidak ada
+        elif c["name"].lower().startswith("literasi") or cid.startswith("literasi"):
+            c_copy["is_olimpiade_or_ai"] = False
+            c_copy["is_literasi"] = True
+            c_copy["peserta_min"] = "2 / Kelas"
+            c_copy["peserta_max"] = None
+            c_copy["max_quota"] = None
+            c_copy["remaining_quota"] = None
+            c_copy["is_full"] = False
+            c_copy["quota_text"] = "Kuota Terbuka"
+            c_copy["quota_badge"] = "Kuota Terbuka"
+        # 3. Sisanya: Tidak perlu minimum dan maximum, cukup informasi kuota pendaftaran
+        else:
+            c_copy["is_olimpiade_or_ai"] = False
+            c_copy["is_literasi"] = False
+            c_copy["peserta_min"] = None
+            c_copy["peserta_max"] = None
+            c_copy["max_quota"] = None
+            c_copy["remaining_quota"] = None
+            c_copy["is_full"] = False
+            c_copy["quota_text"] = "Kuota Terbuka"
+            c_copy["quota_badge"] = "Kuota Terbuka"
+            
+        c_copy["is_literasi"] = c["name"].lower().startswith("literasi") or cid.startswith("literasi")
+        decorated.append(c_copy)
+    return decorated
+
+
 @bp.get("/nordelia")
 @bp.get("/event/nordelia")
 def nordelia():
@@ -103,7 +152,7 @@ def nordelia():
             nordelia=NORDELIA_INFO,
             categories=CATEGORIES,
             nordelia_categories=nordelia_json.get("categories", []),
-            cabang_lomba=CABANG_LOMBA,
+            cabang_lomba=build_decorated_cabang_list(),
             sheet2_formats=SHEET2_FORMAT_SPEC,
             format_registrasi=FORMAT_REGISTRASI,
             summary=summary,
@@ -116,11 +165,17 @@ def nordelia():
 
 @bp.get("/nordelia/<category_id>")
 def nordelia_category(category_id: str):
+    cat_id_clean = category_id.lower().strip()
+    if cat_id_clean in ("olimpiade-9-cabang", "osn"):
+        target_ids = ("osn", "olimpiade-9-cabang")
+    else:
+        target_ids = (cat_id_clean, category_id)
+
     # Cari di nordelia_events.json
     nordelia_json = load_nordelia_events()
     cat_match = None
     for c in nordelia_json.get("categories", []):
-        if c.get("id") == category_id:
+        if c.get("id") in target_ids:
             cat_match = c
             break
 
@@ -153,13 +208,66 @@ def nordelia_category(category_id: str):
     if not cat_match:
         return redirect(url_for("pages.nordelia"))
 
+    counts = storage.get_counts_by_cabang()
+    if not cat_match.get("subEvents"):
+        cabang_info = get_cabang_by_id(cat_match["id"])
+        sub_name = cabang_info["name"] if cabang_info else cat_match["name"]
+        is_olimp = (cabang_info.get("is_olimpiade_or_ai", False) if cabang_info else False) or cat_match["id"] in OLIMPIADE_9_DAN_AI_IDS or "ai" in cat_match["id"].lower() or "artifisial" in sub_name.lower()
+        is_lit = sub_name.lower().startswith("literasi") or cat_match["id"].startswith("literasi")
+        reg_c = counts.get(cabang_info["id"] if cabang_info else cat_match["id"], 0)
+        rem = max(0, 20 - reg_c) if is_olimp else None
+        
+        cat_match["subEvents"] = [
+            {
+                "id": cabang_info["id"] if cabang_info else cat_match["id"],
+                "name": sub_name,
+                "pic": cabang_info["pic"] if cabang_info else "-",
+                "tempat": cabang_info["tempat"] if cabang_info else "-",
+                "peserta_min": "5 / Kelas" if is_olimp else ("2 / Kelas" if is_lit else None),
+                "peserta_max": "20" if is_olimp else None,
+                "is_olimpiade_or_ai": is_olimp,
+                "is_literasi": is_lit,
+                "registered_count": reg_c,
+                "remaining_quota": rem,
+                "is_full": reg_c >= 20 if is_olimp else False,
+                "quota_text": (f"Sisa {rem} dari 20 Kuota" if rem > 0 else "Kuota Penuh (20/20)") if is_olimp else "Kuota Terbuka",
+                "quota_badge": (f"Sisa {rem} Kuota" if rem > 0 else "Kuota Penuh") if is_olimp else "Kuota Terbuka",
+                "registrationFormat": ["Nama Lengkap", "Kelas"],
+            }
+        ]
+    else:
+        for sub in cat_match.get("subEvents", []):
+            cb = get_cabang_by_id(sub.get("id"))
+            if not cb and ("ai" in sub.get("id", "").lower() or "artifisial" in sub.get("name", "").lower()):
+                cb = get_cabang_by_id("olimpiade-ai")
+            
+            sub_id = cb["id"] if cb else sub.get("id", "")
+            sub_name = cb.get("name", sub.get("name", ""))
+            is_olimp = (cb.get("is_olimpiade_or_ai", False) if cb else False) or sub_id in OLIMPIADE_9_DAN_AI_IDS or "ai" in sub_id.lower() or "artifisial" in sub_name.lower() or "olimpiade" in sub_id.lower()
+            is_lit = sub_name.lower().startswith("literasi") or sub_id.startswith("literasi")
+            reg_c = counts.get(sub_id, 0)
+            rem = max(0, 20 - reg_c) if is_olimp else None
+            
+            sub["peserta_min"] = "5 / Kelas" if is_olimp else ("2 / Kelas" if is_lit else None)
+            sub["peserta_max"] = "20" if is_olimp else None
+            sub["tempat"] = cb.get("tempat", "-") if cb else "-"
+            sub["pic"] = cb.get("pic", "-") if cb else "-"
+            sub["is_olimpiade_or_ai"] = is_olimp
+            sub["is_literasi"] = is_lit
+            sub["registered_count"] = reg_c
+            sub["remaining_quota"] = rem
+            sub["is_full"] = reg_c >= 20 if is_olimp else False
+            sub["quota_text"] = (f"Sisa {rem} dari 20 Kuota" if rem > 0 else "Kuota Penuh (20/20)") if is_olimp else "Kuota Terbuka"
+            sub["quota_badge"] = (f"Sisa {rem} Kuota" if rem > 0 else "Kuota Penuh") if is_olimp else "Kuota Terbuka"
+            sub["format_type"] = cb.get("format_type", "olimpiade_akademik") if cb else "olimpiade_akademik" 
+
     return render_template(
         "nordelia_sub.html",
         **_ctx(
             active_page="nordelia",
             category=cat_match,
             format_registrasi=FORMAT_REGISTRASI,
-            cabang_lomba=CABANG_LOMBA,
+            cabang_lomba=build_decorated_cabang_list(),
             summary=storage.get_summary_stats(),
         ),
     )
@@ -168,11 +276,20 @@ def nordelia_category(category_id: str):
 @bp.get("/nordelia/spreadsheet")
 def nordelia_spreadsheet():
     selected_cat = request.args.get("category", "semua")
-    regs = storage.get_all_registrations(selected_cat if selected_cat != "semua" else None)
+    selected_cabang = request.args.get("cabang", "")
+
+    all_regs = storage.get_all_registrations()
+    if selected_cabang:
+        regs = [r for r in all_regs if r.get("cabang_id") == selected_cabang or r.get("sheet_name") == selected_cabang or r.get("cabang_name") == selected_cabang]
+    elif selected_cat and selected_cat != "semua":
+        regs = storage.get_all_registrations(selected_cat)
+    else:
+        regs = all_regs
+
     summary = storage.get_summary_stats()
     spreadsheet_url = get_config(
         "NORDELIA_SPREADSHEET_URL",
-        "https://docs.google.com/spreadsheets/d/" + get_config("NORDELIA_SPREADSHEET_ID", "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms") + "/edit",
+        "https://docs.google.com/spreadsheets/d/" + get_config("NORDELIA_SPREADSHEET_ID", "1B4IyGD4mfPZkkQLjYfwNyGzOVw2EvMcDD_YlMTQ3lec") + "/edit",
     )
     return render_template(
         "nordelia_spreadsheet.html",
@@ -180,7 +297,9 @@ def nordelia_spreadsheet():
             active_page="nordelia",
             nordelia=NORDELIA_INFO,
             categories=CATEGORIES,
+            cabang_lomba=build_decorated_cabang_list(),
             selected_category=selected_cat,
+            selected_cabang=selected_cabang,
             registrations=regs,
             summary=summary,
             sheet2_formats=SHEET2_FORMAT_SPEC,
@@ -258,7 +377,7 @@ def api_nordelia_register():
 
         return jsonify({
             "success": True,
-            "message": f"Pendaftaran cabang '{cabang_info['name']}' berhasil dicatat secara real-time ke Google Spreadsheet!",
+            "message": f"Pendaftaran cabang '{cabang_info['name']}' berhasil dicatat! Terima kasih telah mendaftar.",
             "entry": saved_entry,
             "quota_info": quota_info,
         })

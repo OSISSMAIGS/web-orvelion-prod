@@ -71,38 +71,66 @@
   </div>
 
   <!-- CLASSIFICATION TABS & CONTROLS -->
-  <div class="p-4 rounded-2xl bg-[#161210] border border-white/10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
-    <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
-      <a href="/nordelia/spreadsheet?category=semua"
-         class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'semua' %}bg-gradient-to-r from-[#FFB7C5] to-[#FFE5B4] text-black{% else %}bg-stone-900 text-stone-300 hover:text-white border border-white/10{% endif %}">
-        Master (Semua)
-      </a>
-      <a href="/nordelia/spreadsheet?category=akademik"
-         class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'akademik' %}bg-[#AEC6CF] text-black{% else %}bg-stone-900 text-[#AEC6CF] hover:text-white border border-[#AEC6CF]/30{% endif %}">
-        Akademik
-      </a>
-      <a href="/nordelia/spreadsheet?category=bahasa"
-         class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'bahasa' %}bg-[#FFB7C5] text-black{% else %}bg-stone-900 text-[#FFB7C5] hover:text-white border border-[#FFB7C5]/30{% endif %}">
-        Bahasa
-      </a>
-      <a href="/nordelia/spreadsheet?category=seni"
-         class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'seni' %}bg-[#FFE5B4] text-black{% else %}bg-stone-900 text-[#FFE5B4] hover:text-white border border-[#FFE5B4]/30{% endif %}">
-        Seni
-      </a>
-      <a href="/nordelia/spreadsheet?category=olahraga"
-         class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'olahraga' %}bg-[#FFC0CB] text-black{% else %}bg-stone-900 text-[#FFC0CB] hover:text-white border border-[#FFC0CB]/30{% endif %}">
-        Olahraga
-      </a>
-      <a href="/nordelia/spreadsheet?category=format"
-         class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'format' %}bg-white text-black{% else %}bg-stone-900 text-stone-300 hover:text-white border border-white/10{% endif %}">
-        Sheet 2: Format Pendaftaran
-      </a>
+  <div class="space-y-3">
+    <div class="p-4 rounded-2xl bg-[#161210] border border-white/10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+      <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
+        <a href="/nordelia/spreadsheet?category=semua"
+           class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'semua' and not selected_cabang %}bg-gradient-to-r from-[#FFB7C5] to-[#FFE5B4] text-black{% else %}bg-stone-900 text-stone-300 hover:text-white border border-white/10{% endif %}">
+          Master Pendaftaran (Semua)
+        </a>
+        <a href="/nordelia/spreadsheet?category=akademik"
+           class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'akademik' and not selected_cabang %}bg-[#AEC6CF] text-black{% else %}bg-stone-900 text-[#AEC6CF] hover:text-white border border-[#AEC6CF]/30{% endif %}">
+          Akademik
+        </a>
+        <a href="/nordelia/spreadsheet?category=bahasa"
+           class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'bahasa' and not selected_cabang %}bg-[#FFB7C5] text-black{% else %}bg-stone-900 text-[#FFB7C5] hover:text-white border border-[#FFB7C5]/30{% endif %}">
+          Bahasa
+        </a>
+        <a href="/nordelia/spreadsheet?category=seni"
+           class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'seni' and not selected_cabang %}bg-[#FFE5B4] text-black{% else %}bg-stone-900 text-[#FFE5B4] hover:text-white border border-[#FFE5B4]/30{% endif %}">
+          Seni
+        </a>
+        <a href="/nordelia/spreadsheet?category=olahraga"
+           class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'olahraga' and not selected_cabang %}bg-[#FFC0CB] text-black{% else %}bg-stone-900 text-[#FFC0CB] hover:text-white border border-[#FFC0CB]/30{% endif %}">
+          Olahraga
+        </a>
+        <a href="/nordelia/spreadsheet?category=format"
+           class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'format' %}bg-white text-black{% else %}bg-stone-900 text-stone-300 hover:text-white border border-white/10{% endif %}">
+          Sheet 2: Format Pendaftaran
+        </a>
+      </div>
+
+      <div class="relative min-w-[240px]">
+        <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400"><use href="#i-search"></use></svg>
+        <input id="table-search" type="text" placeholder="Filter nama peserta, kelas, atau lomba..."
+               class="w-full pl-9 pr-4 py-2 text-xs rounded-xl bg-black border border-white/20 text-white placeholder-stone-500 focus:outline-none focus:border-[#FFE5B4]" />
+      </div>
     </div>
 
-    <div class="relative min-w-[240px]">
-      <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400"><use href="#i-search"></use></svg>
-      <input id="table-search" type="text" placeholder="Filter nama peserta, kelas, atau lomba..."
-             class="w-full pl-9 pr-4 py-2 text-xs rounded-xl bg-black border border-white/20 text-white placeholder-stone-500 focus:outline-none focus:border-[#FFE5B4]" />
+    <!-- Quick Select Sheet per Cabang Lomba (1 Lomba 1 Sheet) -->
+    <div class="p-3.5 rounded-2xl bg-black/40 border border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-[#FFE5B4] animate-pulse"></span>
+        <span class="font-bold text-[#FFE5B4]">Pilih Sheet Lomba:</span>
+        <select onchange="window.location.href=this.value"
+                class="px-3 py-1.5 rounded-xl bg-stone-900 border border-white/20 text-xs text-white focus:outline-none focus:border-[#FFE5B4] max-w-xs sm:max-w-md">
+          <option value="/nordelia/spreadsheet?category=semua">-- Master Pendaftaran (Semua Lomba) --</option>
+          {% for cb in cabang_lomba %}
+            <option value="/nordelia/spreadsheet?cabang={{ cb.id }}" {% if selected_cabang == cb.id %}selected{% endif %}>
+              Sheet: {{ cb.sheet_name }} ({{ cb.category | capitalize }})
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      {% if selected_cabang %}
+        <div class="flex items-center gap-2">
+          <span class="text-stone-300">Menampilkan sheet khusus: <strong class="text-white">{{ selected_cabang }}</strong></span>
+          <a href="/nordelia/spreadsheet?category=semua" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white/10 text-stone-300 hover:text-white hover:bg-white/20">
+            &times; Kembali ke Master
+          </a>
+        </div>
+      {% endif %}
     </div>
   </div>
 

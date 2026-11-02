@@ -41,10 +41,10 @@
       ]
     },
     {
-      "id": "olimpiade-9-cabang",
-      "name": "OLIMPIADE 9 CABANG",
+      "id": "osn",
+      "name": "OSN",
       "hasSubEvents": true,
-      "description": "Pilih salah satu cabang olimpiade",
+      "description": "Olimpiade Sains Nasional (9 Cabang Sains & Humaniora)",
       "subEvents": [
         {
           "id": "olimpiade-matematika",
@@ -260,7 +260,7 @@
           "name": "BACA PUISI",
           "registrationFormat": [
             "Nama Lengkap",
-            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+            "Kelas"
           ]
         },
         {
@@ -268,15 +268,23 @@
           "name": "CIPTA PUISI",
           "registrationFormat": [
             "Nama Lengkap",
-            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+            "Kelas"
           ]
         },
         {
-          "id": "menulis-cerita-pendek",
+          "id": "jurnalistik",
+          "name": "JURNALISTIK",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas"
+          ]
+        },
+        {
+          "id": "menulis-cerpen",
           "name": "MENULIS CERITA PENDEK",
           "registrationFormat": [
             "Nama Lengkap",
-            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+            "Kelas"
           ]
         },
         {
@@ -284,7 +292,15 @@
           "name": "MONOLOG",
           "registrationFormat": [
             "Nama Lengkap",
-            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+            "Kelas"
+          ]
+        },
+        {
+          "id": "cipta-lagu",
+          "name": "CIPTA LAGU",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas"
           ]
         },
         {
@@ -292,31 +308,45 @@
           "name": "DESAIN POSTER",
           "registrationFormat": [
             "Nama Lengkap",
-            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+            "Kelas",
+            "Link Portofolio"
           ]
         },
         {
-          "id": "instrumen-solo-gitar",
+          "id": "fotografi",
+          "name": "FOTOGRAFI",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas",
+            "Link Portofolio"
+          ]
+        },
+        {
+          "id": "solo-gitar",
           "name": "INSTRUMEN SOLO GITAR",
           "registrationFormat": [
             "Nama Lengkap",
-            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+            "Kelas"
           ]
         },
         {
-          "id": "menyanyi-solo-putri",
+          "id": "vokal-putri",
           "name": "MENYANYI SOLO PUTRI",
           "registrationFormat": [
-            "Nama Lengkap",
-            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+            "Nama & Kategori",
+            "Kelas",
+            "Link Lagu Penyisihan",
+            "Link Lagu Final"
           ]
         },
         {
-          "id": "menyanyi-solo-putra",
+          "id": "vokal-putra",
           "name": "MENYANYI SOLO PUTRA",
           "registrationFormat": [
-            "Nama Lengkap",
-            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+            "Nama & Kategori",
+            "Kelas",
+            "Link Lagu Penyisihan",
+            "Link Lagu Final"
           ]
         },
         {
@@ -324,7 +354,7 @@
           "name": "KRIYA",
           "registrationFormat": [
             "Nama Lengkap",
-            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+            "Kelas"
           ]
         },
         {
@@ -332,15 +362,17 @@
           "name": "KOMIK DIGITAL",
           "registrationFormat": [
             "Nama Lengkap",
-            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+            "Kelas",
+            "Link Portofolio"
           ]
         },
         {
-          "id": "tari-kreasi",
-          "name": "TARI KREASI",
+          "id": "film-pendek",
+          "name": "FILM PENDEK",
           "registrationFormat": [
             "Nama Lengkap",
-            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+            "Kelas",
+            "Link Portofolio"
           ]
         }
       ]
@@ -356,7 +388,7 @@
           "name": "SILAT",
           "registrationFormat": [
             "Nama Lengkap",
-            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+            "Kelas"
           ]
         },
         {
@@ -364,31 +396,31 @@
           "name": "ATLETIK",
           "registrationFormat": [
             "Nama Lengkap",
-            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+            "Kelas"
           ]
         },
         {
           "id": "basket",
           "name": "BASKET",
           "registrationFormat": [
-            "Nama Lengkap",
-            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+            "Nama Anggota 1-2-3-Cadangan",
+            "Kelas"
           ]
         },
         {
           "id": "futsal",
           "name": "FUTSAL",
           "registrationFormat": [
-            "Nama Lengkap",
-            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+            "Nama Anggota 1-2-3-4-5-Cadangan",
+            "Kelas"
           ]
         },
         {
           "id": "voli",
           "name": "VOLI",
           "registrationFormat": [
-            "Nama Lengkap",
-            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+            "Nama Anggota 1-2-3-4-5-Cadangan",
+            "Kelas"
           ]
         },
         {
@@ -396,7 +428,7 @@
           "name": "CATUR",
           "registrationFormat": [
             "Nama Lengkap",
-            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+            "Kelas"
           ]
         }
       ]

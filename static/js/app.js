@@ -266,25 +266,8 @@ function initNordelia() {
       if (hasSub) {
         window.location.href = "/nordelia/" + catId;
       } else {
-        activeCategory = catId;
-
-        document.querySelectorAll(".cat-pill").forEach(function (p) {
-          const isMatch = p.getAttribute("data-filter-cat") === catId;
-          p.classList.toggle("is-active", isMatch);
-          if (isMatch) {
-            p.className = "cat-pill is-active px-4 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap bg-gradient-to-r from-[#FFB7C5] to-[#FFE5B4] text-black";
-          } else {
-            p.className = "cat-pill px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-stone-900/80 text-stone-300 hover:text-white border border-white/10";
-          }
-        });
-
-        if (currentCategoryName) {
-          currentCategoryName.textContent = catId.toUpperCase();
-        }
-
-        applyFilter();
-
-        document.getElementById("section-cabang")?.scrollIntoView({ behavior: "smooth" });
+        // Cabang tanpa sub-events (Literasi Numerasi, Science, Bahasa Indonesia, AI) langsung mengarah ke formulir pendaftaran
+        openRegisterModal(catId);
       }
     });
   });
@@ -317,6 +300,7 @@ function initNordelia() {
   const formBadgeCategory = document.getElementById("form-badge-category");
   const formRuleBox = document.getElementById("form-rule-box");
   const inputCabangId = document.getElementById("input-cabang-id");
+  const inputCategoryId = document.getElementById("input-category-id");
   const dynamicFormFields = document.getElementById("dynamic-form-fields");
   const formAlert = document.getElementById("form-alert");
   const regForm = document.getElementById("nordelia-reg-form");
@@ -335,7 +319,13 @@ function initNordelia() {
 
   function openRegisterModal(cabangId) {
     console.log("openRegisterModal dipanggil dengan cabangId:", cabangId);
-    const c = cabangList.find(item => item.id === cabangId);
+    let c = cabangList.find(item => item.id === cabangId);
+    if (!c) {
+      c = cabangList.find(item => 
+        (cabangId.includes("ai") && (item.id.includes("ai") || item.name.toLowerCase().includes("artifisial"))) ||
+        item.name.toLowerCase().includes(cabangId.toLowerCase())
+      );
+    }
     console.log("Cabang ditemukan:", c ? c.name : "tidak ditemukan");
     if (!c) {
       console.error("Cabang tidak ditemukan untuk ID:", cabangId);
@@ -343,13 +333,40 @@ function initNordelia() {
     }
 
     inputCabangId.value = c.id;
+    if (inputCategoryId) inputCategoryId.value = c.category || "akademik";
     formCabangTitle.textContent = c.name;
-    formBadgeCategory.textContent = c.category.toUpperCase() + " • NO. " + c.no;
+    formBadgeCategory.textContent = (c.category ? c.category.toUpperCase() : "LOMBA") + (c.no ? " • NO. " + c.no : "");
+    
+    const isOlimp = !!(c.is_olimpiade_or_ai || c.id === "olimpiade-ai" || c.id.includes("olimpiade") || (c.name && c.name.toLowerCase().includes("artifisial")));
+    const isLit = !!(c.is_literasi || (c.name && c.name.toLowerCase().startsWith("literasi")) || (c.id && c.id.startsWith("literasi")));
+    const regCount = (typeof c.registered_count === "number") ? c.registered_count : 0;
+    
+    let quotaDisplay = "";
+    if (isOlimp) {
+      const rem = (typeof c.remaining_quota === "number") ? c.remaining_quota : Math.max(0, 20 - regCount);
+      const isFull = rem <= 0 || !!c.is_full;
+      quotaDisplay = `<span class="${isFull ? 'text-rose-400' : 'text-amber-300'} font-bold">${isFull ? 'Kuota Penuh (20/20)' : 'Sisa ' + rem + ' dari 20 Kuota'}</span>`;
+    } else {
+      quotaDisplay = `<span class="text-emerald-400 font-bold">Kuota Terbuka</span>`;
+    }
+
+    let minMaxDisplay = "";
+    if (isOlimp) {
+      minMaxDisplay = `<span class="text-amber-300 font-bold">Min: 5/Kelas • Maks: 20</span>`;
+    } else if (isLit) {
+      minMaxDisplay = `<span class="text-[#FFE5B4] font-bold">Min: 2/Kelas</span>`;
+    }
+
     formRuleBox.innerHTML = `
       <div class="flex items-center justify-between mb-1">
-        <span class="text-stone-400">Lokasi: ${c.tempat}</span>
+        <span class="text-stone-400">Lokasi: ${c.tempat || '-'}</span>
+        ${minMaxDisplay}
       </div>
-      <p class="text-[11px] text-stone-300"><strong class="text-white">Ketentuan:</strong> ${c.note}</p>
+      <div class="flex items-center justify-between py-1 my-1 border-t border-b border-white/10 text-[11px]">
+        <span class="text-stone-300">Terdaftar: <strong class="text-white">${regCount} Orang</strong></span>
+        ${quotaDisplay}
+      </div>
+      <p class="text-[11px] text-stone-300"><strong class="text-white">Ketentuan:</strong> ${c.note || '-'}</p>
     `;
 
     // Dynamic field generation based on format_type
@@ -428,7 +445,7 @@ function initNordelia() {
     btnSubmit.disabled = true;
     btnSubmit.innerHTML = `
       <svg class="w-4 h-4 animate-spin text-black" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25"></circle><path fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
-      <span>Menyimpan ke Spreadsheet Real-Time...</span>
+      <span>Memproses Pendaftaran...</span>
     `;
 
     try {
@@ -451,7 +468,8 @@ function initNordelia() {
         setTimeout(() => {
           closeRegisterModal();
           regForm.reset();
-        }, 1500);
+          window.location.reload();
+        }, 1200);
 
       } else {
         formAlert.className = "p-3 rounded-xl mb-4 text-xs font-bold bg-rose-950/80 text-rose-300 border border-rose-500/40";

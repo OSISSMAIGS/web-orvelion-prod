@@ -94,8 +94,25 @@ class NordeliaStorage:
     def save_registration(self, reg_data: Dict[str, Any]) -> Dict[str, Any]:
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         cabang_info = get_cabang_by_id(reg_data.get("cabang_id", ""))
-        category_id = reg_data.get("category_id") or (cabang_info["category"] if cabang_info else "umum")
+        
+        # Normalisasi kategori ke 4 bidang utama: akademik, bahasa, seni, olahraga
+        if cabang_info and cabang_info.get("category"):
+            category_id = cabang_info["category"].lower()
+        else:
+            raw_cat = (reg_data.get("category_id") or "").lower()
+            if any(k in raw_cat for k in ["akademik", "olimp", "sains", "science", "numerasi"]):
+                category_id = "akademik"
+            elif any(k in raw_cat for k in ["bahasa", "debat", "ldbi", "nsdc", "story"]):
+                category_id = "bahasa"
+            elif any(k in raw_cat for k in ["seni", "fls3n", "kriya", "puisi", "poster", "vokal", "lagu"]):
+                category_id = "seni"
+            elif any(k in raw_cat for k in ["olahraga", "o2sn", "basket", "futsal", "voli", "atletik", "silat", "catur"]):
+                category_id = "olahraga"
+            else:
+                category_id = "akademik"
+
         cabang_name = reg_data.get("cabang_name") or (cabang_info["name"] if cabang_info else reg_data.get("cabang_id", ""))
+        sheet_name = (cabang_info.get("sheet_name") if cabang_info else None) or cabang_name
         participant_name = reg_data.get("nama_lengkap") or reg_data.get("nama_tim") or reg_data.get("nama", "Anonim")
         kelas = reg_data.get("kelas", "-")
         whatsapp = reg_data.get("whatsapp", "-")
@@ -106,6 +123,7 @@ class NordeliaStorage:
             "category_id": category_id,
             "cabang_id": reg_data.get("cabang_id", ""),
             "cabang_name": cabang_name,
+            "sheet_name": sheet_name,
             "participant_name": participant_name,
             "kelas": kelas,
             "whatsapp": whatsapp,
@@ -236,6 +254,18 @@ class NordeliaStorage:
             regs = self.get_all_registrations()
             return sum(1 for r in regs if r.get('cabang_id') == cabang_id)
 
+    def get_counts_by_cabang(self) -> Dict[str, int]:
+        counts = {}
+        all_regs = self.get_all_registrations()
+        for r in all_regs:
+            cid = r.get("cabang_id")
+            if cid:
+                counts[cid] = counts.get(cid, 0) + 1
+                cb = get_cabang_by_id(cid)
+                if cb and cb["id"] != cid:
+                    counts[cb["id"]] = counts.get(cb["id"], 0) + 1
+        return counts
+
     def get_summary_stats(self) -> Dict[str, Any]:
         all_regs = self.get_all_registrations()
         counts = {
@@ -268,12 +298,13 @@ def push_to_google_sheet(entry: Dict[str, Any]) -> bool:
 
     if webhook_url and webhook_url.startswith("http"):
         try:
+            target_sheet = entry.get("sheet_name") or entry.get("cabang_name") or "Lomba"
             payload = {
                 "action": "register",
                 "spreadsheet_id": sheet_id,
                 "timestamp": entry.get("created_at"),
                 "category": entry.get("category_id", "").upper(),
-                "target_sheet": entry.get("category_id", "").lower(),
+                "target_sheet": target_sheet,
                 "cabang": entry.get("cabang_name"),
                 "nama": entry.get("participant_name"),
                 "kelas": entry.get("kelas"),

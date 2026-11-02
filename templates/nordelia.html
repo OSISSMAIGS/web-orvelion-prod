@@ -198,7 +198,7 @@
 
       <div class="hidden sm:flex items-center gap-2">
         <button type="button" data-open-sheet2-modal class="text-xs font-bold px-3 py-1.5 rounded-lg bg-stone-800 text-[#FFE5B4] border border-[#FFE5B4]/30 hover:bg-stone-700">
-          Petunjuk Format Sheet 2
+          Panduan Format Pendaftaran
         </button>
       </div>
     </div>
@@ -232,9 +232,21 @@
                            {% else %}bg-[#FFC0CB]/15 text-[#FFC0CB] border-[#FFC0CB]/30{% endif %}">
                 {{ c.category }} • No. {{ c.no }}
               </span>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-950/60 text-emerald-300 border border-emerald-500/30">
-                Pendaftaran Buka
-              </span>
+              {% if c.is_olimpiade_or_ai %}
+                {% if c.is_full %}
+                  <span class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40">
+                    Kuota Penuh
+                  </span>
+                {% else %}
+                  <span class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40">
+                    Sisa {{ c.remaining_quota if c.remaining_quota is not none else (20 - (c.registered_count or 0)) }} Kuota
+                  </span>
+                {% endif %}
+              {% else %}
+                <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-950/60 text-emerald-300 border border-emerald-500/30">
+                  Kuota Terbuka
+                </span>
+              {% endif %}
             </div>
 
             <!-- Title -->
@@ -248,36 +260,63 @@
                 <span class="text-stone-400">Tempat Lomba:</span>
                 <span class="font-bold text-right text-stone-200">{{ c.tempat }}</span>
               </div>
-              <div class="flex items-start justify-between gap-2">
-                <span class="text-stone-400">Peserta Min/Max:</span>
-                <span class="font-mono text-stone-200">{{ c.peserta_min }} / {{ c.peserta_max }}</span>
-              </div>
+              {% if c.is_olimpiade_or_ai %}
+                <div class="flex items-start justify-between gap-2">
+                  <span class="text-stone-400">Peserta Min / Max:</span>
+                  <span class="font-bold text-amber-300">5 / Kelas • Maks. 20</span>
+                </div>
+              {% elif c.is_literasi %}
+                <div class="flex items-start justify-between gap-2">
+                  <span class="text-stone-400">Peserta Minimal:</span>
+                  <span class="font-bold text-[#FFE5B4]">2 / Kelas</span>
+                </div>
+              {% endif %}
             </div>
 
             <!-- Notes / Rule snippet -->
             <div class="p-2.5 rounded-xl bg-black/40 border border-white/5 text-[11px] text-stone-300 leading-relaxed">
               <span class="font-bold text-[#FFE5B4]">Ketentuan:</span> {{ c.note }}
             </div>
+
+            <!-- Informasi Pendaftar & Sisa Kuota (DI SELURUH LOMBA) -->
+            <div class="p-3 rounded-xl bg-black/60 border border-white/10 space-y-1.5">
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-stone-400 flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                  Terdaftar Saat Ini:
+                </span>
+                <span class="font-black text-white bg-white/10 px-2 py-0.5 rounded-md">
+                  {{ c.registered_count }} Orang
+                </span>
+              </div>
+              <div class="flex items-center justify-between text-xs pt-1 border-t border-white/10">
+                <span class="text-stone-400">Sisa Kuota:</span>
+                {% if c.is_olimpiade_or_ai %}
+                  <span class="font-black {% if c.is_full %}text-rose-400{% else %}text-amber-300{% endif %}">
+                    {% if c.is_full %}Kuota Penuh (20/20){% else %}Sisa {{ c.remaining_quota if c.remaining_quota is not none else (20 - (c.registered_count or 0)) }} dari 20 Kuota{% endif %}
+                  </span>
+                {% else %}
+                  <span class="font-bold text-emerald-400">Kuota Terbuka</span>
+                {% endif %}
+              </div>
+            </div>
           </div>
 
           <!-- Bottom Button to Register -->
-          <div class="pt-4 mt-4 border-t border-white/10 flex items-center justify-between gap-3">
-            <div>
-              {% if c.is_olimpiade_or_ai %}
-                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-400/20 text-amber-300 border border-amber-400/30">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-                  Maks. 20 Peserta
-                </span>
-              {% else %}
-                <span class="text-[11px] text-stone-400 font-medium">Batas: {{ c.peserta_max }}</span>
-              {% endif %}
-            </div>
-            <button type="button"
-                    data-register-cabang="{{ c.id }}"
-                    class="px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider text-black bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] hover:brightness-110 shadow-md transition-transform hover:scale-105 flex items-center gap-1.5">
-              <span><strong>Daftar Lomba</strong></span>
-              <svg class="w-3.5 h-3.5 text-black"><use href="#i-chevron"></use></svg>
-            </button>
+          <div class="pt-4 mt-3 border-t border-white/10">
+            {% if c.is_full %}
+              <button type="button" disabled
+                      class="w-full py-2.5 rounded-xl text-xs font-black uppercase tracking-wider text-stone-400 bg-stone-800 cursor-not-allowed flex items-center justify-center gap-1.5">
+                <span>Kuota Penuh (20/20)</span>
+              </button>
+            {% else %}
+              <button type="button"
+                      data-register-cabang="{{ c.id }}"
+                      class="w-full py-2.5 rounded-xl text-xs font-black uppercase tracking-wider text-black bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] hover:brightness-110 shadow-md transition-transform hover:scale-[1.02] flex items-center justify-center gap-1.5">
+                <span><strong>Daftar Lomba</strong></span>
+                <svg class="w-3.5 h-3.5 text-black"><use href="#i-chevron"></use></svg>
+              </button>
+            {% endif %}
           </div>
 
         </article>
@@ -316,6 +355,7 @@
     <div id="form-alert" class="hidden p-3 rounded-xl mb-4 text-xs font-bold"></div>
 
     <form id="nordelia-reg-form" class="space-y-4">
+      <input type="hidden" name="category_id" id="input-category-id" value="" />
       <input type="hidden" name="cabang_id" id="input-cabang-id" value="" />
 
       <!-- Dynamic Form Fields will be inserted here -->
@@ -329,7 +369,7 @@
       </div>
 
       <p class="text-[11px] text-center text-stone-400">
-        Data akan langsung terklasifikasi ke spreadsheet dan dihubungi oleh PIC cabang lomba terkait.
+        Data pendaftaran akan diverifikasi dan diproses oleh panitia cabang lomba terkait.
       </p>
     </form>
   </div>
