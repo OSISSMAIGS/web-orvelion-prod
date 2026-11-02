@@ -257,11 +257,36 @@ function initNordelia() {
     }
   }
 
+  // Modal OSN Jurusan Elements & Handler
+  const modalOsn = document.getElementById("modal-osn-jurusan");
+  const closeOsnBtn = document.getElementById("btn-close-osn-modal");
+  const cancelOsnBtn = document.getElementById("btn-cancel-osn-modal");
+
+  function closeOsnModal() {
+    modalOsn?.classList.add("hidden");
+    document.body.classList.remove("overflow-hidden");
+  }
+
+  closeOsnBtn?.addEventListener("click", closeOsnModal);
+  cancelOsnBtn?.addEventListener("click", closeOsnModal);
+  modalOsn?.addEventListener("click", (e) => {
+    if (e.target === modalOsn) closeOsnModal();
+  });
+
   // Category Buttons click handler
   document.querySelectorAll("[data-category-select]").forEach(function (btn) {
     btn.addEventListener("click", function () {
       const catId = btn.getAttribute("data-category-select");
       const hasSub = btn.getAttribute("data-has-sub") === "true";
+
+      // Khusus OSN: Arahkan terlebih dahulu ke pemilihan jurusan IPA/IPS
+      if (catId === "osn" || catId === "olimpiade-9-cabang") {
+        if (modalOsn) {
+          modalOsn.classList.remove("hidden");
+          document.body.classList.add("overflow-hidden");
+          return;
+        }
+      }
 
       if (hasSub) {
         window.location.href = "/nordelia/" + catId;
@@ -335,7 +360,7 @@ function initNordelia() {
     inputCabangId.value = c.id;
     if (inputCategoryId) inputCategoryId.value = c.category || "akademik";
     formCabangTitle.textContent = c.name;
-    formBadgeCategory.textContent = (c.category ? c.category.toUpperCase() : "LOMBA") + (c.no ? " • NO. " + c.no : "");
+    formBadgeCategory.textContent = (c.category ? c.category.toUpperCase() : "LOMBA");
     
     const isOlimp = !!(c.is_olimpiade_or_ai || c.id === "olimpiade-ai" || c.id.includes("olimpiade") || (c.name && c.name.toLowerCase().includes("artifisial")));
     const isLit = !!(c.is_literasi || (c.name && c.name.toLowerCase().startsWith("literasi")) || (c.id && c.id.startsWith("literasi")));
@@ -352,9 +377,7 @@ function initNordelia() {
 
     let minMaxDisplay = "";
     if (isOlimp) {
-      minMaxDisplay = `<span class="text-amber-300 font-bold">Min: 5/Kelas • Maks: 20</span>`;
-    } else if (isLit) {
-      minMaxDisplay = `<span class="text-[#FFE5B4] font-bold">Min: 2/Kelas</span>`;
+      minMaxDisplay = `<span class="text-amber-300 font-bold">Maks. 20 Peserta</span>`;
     }
 
     formRuleBox.innerHTML = `
@@ -434,6 +457,217 @@ function initNordelia() {
     document.body.classList.remove("overflow-hidden");
   }
 
+  // =========================================================================
+  // OSN PEMINATAN JURUSAN LOGIC (IPA vs IPS)
+  // =========================================================================
+  const OSN_IPA_ONLY_IDS = [
+    "olimpiade-fisika",
+    "olimpiade-kimia",
+    "olimpiade-biologi",
+    "olimpiade-astronomi",
+    "olimpiade-informatika"
+  ];
+  const OSN_IPS_ALLOWED_IDS = [
+    "olimpiade-matematika",
+    "olimpiade-kebumian",
+    "olimpiade-geografi",
+    "olimpiade-ekonomi"
+  ];
+  const OSN_ALL_IDS = [...OSN_IPA_ONLY_IDS, ...OSN_IPS_ALLOWED_IDS];
+
+  let currentJurusan = null; // 'ipa', 'ips', or null
+  try {
+    currentJurusan = sessionStorage.getItem("nordelia_jurusan") || null;
+  } catch (e) {}
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const paramJurusan = urlParams.get("jurusan");
+  if (paramJurusan && (paramJurusan === "ipa" || paramJurusan === "ips")) {
+    currentJurusan = paramJurusan;
+    try { sessionStorage.setItem("nordelia_jurusan", currentJurusan); } catch (e) {}
+  }
+
+  const badgeJurusan = document.getElementById("active-jurusan-badge");
+  const jurusanFilterBtns = document.querySelectorAll("[data-jurusan-filter]");
+
+  function updateJurusanUI() {
+    if (badgeJurusan) {
+      if (currentJurusan === "ipa") {
+        badgeJurusan.textContent = "🔬 Kelas IPA";
+        badgeJurusan.className = "px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#AEC6CF]/20 text-[#AEC6CF] border border-[#AEC6CF]/40";
+      } else if (currentJurusan === "ips") {
+        badgeJurusan.textContent = "📚 Kelas IPS";
+        badgeJurusan.className = "px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#FFE5B4]/20 text-[#FFE5B4] border border-[#FFE5B4]/40";
+      } else {
+        badgeJurusan.textContent = "Semua Kelas";
+        badgeJurusan.className = "px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/10 text-stone-300";
+      }
+    }
+
+    jurusanFilterBtns.forEach(btn => {
+      const val = btn.getAttribute("data-jurusan-filter");
+      if ((val === "all" && !currentJurusan) || val === currentJurusan) {
+        btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all bg-white/20 border-white/40 text-white shadow-sm";
+      } else {
+        btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all bg-black/40 border-white/15 text-stone-300 hover:text-white";
+      }
+    });
+
+    // Dim IPA-only cards if user selected IPS
+    document.querySelectorAll("[data-cabang-card]").forEach(card => {
+      const isOsn = card.getAttribute("data-is-osn") === "true";
+      const osnType = card.getAttribute("data-osn-type");
+      if (currentJurusan === "ips" && isOsn && osnType === "ipa-only") {
+        card.classList.add("opacity-60", "border-amber-500/30");
+      } else {
+        card.classList.remove("opacity-60", "border-amber-500/30");
+      }
+    });
+  }
+
+  updateJurusanUI();
+
+  jurusanFilterBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const val = btn.getAttribute("data-jurusan-filter");
+      if (val === "all") {
+        currentJurusan = null;
+        try { sessionStorage.removeItem("nordelia_jurusan"); } catch (e) {}
+      } else {
+        currentJurusan = val;
+        try { sessionStorage.setItem("nordelia_jurusan", val); } catch (e) {}
+      }
+      updateJurusanUI();
+    });
+  });
+
+  // Modals elements
+  const modalIpsBlocked = document.getElementById("modal-ips-blocked");
+  const btnCloseIpsBlocked = document.getElementById("btn-close-ips-blocked");
+  const btnCloseIpsModalFooter = document.getElementById("btn-close-ips-modal-footer");
+  const btnSwitchToIpa = document.getElementById("btn-switch-to-ipa");
+  const btnShowIpsCabang = document.getElementById("btn-show-ips-cabang");
+  const ipsBlockedCabangName = document.getElementById("ips-blocked-cabang-name");
+  const ipsBlockedMessage = document.getElementById("ips-blocked-message");
+
+  const modalConfirmJurusan = document.getElementById("modal-confirm-jurusan");
+  const btnCloseConfirmJurusan = document.getElementById("btn-close-confirm-jurusan");
+  const btnCancelConfirmJurusan = document.getElementById("btn-cancel-confirm-jurusan");
+  const btnChooseIpa = document.getElementById("btn-choose-ipa");
+  const btnChooseIps = document.getElementById("btn-choose-ips");
+  const confirmJurusanCabangName = document.getElementById("confirm-jurusan-cabang-name");
+
+  let pendingCabangId = null;
+  let blockedCabangId = null;
+
+  function showIpsBlockedPopup(cabangId, cabangName) {
+    blockedCabangId = cabangId;
+    if (ipsBlockedCabangName) ipsBlockedCabangName.textContent = cabangName || "ini";
+    if (ipsBlockedMessage) {
+      ipsBlockedMessage.innerHTML = `Maaf, <strong>${cabangName || 'Olimpiade ini'}</strong> tidak tersedia untuk kelas IPS. Siswa kelas IPS hanya diperbolehkan mendaftar cabang Matematika, Kebumian, Geografi, dan Ekonomi.`;
+    }
+    modalIpsBlocked?.classList.remove("hidden");
+    document.body.classList.add("overflow-hidden");
+  }
+
+  function closeIpsBlockedPopup() {
+    modalIpsBlocked?.classList.add("hidden");
+    document.body.classList.remove("overflow-hidden");
+  }
+
+  btnCloseIpsBlocked?.addEventListener("click", closeIpsBlockedPopup);
+  btnCloseIpsModalFooter?.addEventListener("click", closeIpsBlockedPopup);
+  modalIpsBlocked?.addEventListener("click", (e) => {
+    if (e.target === modalIpsBlocked) closeIpsBlockedPopup();
+  });
+
+  btnSwitchToIpa?.addEventListener("click", () => {
+    currentJurusan = "ipa";
+    try { sessionStorage.setItem("nordelia_jurusan", "ipa"); } catch (e) {}
+    updateJurusanUI();
+    closeIpsBlockedPopup();
+    if (blockedCabangId) {
+      openRegisterModal(blockedCabangId);
+      blockedCabangId = null;
+    }
+  });
+
+  btnShowIpsCabang?.addEventListener("click", () => {
+    closeIpsBlockedPopup();
+    currentJurusan = "ips";
+    try { sessionStorage.setItem("nordelia_jurusan", "ips"); } catch (e) {}
+    updateJurusanUI();
+
+    const grid = document.getElementById("cabang-grid");
+    if (grid) {
+      grid.scrollIntoView({ behavior: "smooth", block: "start" });
+      OSN_IPS_ALLOWED_IDS.forEach(id => {
+        const card = document.querySelector(`[data-cabang-id="${id}"]`);
+        if (card) {
+          card.classList.add("ring-2", "ring-[#FFE5B4]", "scale-[1.02]");
+          setTimeout(() => {
+            card.classList.remove("ring-2", "ring-[#FFE5B4]", "scale-[1.02]");
+          }, 2500);
+        }
+      });
+    }
+  });
+
+  function showConfirmJurusanModal(cabangId, cabangName) {
+    pendingCabangId = cabangId;
+    if (confirmJurusanCabangName) confirmJurusanCabangName.textContent = cabangName || "OSN";
+    modalConfirmJurusan?.classList.remove("hidden");
+    document.body.classList.add("overflow-hidden");
+  }
+
+  function closeConfirmJurusanModal() {
+    modalConfirmJurusan?.classList.add("hidden");
+    document.body.classList.remove("overflow-hidden");
+    pendingCabangId = null;
+  }
+
+  btnCloseConfirmJurusan?.addEventListener("click", closeConfirmJurusanModal);
+  btnCancelConfirmJurusan?.addEventListener("click", closeConfirmJurusanModal);
+  modalConfirmJurusan?.addEventListener("click", (e) => {
+    if (e.target === modalConfirmJurusan) closeConfirmJurusanModal();
+  });
+
+  btnChooseIpa?.addEventListener("click", () => {
+    currentJurusan = "ipa";
+    try { sessionStorage.setItem("nordelia_jurusan", "ipa"); } catch (e) {}
+    updateJurusanUI();
+    const targetId = pendingCabangId;
+    closeConfirmJurusanModal();
+    if (targetId) {
+      openRegisterModal(targetId);
+    }
+  });
+
+  btnChooseIps?.addEventListener("click", () => {
+    currentJurusan = "ips";
+    try { sessionStorage.setItem("nordelia_jurusan", "ips"); } catch (e) {}
+    updateJurusanUI();
+    const targetId = pendingCabangId;
+    closeConfirmJurusanModal();
+
+    if (targetId && OSN_IPA_ONLY_IDS.includes(targetId)) {
+      const cObj = cabangList.find(x => x.id === targetId);
+      showIpsBlockedPopup(targetId, cObj ? cObj.name : "Olimpiade");
+    } else if (targetId) {
+      openRegisterModal(targetId);
+    }
+  });
+
+  // Listeners for blocked buttons on subpages (e.g. /nordelia/osn)
+  document.querySelectorAll("[data-blocked-jurusan-btn]").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const subId = btn.getAttribute("data-blocked-jurusan-btn");
+      const subName = btn.getAttribute("data-blocked-sub-name") || "Olimpiade";
+      showIpsBlockedPopup(subId, subName);
+    });
+  });
+
   const registerButtons = document.querySelectorAll("[data-register-cabang]");
   console.log("Tombol daftar ditemukan:", registerButtons.length);
 
@@ -454,7 +688,24 @@ function initNordelia() {
       e.stopPropagation();
       const cabangId = btn.getAttribute("data-register-cabang");
       console.log("Tombol daftar diklik untuk cabang:", cabangId);
-      console.log("cabangList tersedia:", cabangList ? cabangList.length : "tidak ada");
+      
+      const cObj = cabangList.find(x => x.id === cabangId) || {};
+      const cabangName = cObj.name || "Cabang Lomba";
+
+      // Khusus cabang OSN: Validasi Peminatan IPA/IPS
+      const isOsnBranch = OSN_ALL_IDS.includes(cabangId);
+      if (isOsnBranch) {
+        if (currentJurusan === "ips") {
+          if (OSN_IPA_ONLY_IDS.includes(cabangId)) {
+            showIpsBlockedPopup(cabangId, cabangName);
+            return;
+          }
+        } else if (!currentJurusan) {
+          showConfirmJurusanModal(cabangId, cabangName);
+          return;
+        }
+      }
+
       openRegisterModal(cabangId);
     });
   });

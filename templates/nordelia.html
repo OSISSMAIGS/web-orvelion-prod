@@ -211,26 +211,70 @@
       <p class="text-xs text-stone-400 mt-1">Coba sesuaikan kata kunci pencarian atau pilih tab kategori yang lain.</p>
     </div>
 
+    <!-- FILTER PEMINATAN KELAS KHUSUS OSN -->
+    <div id="jurusan-filter-bar" class="mb-6 p-4 sm:p-5 rounded-2xl bg-black/40 border border-white/10 backdrop-blur-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="space-y-1">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold text-white">Peminatan Kelas (OSN):</span>
+          <span id="active-jurusan-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/10 text-stone-300">
+            Semua Kelas
+          </span>
+        </div>
+        <p class="text-[11px] text-stone-400">
+          Siswa IPA dapat memilih seluruh cabang OSN. Siswa IPS hanya diperbolehkan memilih Matematika, Kebumian, Geografi, dan Ekonomi.
+        </p>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <button type="button" data-jurusan-filter="all"
+                class="px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all bg-white/15 border-white/30 text-white shadow-sm">
+          Semua
+        </button>
+        <button type="button" data-jurusan-filter="ipa"
+                class="px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all bg-black/40 border-white/15 text-stone-300 hover:border-[#AEC6CF] hover:text-[#AEC6CF]">
+          🔬 Kelas IPA
+        </button>
+        <button type="button" data-jurusan-filter="ips"
+                class="px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all bg-black/40 border-white/15 text-stone-300 hover:border-[#FFE5B4] hover:text-[#FFE5B4]">
+          📚 Kelas IPS
+        </button>
+      </div>
+    </div>
     <!-- The Children Grid -->
     <div id="cabang-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       {% for c in cabang_lomba %}
         <article data-cabang-card
+                 data-cabang-id="{{ c.id }}"
                  data-category="{{ c.category }}"
                  data-name="{{ c.name }}"
                  data-pic="{{ c.pic }}"
                  data-tempat="{{ c.tempat }}"
+<<<<<<< HEAD
                  class="group rounded-2xl p-5 border backdrop-blur-md flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-[#FF6B00]/50 hover:shadow-2xl"
                  style="background: rgba(20, 20, 20, 0.85); border-color: rgba(255, 107, 0, 0.2);">
+=======
+                 data-is-osn="{{ 'true' if c.id in ('olimpiade-matematika','olimpiade-fisika','olimpiade-kimia','olimpiade-biologi','olimpiade-astronomi','olimpiade-informatika','olimpiade-kebumian','olimpiade-geografi','olimpiade-ekonomi') else 'false' }}"
+                 data-osn-type="{{ 'ipa-only' if c.id in ('olimpiade-fisika','olimpiade-kimia','olimpiade-biologi','olimpiade-astronomi','olimpiade-informatika') else ('ips-allowed' if c.id in ('olimpiade-matematika','olimpiade-kebumian','olimpiade-geografi','olimpiade-ekonomi') else 'none') }}"
+                 class="group rounded-2xl p-5 border backdrop-blur-md flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                 style="background: rgba(22, 18, 15, 0.75); border-color: rgba(255, 255, 255, 0.1);">
+>>>>>>> e4712c7f14527f192e15a058d5c65edfc7885e36
           
           <div class="space-y-3.5">
             <!-- Header Badges -->
             <div class="flex items-center justify-between gap-2">
               <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md border
+<<<<<<< HEAD
                            {% if c.category == 'akademik' %}bg-[#CC4400]/20 text-[#CC4400] border-[#CC4400]/40
                            {% elif c.category == 'bahasa' %}bg-[#FF6B00]/20 text-[#FF6B00] border-[#FF6B00]/40
                            {% elif c.category == 'seni' %}bg-white/15 text-white border-white/30
                            {% else %}bg-[#FF8533]/20 text-[#FF8533] border-[#FF8533]/40{% endif %}">
                 {{ c.category }} • No. {{ c.no }}
+=======
+                           {% if c.category == 'akademik' %}bg-[#AEC6CF]/15 text-[#AEC6CF] border-[#AEC6CF]/30
+                           {% elif c.category == 'bahasa' %}bg-[#FFB7C5]/15 text-[#FFB7C5] border-[#FFB7C5]/30
+                           {% elif c.category == 'seni' %}bg-[#FFE5B4]/15 text-[#FFE5B4] border-[#FFE5B4]/30
+                           {% else %}bg-[#FFC0CB]/15 text-[#FFC0CB] border-[#FFC0CB]/30{% endif %}">
+                {{ c.category | upper }}
+>>>>>>> e4712c7f14527f192e15a058d5c65edfc7885e36
               </span>
               {% if c.is_olimpiade_or_ai %}
                 {% if c.is_full %}
@@ -262,6 +306,7 @@
               </div>
               {% if c.is_olimpiade_or_ai %}
                 <div class="flex items-start justify-between gap-2">
+<<<<<<< HEAD
                   <span class="text-stone-400">Peserta Min / Max:</span>
                   <span class="font-bold text-[#FF8533]">5 / Kelas • Maks. 20</span>
                 </div>
@@ -269,6 +314,10 @@
                 <div class="flex items-start justify-between gap-2">
                   <span class="text-stone-400">Peserta Minimal:</span>
                   <span class="font-bold text-white">2 / Kelas</span>
+=======
+                  <span class="text-stone-400">Batas Kuota:</span>
+                  <span class="font-bold text-amber-300">Maks. 20 Peserta</span>
+>>>>>>> e4712c7f14527f192e15a058d5c65edfc7885e36
                 </div>
               {% endif %}
             </div>
@@ -375,7 +424,98 @@
   </div>
 </div>
 
+<!-- ========================================================================= -->
+<!-- MODAL PEMILIHAN JURUSAN IPA / IPS UNTUK OSN -->
+<!-- ========================================================================= -->
+<div id="modal-osn-jurusan" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+  <div class="relative w-full max-w-2xl rounded-3xl p-6 sm:p-8 bg-[#181311] border border-[#FFE5B4]/40 max-h-[92vh] overflow-y-auto shadow-2xl">
+    
+    <button type="button" id="btn-close-osn-modal" class="absolute top-5 right-5 p-2 rounded-full bg-white/10 text-stone-300 hover:text-white" aria-label="Tutup">
+      <svg class="w-5 h-5"><use href="#i-x"></use></svg>
+    </button>
+
+    <div class="flex items-center gap-3 mb-4">
+      <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-gradient-to-tr from-[#FFB7C5] to-[#FFE5B4] text-black font-black">
+        <svg class="w-5 h-5"><use href="#i-trophy"></use></svg>
+      </div>
+      <div>
+        <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-white/10 text-[#FFE5B4]">
+          Peminatan Kelas Peserta
+        </span>
+        <h3 class="text-xl sm:text-2xl font-black text-white">Pilih Peminatan untuk OSN</h3>
+      </div>
+    </div>
+
+    <p class="text-xs text-stone-300 mb-6 leading-relaxed">
+      Sesuai ketentuan, cabang OSN Fisika, Kimia, Biologi, Informatika, Matematika, dan Astronomi khusus diperuntukkan bagi siswa kelas <strong>IPA</strong>. Siswa kelas <strong>IPS</strong> dapat memilih cabang Kebumian, Geografi, dan Ekonomi. Silakan tentukan jenis kelas Anda:
+    </p>
+
+    <!-- 2 Pilihan Card: IPA vs IPS -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      
+      <!-- Card IPA -->
+      <a href="/nordelia/osn?jurusan=ipa"
+         class="group p-5 rounded-2xl border border-white/15 bg-black/40 hover:bg-black/70 hover:border-[#AEC6CF] transition-all duration-300 flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl">
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="w-10 h-10 rounded-xl flex items-center justify-center bg-[#AEC6CF]/20 text-[#AEC6CF] text-2xl font-black">
+              🔬
+            </span>
+            <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#AEC6CF]/20 text-[#AEC6CF] border border-[#AEC6CF]/30">
+              Akses Penuh • 9 Cabang
+            </span>
+          </div>
+          <h4 class="text-lg font-black text-white group-hover:text-[#AEC6CF] transition-colors">
+            Kelas IPA (MIPA)
+          </h4>
+          <p class="text-xs text-stone-300 leading-relaxed">
+            Siswa kelas IPA diperbolehkan mendaftar di <strong>seluruh 9 cabang OSN</strong> (Matematika, Fisika, Kimia, Biologi, Astronomi, Informatika, Kebumian, Geografi, Ekonomi).
+          </p>
+        </div>
+        <div class="mt-5 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#AEC6CF]">
+          <span>Pilih Kelas IPA</span>
+          <span class="text-base group-hover:translate-x-1 transition-transform">&rarr;</span>
+        </div>
+      </a>
+
+      <!-- Card IPS -->
+      <a href="/nordelia/osn?jurusan=ips"
+         class="group p-5 rounded-2xl border border-white/15 bg-black/40 hover:bg-black/70 hover:border-[#FFE5B4] transition-all duration-300 flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl">
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="w-10 h-10 rounded-xl flex items-center justify-center bg-[#FFE5B4]/20 text-[#FFE5B4] text-2xl font-black">
+              📚
+            </span>
+            <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FFE5B4]/20 text-[#FFE5B4] border border-[#FFE5B4]/30">
+              3 Cabang Pilihan
+            </span>
+          </div>
+          <h4 class="text-lg font-black text-white group-hover:text-[#FFE5B4] transition-colors">
+            Kelas IPS (Sosial)
+          </h4>
+          <p class="text-xs text-stone-300 leading-relaxed">
+            Siswa kelas IPS diperbolehkan mendaftar pada cabang <strong>Kebumian</strong>, <strong>Geografi</strong>, dan <strong>Ekonomi</strong>.
+          </p>
+        </div>
+        <div class="mt-5 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#FFE5B4]">
+          <span>Pilih Kelas IPS</span>
+          <span class="text-base group-hover:translate-x-1 transition-transform">&rarr;</span>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="mt-6 pt-4 border-t border-white/10 text-center">
+      <button type="button" id="btn-cancel-osn-modal" class="text-xs text-stone-400 hover:text-white underline">
+        Batal / Kembali
+      </button>
+    </div>
+
+  </div>
+</div>
+
 {% include "partials/nordelia_success.html" %}
+{% include "partials/nordelia_jurusan_modal.html" %}
 
 <!-- DATA JSON SCRIPT FOR INTERACTION -->
 <script id="nordelia-data-cabang" type="application/json">{{ cabang_lomba | tojson | safe }}</script>
