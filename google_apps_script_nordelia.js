@@ -92,6 +92,7 @@ const DAFTAR_CABANG_LOMBA = [
   { name: "Kriya", color: COLOR_CREAM },
   { name: "Komik Digital", color: COLOR_CREAM },
   { name: "Film Pendek", color: COLOR_CREAM },
+  { name: "Tari Kreasi", color: COLOR_CREAM },
 
   // OLAHRAGA & O2SN
   { name: "Silat", color: COLOR_PINK },

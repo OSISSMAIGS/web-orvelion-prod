@@ -106,10 +106,10 @@ def build_decorated_cabang_list():
         reg_count = counts.get(cid, 0)
         c_copy["registered_count"] = reg_count
         
-        # 1. Aturan Olimpiade 9 Cabang + AI: Max 20 Orang, Min 5 / Kelas
+        c_copy["peserta_min"] = None
+        # 1. Aturan Olimpiade (OSN 9 Cabang + Kecerdasan Artifisial): Max 20 Orang, TANPA Minimal Peserta
         if c.get("is_olimpiade_or_ai") or cid in OLIMPIADE_9_DAN_AI_IDS:
             c_copy["is_olimpiade_or_ai"] = True
-            c_copy["peserta_min"] = "5 / Kelas"
             c_copy["peserta_max"] = "20"
             c_copy["max_quota"] = 20
             remaining = max(0, 20 - reg_count)
@@ -117,22 +117,9 @@ def build_decorated_cabang_list():
             c_copy["is_full"] = reg_count >= 20
             c_copy["quota_text"] = f"Sisa {remaining} dari 20 Kuota" if remaining > 0 else "Kuota Penuh (20/20)"
             c_copy["quota_badge"] = f"Sisa {remaining} Kuota" if remaining > 0 else "Kuota Penuh"
-        # 2. Aturan Literasi: Min 2 / Kelas, Max tidak ada
-        elif c["name"].lower().startswith("literasi") or cid.startswith("literasi"):
-            c_copy["is_olimpiade_or_ai"] = False
-            c_copy["is_literasi"] = True
-            c_copy["peserta_min"] = "2 / Kelas"
-            c_copy["peserta_max"] = None
-            c_copy["max_quota"] = None
-            c_copy["remaining_quota"] = None
-            c_copy["is_full"] = False
-            c_copy["quota_text"] = "Kuota Terbuka"
-            c_copy["quota_badge"] = "Kuota Terbuka"
-        # 3. Sisanya: Tidak perlu minimum dan maximum, cukup informasi kuota pendaftaran
+        # 2. Sisanya (Literasi, Seni, Bahasa, Olahraga): Tanpa Min & Tanpa Max
         else:
             c_copy["is_olimpiade_or_ai"] = False
-            c_copy["is_literasi"] = False
-            c_copy["peserta_min"] = None
             c_copy["peserta_max"] = None
             c_copy["max_quota"] = None
             c_copy["remaining_quota"] = None
@@ -220,6 +207,22 @@ def nordelia_category(category_id: str):
     if not cat_match:
         return redirect(url_for("pages.nordelia"))
 
+    jurusan = request.args.get("jurusan", "").lower().strip()
+    # Aturan Peminatan OSN: Matematika boleh dipilih kelas IPS
+    OSN_IPA_ONLY_IDS = {
+        "olimpiade-fisika",
+        "olimpiade-kimia",
+        "olimpiade-biologi",
+        "olimpiade-astronomi",
+        "olimpiade-informatika",
+    }
+    OSN_IPS_ALLOWED_IDS = {
+        "olimpiade-matematika",
+        "olimpiade-kebumian",
+        "olimpiade-geografi",
+        "olimpiade-ekonomi",
+    }
+
     counts = storage.get_counts_by_cabang()
     if not cat_match.get("subEvents"):
         cabang_info = get_cabang_by_id(cat_match["id"])
@@ -235,7 +238,7 @@ def nordelia_category(category_id: str):
                 "name": sub_name,
                 "pic": cabang_info["pic"] if cabang_info else "-",
                 "tempat": cabang_info["tempat"] if cabang_info else "-",
-                "peserta_min": "5 / Kelas" if is_olimp else ("2 / Kelas" if is_lit else None),
+                "peserta_min": None,
                 "peserta_max": "20" if is_olimp else None,
                 "is_olimpiade_or_ai": is_olimp,
                 "is_literasi": is_lit,
@@ -260,7 +263,7 @@ def nordelia_category(category_id: str):
             reg_c = counts.get(sub_id, 0)
             rem = max(0, 20 - reg_c) if is_olimp else None
             
-            sub["peserta_min"] = "5 / Kelas" if is_olimp else ("2 / Kelas" if is_lit else None)
+            sub["peserta_min"] = None
             sub["peserta_max"] = "20" if is_olimp else None
             sub["tempat"] = cb.get("tempat", "-") if cb else "-"
             sub["pic"] = cb.get("pic", "-") if cb else "-"
@@ -271,7 +274,17 @@ def nordelia_category(category_id: str):
             sub["is_full"] = reg_c >= 20 if is_olimp else False
             sub["quota_text"] = (f"Sisa {rem} dari 20 Kuota" if rem > 0 else "Kuota Penuh (20/20)") if is_olimp else "Kuota Terbuka"
             sub["quota_badge"] = (f"Sisa {rem} Kuota" if rem > 0 else "Kuota Penuh") if is_olimp else "Kuota Terbuka"
-            sub["format_type"] = cb.get("format_type", "olimpiade_akademik") if cb else "olimpiade_akademik" 
+            sub["format_type"] = cb.get("format_type", "olimpiade_akademik") if cb else "olimpiade_akademik"
+            
+            # Pengecekan Peminatan IPA/IPS untuk OSN
+            sub["is_ipa_only"] = sub_id in OSN_IPA_ONLY_IDS
+            sub["is_ips_allowed"] = sub_id in OSN_IPS_ALLOWED_IDS
+            if jurusan == "ips" and sub["is_ipa_only"]:
+                sub["is_disabled_jurusan"] = True
+                sub["jurusan_notice"] = "Khusus Siswa IPA"
+            else:
+                sub["is_disabled_jurusan"] = False
+                sub["jurusan_notice"] = None
 
     return render_template(
         "nordelia_sub.html",
@@ -283,6 +296,7 @@ def nordelia_category(category_id: str):
             summary=storage.get_summary_stats(),
             group_link=resolve_group_link(),
             group_label=get_config("NORDELIA_GROUP_LABEL") or NORDELIA_INFO.get("group_label", "Masuk Grup WhatsApp"),
+            selected_jurusan=jurusan,
         ),
     )
 
@@ -344,6 +358,25 @@ def api_nordelia_register():
                 "error": "Cabang lomba tidak ditemukan atau belum dipilih.",
             }), 400
 
+        # Validasi Peminatan Kelas IPA/IPS untuk Cabang OSN Sains Murni (Matematika boleh untuk IPS)
+        OSN_IPA_ONLY_IDS = {
+            "olimpiade-fisika",
+            "olimpiade-kimia",
+            "olimpiade-biologi",
+            "olimpiade-astronomi",
+            "olimpiade-informatika",
+        }
+        kelas_raw = str(data.get("kelas", "")).upper()
+        jurusan_input = str(data.get("jurusan", "")).lower().strip()
+        is_ips = "IPS" in kelas_raw or "SOSIAL" in kelas_raw or jurusan_input == "ips"
+        is_ipa = "IPA" in kelas_raw or "MIPA" in kelas_raw or jurusan_input == "ipa"
+
+        if cabang_id in OSN_IPA_ONLY_IDS and is_ips and not is_ipa:
+            return jsonify({
+                "success": False,
+                "error": f"Cabang '{cabang_info['name']}' khusus untuk siswa kelas IPA. Siswa kelas IPS hanya diperbolehkan mendaftar cabang Matematika, Kebumian, Geografi, atau Ekonomi.",
+            }), 400
+
         # ATURAN 2: Olimpiade 9 cabang + artificial intelligence maksimal 20 orang per cabang
         if cabang_id in OLIMPIADE_9_DAN_AI_IDS:
             current_count = storage.get_cabang_count(cabang_id)
@@ -355,6 +388,15 @@ def api_nordelia_register():
                     "current_count": current_count,
                     "max_quota": 20,
                 }), 400
+
+        # Gabungkan nama peserta jika format tim / beregu 2 orang (Tari Kreasi)
+        p1 = str(data.get("nama_peserta_1", "")).strip()
+        p2 = str(data.get("nama_peserta_2", "")).strip()
+        if p1 and p2:
+            tim_label = str(data.get("nama_tim", "")).strip()
+            combined = f"{tim_label} (1. {p1}, 2. {p2})" if tim_label else f"1. {p1}, 2. {p2}"
+            if not data.get("nama_lengkap"):
+                data["nama_lengkap"] = combined
 
         # Validasi nama peserta / tim
         nama = data.get("nama_lengkap") or data.get("nama_tim") or data.get("nama", "").strip()

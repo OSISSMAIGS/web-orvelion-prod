@@ -374,6 +374,16 @@
             "Kelas",
             "Link Portofolio"
           ]
+        },
+        {
+          "id": "tari-kreasi",
+          "name": "TARI KREASI",
+          "registrationFormat": [
+            "Nama Tim",
+            "Kelas",
+            "Nama Peserta 1",
+            "Nama Peserta 2"
+          ]
         }
       ]
     },

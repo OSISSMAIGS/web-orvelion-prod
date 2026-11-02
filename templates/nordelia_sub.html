@@ -34,6 +34,86 @@
     </div>
   </section>
 
+  <!-- PILIHAN JURUSAN KELAS UNTUK OSN (IPA / IPS) -->
+  {% if category.id in ('osn', 'olimpiade-9-cabang') %}
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-2">
+    <div class="p-5 sm:p-6 rounded-3xl bg-black/50 border border-white/10 shadow-xl">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FFE5B4]/20 text-[#FFE5B4] border border-[#FFE5B4]/30">
+            Peminatan Kelas Peserta
+          </span>
+          <h2 class="text-xl sm:text-2xl font-black text-white mt-1">
+            Pilih Jenis Kelas Anda (IPA / IPS)
+          </h2>
+          <p class="text-xs text-stone-300 mt-1 max-w-2xl">
+            Siswa kelas <strong>IPA</strong> dapat memilih seluruh 9 cabang OSN, sedangkan siswa kelas <strong>IPS</strong> diperbolehkan memilih cabang <strong>Matematika</strong>, <strong>Kebumian</strong>, <strong>Geografi</strong>, dan <strong>Ekonomi</strong>.
+          </p>
+        </div>
+        {% if selected_jurusan %}
+          <div class="shrink-0">
+            <a href="/nordelia/osn" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-semibold text-stone-300 hover:text-white border border-white/10 transition-colors">
+              <span>Tampilkan Semua</span>
+              <svg class="w-3.5 h-3.5"><use href="#i-refresh"></use></svg>
+            </a>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- 2 Cards Jurusan -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- Card 1: Kelas IPA -->
+        <a href="/nordelia/osn?jurusan=ipa"
+           class="p-4 sm:p-5 rounded-2xl border transition-all duration-300 flex items-start gap-4 {% if selected_jurusan == 'ipa' %}bg-[#AEC6CF]/15 border-[#AEC6CF] ring-2 ring-[#AEC6CF]/30 shadow-lg{% else %}bg-black/40 border-white/10 hover:border-[#AEC6CF]/60 hover:bg-black/60{% endif %}">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0 bg-[#AEC6CF]/20 text-[#AEC6CF]">
+            🔬
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="font-black text-base sm:text-lg text-white">Kelas IPA (MIPA)</h3>
+              {% if selected_jurusan == 'ipa' %}
+                <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#AEC6CF] text-black">
+                  ✓ Aktif
+                </span>
+              {% endif %}
+            </div>
+            <p class="text-xs text-stone-300 mt-1">
+              Boleh memilih <strong>seluruh 9 cabang OSN</strong> (Matematika, Fisika, Kimia, Biologi, Astronomi, Informatika, Kebumian, Geografi, Ekonomi).
+            </p>
+            <div class="mt-3 text-xs font-bold text-[#AEC6CF] flex items-center gap-1">
+              <span>{% if selected_jurusan == 'ipa' %}Peminatan Terpilih{% else %}Pilih Kelas IPA &rarr;{% endif %}</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 2: Kelas IPS -->
+        <a href="/nordelia/osn?jurusan=ips"
+           class="p-4 sm:p-5 rounded-2xl border transition-all duration-300 flex items-start gap-4 {% if selected_jurusan == 'ips' %}bg-[#FFE5B4]/15 border-[#FFE5B4] ring-2 ring-[#FFE5B4]/30 shadow-lg{% else %}bg-black/40 border-white/10 hover:border-[#FFE5B4]/60 hover:bg-black/60{% endif %}">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0 bg-[#FFE5B4]/20 text-[#FFE5B4]">
+            📚
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between gap-2">
+              <h3 class="font-black text-base sm:text-lg text-white">Kelas IPS (Sosial)</h3>
+              {% if selected_jurusan == 'ips' %}
+                <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#FFE5B4] text-black">
+                  ✓ Aktif
+                </span>
+              {% endif %}
+            </div>
+            <p class="text-xs text-stone-300 mt-1">
+              Dapat memilih cabang <strong>Matematika</strong>, <strong>Kebumian</strong>, <strong>Geografi</strong>, dan <strong>Ekonomi</strong>. Cabang sains lainnya (Fisika, Kimia, Biologi, Astronomi, Informatika) khusus siswa IPA.
+            </p>
+            <div class="mt-3 text-xs font-bold text-[#FFE5B4] flex items-center gap-1">
+              <span>{% if selected_jurusan == 'ips' %}Peminatan Terpilih{% else %}Pilih Kelas IPS &rarr;{% endif %}</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
   <!-- SUB-EVENTS GRID (CATATAN: FORMAT DITIADAKAN DARI KARTU SESUAI INSTRUKSI) -->
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -77,13 +157,8 @@
               {% endif %}
               {% if sub.is_olimpiade_or_ai %}
                 <div class="flex items-start justify-between gap-2">
-                  <span class="text-stone-400">Peserta Min / Max:</span>
-                  <span class="font-bold text-amber-300">5 / Kelas • Maks. 20</span>
-                </div>
-              {% elif sub.is_literasi %}
-                <div class="flex items-start justify-between gap-2">
-                  <span class="text-stone-400">Peserta Minimal:</span>
-                  <span class="font-bold text-[#FFE5B4]">2 / Kelas</span>
+                  <span class="text-stone-400">Batas Kuota:</span>
+                  <span class="font-bold text-amber-300">Maks. 20 Peserta</span>
                 </div>
               {% endif %}
             </div>
@@ -113,7 +188,16 @@
           </div>
 
           <div class="pt-4 mt-4 border-t border-white/10">
-            {% if sub.is_full %}
+            {% if sub.is_disabled_jurusan %}
+              <button type="button"
+                      data-blocked-jurusan-btn="{{ sub.id }}"
+                      data-blocked-sub-name="{{ sub.name }}"
+                      class="w-full py-2.5 rounded-xl text-xs font-bold text-amber-300/80 bg-stone-900/90 border border-amber-500/40 hover:border-amber-400 hover:text-amber-200 transition-colors flex items-center justify-center gap-1.5"
+                      title="Klik untuk melihat ketentuan peminatan">
+                <svg class="w-3.5 h-3.5 text-amber-400"><use href="#i-x"></use></svg>
+                <span>Khusus Siswa IPA (Klik Info)</span>
+              </button>
+            {% elif sub.is_full %}
               <button type="button" disabled
                       class="w-full py-2.5 rounded-xl text-xs font-black uppercase tracking-wider text-stone-400 bg-stone-800 cursor-not-allowed flex items-center justify-center gap-1.5">
                 <span>Kuota Penuh (20/20)</span>
@@ -159,7 +243,7 @@
     <!-- Info Kuota Khusus Olimpiade 9 Cabang + AI -->
     <div id="form-quota-banner" class="hidden p-3 rounded-xl bg-amber-950/50 border border-amber-500/40 text-xs text-amber-200 mb-4 flex items-center gap-2">
       <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-      <span><strong>Aturan Kuota:</strong> Minimal <strong>5 peserta per kelas</strong>, maksimal <strong>20 peserta</strong> per cabang.</span>
+      <span><strong>Aturan Kuota:</strong> Cabang olimpiade dibatasi <strong>maksimal 20 peserta</strong> per cabang.</span>
     </div>
 
     <!-- Status Kuota & Info Realtime -->
@@ -191,6 +275,7 @@
 </div>
 
 {% include "partials/nordelia_success.html" %}
+{% include "partials/nordelia_jurusan_modal.html" %}
 
 <script id="nordelia-formats-json" type="application/json">{{ format_registrasi | tojson | safe }}</script>
 <script id="nordelia-cabang-json" type="application/json">{{ cabang_lomba | tojson | safe }}</script>
@@ -246,9 +331,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let minMaxDisplay = "";
     if (isOlimpOrAI) {
-      minMaxDisplay = `<span class="text-amber-300 font-bold">Min: 5/Kelas • Maks: 20</span>`;
-    } else if (isLit) {
-      minMaxDisplay = `<span class="text-[#FFE5B4] font-bold">Min: 2/Kelas</span>`;
+      minMaxDisplay = `<span class="text-amber-300 font-bold">Maks. 20 Peserta</span>`;
     }
 
     const ruleBox = document.getElementById("form-sub-rule-box");
@@ -266,6 +349,9 @@ document.addEventListener("DOMContentLoaded", function () {
       `;
     }
     if (cMatch && cMatch.format_type) {
+      fmtKey = cMatch.format_type;
+    } else if (subId.includes("tari")) {
+      fmtKey = "tari_kreasi";
       fmtKey = cMatch.format_type;
     } else if (subId.includes("debat") || subId.includes("ldbi") || subId.includes("nsdc")) {
       fmtKey = "debat";
