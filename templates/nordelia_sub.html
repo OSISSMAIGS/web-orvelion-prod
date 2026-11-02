@@ -304,7 +304,7 @@ document.addEventListener("DOMContentLoaded", function () {
     inputCabangId.value = subId;
     formSubTitle.textContent = subName;
 
-    const isOlimpOrAI = olimpiade9DanAI.includes(subId) || subId.includes("olimpiade") || subId.includes("ai") || subName.toLowerCase().includes("artifisial");
+    const isOlimpOrAI = (olimpiade9DanAI.includes(subId) || subId.includes("olimpiade") || subId === "ai" || subId === "olimpiade-ai" || subName.toLowerCase().includes("artifisial")) && !subId.includes("desain") && !subId.includes("poster");
     quotaBanner.classList.toggle("hidden", !isOlimpOrAI);
 
     // Tentukan format type sesuai Sheet 2
@@ -312,7 +312,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let cMatch = cabangList.find(x => x.id === subId);
     if (!cMatch) {
       cMatch = cabangList.find(x => 
-        (subId.includes("ai") && (x.id.includes("ai") || x.name.toLowerCase().includes("artifisial"))) ||
+        ((subId === "ai" || subId === "olimpiade-ai") && (x.id.includes("ai") || x.name.toLowerCase().includes("artifisial"))) ||
         x.name.toLowerCase().includes(subId.toLowerCase())
       );
     }

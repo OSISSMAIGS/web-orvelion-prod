@@ -253,12 +253,18 @@ def nordelia_category(category_id: str):
     else:
         for sub in cat_match.get("subEvents", []):
             cb = get_cabang_by_id(sub.get("id"))
-            if not cb and ("ai" in sub.get("id", "").lower() or "artifisial" in sub.get("name", "").lower()):
+            if not cb and (sub.get("id", "").lower() in ("ai", "olimpiade-ai") or "artifisial" in sub.get("name", "").lower()):
                 cb = get_cabang_by_id("olimpiade-ai")
             
             sub_id = cb["id"] if cb else sub.get("id", "")
             sub_name = cb.get("name", sub.get("name", ""))
-            is_olimp = (cb.get("is_olimpiade_or_ai", False) if cb else False) or sub_id in OLIMPIADE_9_DAN_AI_IDS or "ai" in sub_id.lower() or "artifisial" in sub_name.lower() or "olimpiade" in sub_id.lower()
+            is_olimp = (
+                (cb.get("is_olimpiade_or_ai", False) if cb else False)
+                or sub_id in OLIMPIADE_9_DAN_AI_IDS
+                or sub_id in ("ai", "olimpiade-ai")
+                or "artifisial" in sub_name.lower()
+                or ("olimpiade" in sub_id.lower() and not ("desain" in sub_id.lower() or "poster" in sub_id.lower()))
+            ) and not ("desain" in sub_id.lower() or "poster" in sub_id.lower())
             is_lit = sub_name.lower().startswith("literasi") or sub_id.startswith("literasi")
             reg_c = counts.get(sub_id, 0)
             rem = max(0, 20 - reg_c) if is_olimp else None
