@@ -610,6 +610,8 @@ function initNordelia() {
           }, 2500);
         }
       });
+    } else {
+      window.location.href = "/nordelia/osn?jurusan=ips";
     }
   });
 

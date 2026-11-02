@@ -42,7 +42,7 @@
               <strong class="text-white font-black">sports</strong>, 
               <strong class="text-[#CC4400] font-black">academic</strong>, dan 
               <strong class="text-[#FF8533] font-black">arts</strong>. 
-              <strong>Nordelia</strong> menggambarkan kesempatan para siswa untuk memenangi bidang yang mereka dalami di 4 kategori yang hadir di festival bulan bahasa ini, yaitu bidang 
+              <strong>Nordelia</strong> menggambarkan kesempatan para siswa untuk memenangi bidang yang mereka dalami di berbagai kategori kompetisi yang hadir di festival ini, yaitu bidang 
               <span class="text-white font-bold">Olahraga</span>, 
               <span class="text-[#CC4400] font-bold">Akademik</span>, 
               <span class="text-[#FF8533] font-bold">Seni</span>, dan 
@@ -110,7 +110,7 @@
             <!-- Quick Action from Mascot -->
             <div class="mt-3">
               <a href="#section-categories" class="p-2 rounded-xl bg-black/60 hover:bg-[#FF6B00] hover:text-black text-[#FF6B00] border border-[#FF6B00]/40 text-xs font-bold block text-center transition-colors">
-                Lihat 4 Kategori
+                Lihat Kategori Lomba
               </a>
             </div>
           </div>
@@ -164,213 +164,6 @@
       {% endfor %}
     </div>
 
-    <!-- All Categories / Filter Bar & Search -->
-    <div class="mt-8 p-4 rounded-2xl bg-[#141414] border border-white/10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
-      <div class="flex items-center gap-1.5 overflow-x-auto pb-1" id="category-filter-pills">
-        <button type="button" data-filter-cat="semua" class="cat-pill is-active px-4 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap bg-gradient-to-r from-[#CC4400] via-[#FF6B00] to-[#FF8533] text-black">
-          Semua Cabang (49+)
-        </button>
-        {% for cat in categories %}
-          <button type="button" data-filter-cat="{{ cat.id }}" class="cat-pill px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-black/60 text-stone-300 hover:text-white border border-white/10">
-            {{ cat.name }}
-          </button>
-        {% endfor %}
-      </div>
-
-      <div class="relative min-w-[260px] sm:w-80">
-        <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400"><use href="#i-search"></use></svg>
-        <input id="cabang-search" type="text" placeholder="Cari cabang lomba atau tempat..."
-               class="w-full pl-10 pr-4 py-2 text-xs rounded-xl bg-black border border-white/20 text-white placeholder-stone-400 focus:outline-none focus:border-[#FF6B00]" />
-      </div>
-    </div>
-  </section>
-
-  <!-- CHILDREN CABANG LOMBA GRID -->
-  <section id="section-cabang" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 scroll-mt-24">
-    <div class="flex items-center justify-between mb-6">
-      <div>
-        <h3 id="current-category-title" class="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
-          <span>Daftar Cabang Lomba:</span>
-          <span class="text-[#FF6B00]" id="current-category-name">Semua Kategori</span>
-        </h3>
-        <p class="text-xs text-stone-400 mt-0.5">Klik tombol "Daftar Lomba" pada cabang yang Anda minati untuk mengisi formulir pendaftaran.</p>
-      </div>
-
-      <div class="hidden sm:flex items-center gap-2">
-        <button type="button" data-open-sheet2-modal class="text-xs font-bold px-3 py-1.5 rounded-lg bg-[#141414] text-[#FF6B00] border border-[#FF6B00]/40 hover:bg-[#1a1a1a]">
-          Panduan Format Pendaftaran
-        </button>
-      </div>
-    </div>
-
-    <div id="cabang-empty" class="hidden text-center py-16 p-8 rounded-3xl bg-black/40 border border-white/10">
-      <div class="w-12 h-12 mx-auto mb-3 text-stone-500">
-        <svg class="w-full h-full"><use href="#i-search"></use></svg>
-      </div>
-      <h4 class="text-base font-bold text-white">Tidak ada cabang lomba yang cocok</h4>
-      <p class="text-xs text-stone-400 mt-1">Coba sesuaikan kata kunci pencarian atau pilih tab kategori yang lain.</p>
-    </div>
-
-    <!-- FILTER PEMINATAN KELAS KHUSUS OSN -->
-    <div id="jurusan-filter-bar" class="mb-6 p-4 sm:p-5 rounded-2xl bg-black/40 border border-white/10 backdrop-blur-md flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div class="space-y-1">
-        <div class="flex items-center gap-2">
-          <span class="text-xs font-bold text-white">Peminatan Kelas (OSN):</span>
-          <span id="active-jurusan-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/10 text-stone-300">
-            Semua Kelas
-          </span>
-        </div>
-        <p class="text-[11px] text-stone-400">
-          Siswa IPA dapat memilih seluruh cabang OSN. Siswa IPS hanya diperbolehkan memilih Matematika, Kebumian, Geografi, dan Ekonomi.
-        </p>
-      </div>
-      <div class="flex items-center gap-2 shrink-0">
-        <button type="button" data-jurusan-filter="all"
-                class="px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all bg-white/15 border-white/30 text-white shadow-sm">
-          Semua
-        </button>
-        <button type="button" data-jurusan-filter="ipa"
-                class="px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all bg-black/40 border-white/15 text-stone-300 hover:border-[#AEC6CF] hover:text-[#AEC6CF]">
-          🔬 Kelas IPA
-        </button>
-        <button type="button" data-jurusan-filter="ips"
-                class="px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all bg-black/40 border-white/15 text-stone-300 hover:border-[#FFE5B4] hover:text-[#FFE5B4]">
-          📚 Kelas IPS
-        </button>
-      </div>
-    </div>
-    <!-- The Children Grid -->
-    <div id="cabang-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      {% for c in cabang_lomba %}
-        <article data-cabang-card
-                 data-cabang-id="{{ c.id }}"
-                 data-category="{{ c.category }}"
-                 data-name="{{ c.name }}"
-                 data-pic="{{ c.pic }}"
-                 data-tempat="{{ c.tempat }}"
-<<<<<<< HEAD
-                 class="group rounded-2xl p-5 border backdrop-blur-md flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-[#FF6B00]/50 hover:shadow-2xl"
-                 style="background: rgba(20, 20, 20, 0.85); border-color: rgba(255, 107, 0, 0.2);">
-=======
-                 data-is-osn="{{ 'true' if c.id in ('olimpiade-matematika','olimpiade-fisika','olimpiade-kimia','olimpiade-biologi','olimpiade-astronomi','olimpiade-informatika','olimpiade-kebumian','olimpiade-geografi','olimpiade-ekonomi') else 'false' }}"
-                 data-osn-type="{{ 'ipa-only' if c.id in ('olimpiade-fisika','olimpiade-kimia','olimpiade-biologi','olimpiade-astronomi','olimpiade-informatika') else ('ips-allowed' if c.id in ('olimpiade-matematika','olimpiade-kebumian','olimpiade-geografi','olimpiade-ekonomi') else 'none') }}"
-                 class="group rounded-2xl p-5 border backdrop-blur-md flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-                 style="background: rgba(22, 18, 15, 0.75); border-color: rgba(255, 255, 255, 0.1);">
->>>>>>> e4712c7f14527f192e15a058d5c65edfc7885e36
-          
-          <div class="space-y-3.5">
-            <!-- Header Badges -->
-            <div class="flex items-center justify-between gap-2">
-              <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md border
-<<<<<<< HEAD
-                           {% if c.category == 'akademik' %}bg-[#CC4400]/20 text-[#CC4400] border-[#CC4400]/40
-                           {% elif c.category == 'bahasa' %}bg-[#FF6B00]/20 text-[#FF6B00] border-[#FF6B00]/40
-                           {% elif c.category == 'seni' %}bg-white/15 text-white border-white/30
-                           {% else %}bg-[#FF8533]/20 text-[#FF8533] border-[#FF8533]/40{% endif %}">
-                {{ c.category }} • No. {{ c.no }}
-=======
-                           {% if c.category == 'akademik' %}bg-[#AEC6CF]/15 text-[#AEC6CF] border-[#AEC6CF]/30
-                           {% elif c.category == 'bahasa' %}bg-[#FFB7C5]/15 text-[#FFB7C5] border-[#FFB7C5]/30
-                           {% elif c.category == 'seni' %}bg-[#FFE5B4]/15 text-[#FFE5B4] border-[#FFE5B4]/30
-                           {% else %}bg-[#FFC0CB]/15 text-[#FFC0CB] border-[#FFC0CB]/30{% endif %}">
-                {{ c.category | upper }}
->>>>>>> e4712c7f14527f192e15a058d5c65edfc7885e36
-              </span>
-              {% if c.is_olimpiade_or_ai %}
-                {% if c.is_full %}
-                  <span class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40">
-                    Kuota Penuh
-                  </span>
-                {% else %}
-                  <span class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-[#FF6B00]/20 text-[#FF8533] border border-[#FF6B00]/40">
-                    Sisa {{ c.remaining_quota if c.remaining_quota is not none else (20 - (c.registered_count or 0)) }} Kuota
-                  </span>
-                {% endif %}
-              {% else %}
-                <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-black/60 text-white border border-white/20">
-                  Kuota Terbuka
-                </span>
-              {% endif %}
-            </div>
-
-            <!-- Title -->
-            <h4 class="text-base sm:text-lg font-black text-white group-hover:text-[#FF6B00] transition-colors leading-snug">
-              {{ c.name }}
-            </h4>
-
-            <!-- Information list -->
-            <div class="space-y-1.5 text-xs text-stone-300 pt-2 border-t border-white/10">
-              <div class="flex items-start justify-between gap-2">
-                <span class="text-stone-400">Tempat Lomba:</span>
-                <span class="font-bold text-right text-white">{{ c.tempat }}</span>
-              </div>
-              {% if c.is_olimpiade_or_ai %}
-                <div class="flex items-start justify-between gap-2">
-<<<<<<< HEAD
-                  <span class="text-stone-400">Peserta Min / Max:</span>
-                  <span class="font-bold text-[#FF8533]">5 / Kelas • Maks. 20</span>
-                </div>
-              {% elif c.is_literasi %}
-                <div class="flex items-start justify-between gap-2">
-                  <span class="text-stone-400">Peserta Minimal:</span>
-                  <span class="font-bold text-white">2 / Kelas</span>
-=======
-                  <span class="text-stone-400">Batas Kuota:</span>
-                  <span class="font-bold text-amber-300">Maks. 20 Peserta</span>
->>>>>>> e4712c7f14527f192e15a058d5c65edfc7885e36
-                </div>
-              {% endif %}
-            </div>
-
-            <!-- Notes / Rule snippet -->
-            <div class="p-2.5 rounded-xl bg-black/50 border border-white/5 text-[11px] text-stone-300 leading-relaxed">
-              <span class="font-bold text-[#FF6B00]">Ketentuan:</span> {{ c.note }}
-            </div>
-
-            <!-- Informasi Pendaftar & Sisa Kuota -->
-            <div class="p-3 rounded-xl bg-black/70 border border-white/10 space-y-1.5">
-              <div class="flex items-center justify-between text-xs">
-                <span class="text-stone-400 flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-[#FF6B00]"></span>
-                  Terdaftar Saat Ini:
-                </span>
-                <span class="font-black text-white bg-white/10 px-2 py-0.5 rounded-md">
-                  {{ c.registered_count }} Orang
-                </span>
-              </div>
-              <div class="flex items-center justify-between text-xs pt-1 border-t border-white/10">
-                <span class="text-stone-400">Sisa Kuota:</span>
-                {% if c.is_olimpiade_or_ai %}
-                  <span class="font-black {% if c.is_full %}text-rose-400{% else %}text-[#FF8533]{% endif %}">
-                    {% if c.is_full %}Kuota Penuh (20/20){% else %}Sisa {{ c.remaining_quota if c.remaining_quota is not none else (20 - (c.registered_count or 0)) }} dari 20 Kuota{% endif %}
-                  </span>
-                {% else %}
-                  <span class="font-bold text-white">Kuota Terbuka</span>
-                {% endif %}
-              </div>
-            </div>
-          </div>
-
-          <!-- Bottom Button to Register -->
-          <div class="pt-4 mt-3 border-t border-white/10">
-            {% if c.is_full %}
-              <button type="button" disabled
-                      class="w-full py-2.5 rounded-xl text-xs font-black uppercase tracking-wider text-stone-400 bg-stone-900 cursor-not-allowed flex items-center justify-center gap-1.5">
-                <span>Kuota Penuh (20/20)</span>
-              </button>
-            {% else %}
-              <button type="button"
-                      data-register-cabang="{{ c.id }}"
-                      class="w-full py-2.5 rounded-xl text-xs font-black uppercase tracking-wider text-black bg-gradient-to-r from-[#CC4400] via-[#FF6B00] to-[#FF8533] hover:text-white hover:brightness-110 shadow-md transition-all hover:scale-[1.02] flex items-center justify-center gap-1.5">
-                <span><strong>Daftar Lomba</strong></span>
-                <svg class="w-3.5 h-3.5"><use href="#i-chevron"></use></svg>
-              </button>
-            {% endif %}
-          </div>
-
-        </article>
-      {% endfor %}
-    </div>
   </section>
 </div>
 
@@ -447,7 +240,7 @@
     </div>
 
     <p class="text-xs text-stone-300 mb-6 leading-relaxed">
-      Sesuai ketentuan, cabang OSN Fisika, Kimia, Biologi, Informatika, Matematika, dan Astronomi khusus diperuntukkan bagi siswa kelas <strong>IPA</strong>. Siswa kelas <strong>IPS</strong> dapat memilih cabang Kebumian, Geografi, dan Ekonomi. Silakan tentukan jenis kelas Anda:
+      Sesuai ketentuan, cabang OSN Fisika, Kimia, Biologi, Informatika, dan Astronomi khusus diperuntukkan bagi siswa kelas <strong>IPA</strong>. Siswa kelas <strong>IPS</strong> dapat memilih cabang <strong>Matematika</strong>, <strong>Kebumian</strong>, <strong>Geografi</strong>, dan <strong>Ekonomi</strong>. Silakan tentukan jenis kelas Anda:
     </p>
 
     <!-- 2 Pilihan Card: IPA vs IPS -->
@@ -487,14 +280,14 @@
               📚
             </span>
             <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FFE5B4]/20 text-[#FFE5B4] border border-[#FFE5B4]/30">
-              3 Cabang Pilihan
+              4 Cabang Pilihan
             </span>
           </div>
           <h4 class="text-lg font-black text-white group-hover:text-[#FFE5B4] transition-colors">
             Kelas IPS (Sosial)
           </h4>
           <p class="text-xs text-stone-300 leading-relaxed">
-            Siswa kelas IPS diperbolehkan mendaftar pada cabang <strong>Kebumian</strong>, <strong>Geografi</strong>, dan <strong>Ekonomi</strong>.
+            Siswa kelas IPS diperbolehkan mendaftar pada cabang <strong>Matematika</strong>, <strong>Kebumian</strong>, <strong>Geografi</strong>, dan <strong>Ekonomi</strong>.
           </p>
         </div>
         <div class="mt-5 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#FFE5B4]">

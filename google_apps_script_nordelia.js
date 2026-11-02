@@ -18,7 +18,7 @@
  * 3. Hapus semua kode lama dan PASTE (tempel) seluruh isi file ini.
  * 4. Klik ikon 'Save' (Simpan) disket.
  * 5. Pilih fungsi 'setupNordeliaSpreadsheet' di dropdown atas, lalu klik 'Run' (Jalankan)
- *    agar SELURUH 48 SHEET CABANG LOMBA terbuat otomatis di spreadsheet Anda!
+ *    agar SELURUH 43 SHEET CABANG LOMBA terbuat otomatis di spreadsheet Anda!
  *    (Atau cukup buka Web App URL dengan parameter ?setup=1 di browser).
  * 6. Klik tombol 'Deploy' (Terapkan) di pojok kanan atas:
  *    - Pilih 'Manage deployments' (Kelola penerapan).
@@ -43,7 +43,7 @@ const TABLE_HEADERS = [
   "STATUS"
 ];
 
-// Daftar 48 Cabang Lomba Resmi Nordelia 2026 (1 Lomba = 1 Sheet)
+// Daftar 43 Cabang Lomba Resmi Nordelia 2026 (1 Lomba = 1 Sheet)
 const DAFTAR_CABANG_LOMBA = [
   // AKADEMIK & SAINS
   { name: "Literasi Numerasi", color: COLOR_BLUE },
@@ -59,8 +59,6 @@ const DAFTAR_CABANG_LOMBA = [
   { name: "Olimpiade Geografi", color: COLOR_BLUE },
   { name: "Olimpiade Ekonomi", color: COLOR_BLUE },
   { name: "Olimpiade Kecerdasan Artifisial", color: COLOR_BLUE },
-  { name: "OPSI", color: COLOR_BLUE },
-  { name: "FIKSI", color: COLOR_BLUE },
 
   // BAHASA & DEBAT
   { name: "LDBI", color: COLOR_PINK },
@@ -80,18 +78,14 @@ const DAFTAR_CABANG_LOMBA = [
   { name: "Cosplay", color: COLOR_CREAM },
   { name: "Baca Puisi", color: COLOR_CREAM },
   { name: "Cipta Puisi", color: COLOR_CREAM },
-  { name: "Jurnalistik", color: COLOR_CREAM },
   { name: "Menulis Cerpen", color: COLOR_CREAM },
   { name: "Monolog", color: COLOR_CREAM },
-  { name: "Cipta Lagu", color: COLOR_CREAM },
   { name: "Desain Poster", color: COLOR_CREAM },
-  { name: "Fotografi", color: COLOR_CREAM },
   { name: "Instrumen Solo Gitar", color: COLOR_CREAM },
   { name: "Menyanyi Solo Putri", color: COLOR_CREAM },
   { name: "Menyanyi Solo Putra", color: COLOR_CREAM },
   { name: "Kriya", color: COLOR_CREAM },
   { name: "Komik Digital", color: COLOR_CREAM },
-  { name: "Film Pendek", color: COLOR_CREAM },
   { name: "Tari Kreasi", color: COLOR_CREAM },
 
   // OLAHRAGA & O2SN
@@ -136,6 +130,13 @@ function setupNordeliaSpreadsheet() {
       "", ""
     ],
     [
+      "FLS3N - TARI KREASI (BEREGU 2 ORANG)",
+      "1.) Nama Tim / Grup Tari\n2.) Asal Kelas Tim\n3.) Nama Lengkap Peserta 1\n4.) Nama Lengkap Peserta 2\n5.) No. WhatsApp",
+      "", "",
+      "Sanggar Melati CGC\n10.2 CGC\n1. Alya Syahrini, 2. Tiara Andini\n081234567890",
+      "", ""
+    ],
+    [
       "FLS3N - VOKAL SOLO PUTRA & PUTRI",
       "1.) Nama & Kategori (cth: Rahmat Ardhani (Putra))\n2.) Kelas\n3.) Link lagu karaoke babak penyisihan\n4.) Link lagu karaoke babak final",
       "", "",
@@ -177,7 +178,7 @@ function setupNordeliaSpreadsheet() {
     initOrFormatSheet(ss, c.name, c.color, "PENDAFTARAN: " + c.name.toUpperCase());
   });
 
-  return "Seluruh 48 sheet lomba berhasil disiapkan!";
+  return "Seluruh 43 sheet lomba berhasil disiapkan!";
 }
 
 function findSheetCaseInsensitive(ss, targetName) {

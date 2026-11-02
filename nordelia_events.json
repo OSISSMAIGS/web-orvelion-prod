@@ -272,14 +272,6 @@
           ]
         },
         {
-          "id": "jurnalistik",
-          "name": "JURNALISTIK",
-          "registrationFormat": [
-            "Nama Lengkap",
-            "Kelas"
-          ]
-        },
-        {
           "id": "menulis-cerpen",
           "name": "MENULIS CERITA PENDEK",
           "registrationFormat": [
@@ -296,25 +288,8 @@
           ]
         },
         {
-          "id": "cipta-lagu",
-          "name": "CIPTA LAGU",
-          "registrationFormat": [
-            "Nama Lengkap",
-            "Kelas"
-          ]
-        },
-        {
           "id": "desain-poster",
           "name": "DESAIN POSTER",
-          "registrationFormat": [
-            "Nama Lengkap",
-            "Kelas",
-            "Link Portofolio"
-          ]
-        },
-        {
-          "id": "fotografi",
-          "name": "FOTOGRAFI",
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas",
@@ -360,15 +335,6 @@
         {
           "id": "komik-digital",
           "name": "KOMIK DIGITAL",
-          "registrationFormat": [
-            "Nama Lengkap",
-            "Kelas",
-            "Link Portofolio"
-          ]
-        },
-        {
-          "id": "film-pendek",
-          "name": "FILM PENDEK",
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas",
