@@ -363,11 +363,39 @@ function initNordelia() {
         ${minMaxDisplay}
       </div>
       <div class="flex items-center justify-between py-1 my-1 border-t border-b border-white/10 text-[11px]">
-        <span class="text-stone-300">Terdaftar: <strong class="text-white">${regCount} Orang</strong></span>
-        ${quotaDisplay}
+        <span class="text-stone-300">Terdaftar: <strong class="text-white" id="modal-live-reg-count">${regCount} Orang</strong></span>
+        <span id="modal-live-quota-wrapper">${quotaDisplay}</span>
       </div>
       <p class="text-[11px] text-stone-300"><strong class="text-white">Ketentuan:</strong> ${c.note || '-'}</p>
     `;
+
+    // Ambil live count & kuota langsung dari Google Sheet via API
+    fetch(`/api/nordelia/cabang-quota?cabang_id=${encodeURIComponent(c.id)}`)
+      .then((res) => res.json())
+      .then((live) => {
+        if (!live || typeof live.count !== "number") return;
+        const regEl = document.getElementById("modal-live-reg-count");
+        if (regEl) regEl.textContent = `${live.count} Orang`;
+        const qWrap = document.getElementById("modal-live-quota-wrapper");
+        if (qWrap) {
+          if (live.is_limited) {
+            const isFull = live.is_full;
+            const rem = live.remaining_quota != null ? live.remaining_quota : Math.max(0, 20 - live.count);
+            qWrap.innerHTML = `<span class="${isFull ? 'text-rose-400' : 'text-[#FF8533]'} font-bold">${isFull ? 'Kuota Penuh (20/20)' : 'Sisa ' + rem + ' dari 20 Kuota'}</span>`;
+          } else {
+            qWrap.innerHTML = `<span class="text-white font-bold">Kuota Terbuka</span>`;
+          }
+        }
+        if (live.is_full) {
+          const btnSubmit = document.getElementById("btn-submit-registration");
+          if (btnSubmit) {
+            btnSubmit.disabled = true;
+            btnSubmit.classList.add("opacity-50", "cursor-not-allowed");
+            btnSubmit.innerHTML = `<span><strong>Kuota Penuh (20/20)</strong></span>`;
+          }
+        }
+      })
+      .catch((err) => console.warn("Live sheet quota check:", err));
 
     // Dynamic field generation based on format_type
     const fmtKey = c.format_type || "olimpiade_akademik";

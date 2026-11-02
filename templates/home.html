@@ -24,7 +24,7 @@
           </a>
           <a href="/before-us" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full font-semibold text-xs tracking-wider text-white bg-[#1a1411] border border-orvelion-coral/25 hover:bg-orvelion-coral/10">
             <svg class="w-4 h-4 text-orvelion-coral"><use href="#i-history"></use></svg>
-            Before Us (Generasi Pendahulu)
+            Before Us
           </a>
         </div>
         <div class="grid grid-cols-3 gap-3 pt-6 border-t border-white/5 max-w-lg mx-auto lg:mx-0">
@@ -67,7 +67,7 @@
     <div class="text-center max-w-3xl mx-auto mb-12 space-y-2.5">
       <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orvelion-amber/10 border border-orvelion-amber/20 text-orvelion-amber text-xs font-semibold uppercase tracking-wider">Latar Belakang & Filosofi Nama</div>
       <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Etimologi & Makna <span class="text-gradient-orvelion">ORVÉLION</span></h2>
-      <p class="text-sm sm:text-base text-orvelion-peach/75">Nama kabinet ini dirajut dari perpaduan makna bahasa dan semangat kreasi kepemimpinan muda {{ site.school }}.</p>
+      <p class="text-sm sm:text-base text-orvelion-peach/75">Nama kabinet ini dibuat dari perpaduan makna bahasa dan semangat kepemimpinan muda {{ site.school }}.</p>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto mb-8">
       <div class="glass-card rounded-2xl p-7">
@@ -93,7 +93,7 @@
           <svg class="w-7 h-7"><use href="#i-shield"></use></svg>
         </div>
         <div>
-          <h4 class="text-base sm:text-lg font-bold text-white">Kesimpulan Filosofis Kabinet</h4>
+          <h4 class="text-base sm:text-lg font-bold text-white">Filosofis Kabinet</h4>
           <p class="text-sm sm:text-base text-orvelion-peach/90 leading-relaxed mt-2"><strong class="text-white">ORVÉLION</strong> menggambarkan kabinet OSIS yang menjunjung tinggi nilai keunggulan, bersatu dalam visi, serta berani menghadirkan inovasi serta integritas untuk membangun lingkungan sekolah yang lebih progresif.</p>
         </div>
       </div>
@@ -101,51 +101,7 @@
   </div>
 </section>
 
-<section class="py-16">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-3xl mx-auto mb-12">
-      <span class="text-xs font-bold tracking-widest uppercase text-orvelion-coral">Pilar Karakter Orvélion</span>
-      <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-2">Nilai Luhur Sang Harimau</h2>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-      {% for pillar in pillars %}
-        <div class="glass-card rounded-2xl p-6 hover:-translate-y-1 transition-transform">
-          <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-orvelion-ember to-orvelion-rust flex items-center justify-center text-white mb-4">
-            <svg class="w-5 h-5"><use href="#i-{{ pillar.icon }}"></use></svg>
-          </div>
-          <h3 class="text-base font-bold text-white mb-2">{{ pillar.title }}</h3>
-          <p class="text-xs sm:text-sm text-orvelion-peach/75 leading-relaxed">{{ pillar.desc }}</p>
-        </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
 
-<section class="py-16">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
-      <div>
-        <span class="text-xs font-bold tracking-widest uppercase text-orvelion-coral">Penggerak Orvélion</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Struktur Divisi Kepengurusan</h2>
-      </div>
-      <a href="/event" class="inline-flex items-center gap-1.5 text-xs font-semibold text-orvelion-amber">Lihat Rangkaian Program Divisi <svg class="w-4 h-4"><use href="#i-chevron"></use></svg></a>
-    </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      {% for div in divisions %}
-        <div class="glass-card rounded-xl p-4 flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-lg bg-[#181310] border border-orvelion-coral/20 flex items-center justify-center font-mono font-bold text-xs text-orvelion-amber">0{{ loop.index }}</div>
-            <div>
-              <h3 class="font-bold text-sm text-white">{{ div.name }}</h3>
-              <p class="text-xs text-orvelion-peach/65">{{ div.role }}</p>
-            </div>
-          </div>
-          <span class="text-[11px] font-mono px-2 py-0.5 rounded-full bg-[#181310] border border-white/5">{{ div.count }}</span>
-        </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
 
 <section class="py-16 bg-[#130f0d] border-t border-orvelion-coral/15">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -153,7 +109,7 @@
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
         <div class="lg:col-span-7 space-y-3.5">
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orvelion-rust/20 text-orvelion-amber text-xs font-semibold border border-orvelion-coral/20">Jejak Warisan Kabinet Pendahulu</div>
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Menghormati Jejak “Before Us”</h2>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Generasi Kabinet Osis</h2>
           <p class="text-xs sm:text-sm text-orvelion-peach/80">Perjalanan Orvélion berdiri tegak di atas dedikasi kabinet terdahulu: <strong class="text-white">Credence</strong>, <strong class="text-white">Asteration</strong>, <strong class="text-white">Valiance</strong>, dan <strong class="text-white">Ardraxis</strong>.</p>
           <a href="/before-us" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider text-black bg-gradient-to-r from-orvelion-amber via-orvelion-coral to-orvelion-apricot">Masuk ke Halaman Before Us</a>
         </div>

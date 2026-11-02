@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block title %}Nordelia 2026 | {{ site.name }}{% endblock %}
 {% block content %}
-<!-- Ambient Pastel Mesh Gradient (#FFB7C5 Pink Kiri, #FFE5B4 Oranye/Krem Bawah, #AEC6CF Biru Kanan) -->
-<div class="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-40">
-  <div class="absolute -top-40 -left-40 w-[550px] h-[550px] rounded-full blur-[120px]" style="background: radial-gradient(circle, #FFB7C5 0%, rgba(255,183,197,0) 70%);"></div>
-  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-1/4 w-[600px] h-[450px] rounded-full blur-[140px]" style="background: radial-gradient(circle, #FFE5B4 0%, rgba(255,229,180,0) 70%);"></div>
-  <div class="absolute -top-32 -right-32 w-[550px] h-[550px] rounded-full blur-[120px]" style="background: radial-gradient(circle, #AEC6CF 0%, rgba(174,198,207,0) 70%);"></div>
+<!-- Ambient Mesh Gradient (Hitam & Oren) -->
+<div class="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-30">
+  <div class="absolute -top-40 -left-40 w-[550px] h-[550px] rounded-full blur-[120px]" style="background: radial-gradient(circle, #CC4400 0%, rgba(204,68,0,0) 70%);"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-1/4 w-[600px] h-[450px] rounded-full blur-[140px]" style="background: radial-gradient(circle, #FF6B00 0%, rgba(255,107,0,0) 70%);"></div>
+  <div class="absolute -top-32 -right-32 w-[550px] h-[550px] rounded-full blur-[120px]" style="background: radial-gradient(circle, #CC4400 0%, rgba(204,68,0,0) 70%);"></div>
 </div>
 
 <div class="relative z-10">
@@ -17,14 +17,14 @@
         <!-- Left Hero Text -->
         <div class="lg:col-span-7 space-y-5 text-left">
           <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wider backdrop-blur-md"
-               style="background: rgba(255, 183, 197, 0.15); border-color: #FFB7C5; color: #FFE5B4;">
-            <svg class="w-4 h-4 text-[#FFB7C5]"><use href="#i-sparkles"></use></svg>
+               style="background: rgba(204, 68, 0, 0.15); border-color: #CC4400; color: #FFFFFF;">
+            <svg class="w-4 h-4 text-[#FF6B00]"><use href="#i-sparkles"></use></svg>
             Festival Bulan Bahasa & Prestasi SMA IGS 2026
           </div>
 
           <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight leading-none">
             FESTIVAL <br class="hidden sm:inline"/>
-            <span class="bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] bg-clip-text text-transparent">
+            <span class="bg-gradient-to-r from-white via-[#FF6B00] to-[#CC4400] bg-clip-text text-transparent">
               NORDELIA
             </span>
             <span class="text-xl sm:text-2xl font-bold block sm:inline text-white/80 sm:ml-3">2026</span>
@@ -32,37 +32,37 @@
 
           <!-- Etimologi Card -->
           <div class="p-4 sm:p-5 rounded-2xl border backdrop-blur-md space-y-3"
-               style="background: rgba(22, 18, 15, 0.7); border-color: rgba(255, 183, 197, 0.25);">
-            <div class="flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-[#FFE5B4]">
-              <svg class="w-4 h-4 text-[#FFB7C5]"><use href="#i-trophy"></use></svg>
+               style="background: rgba(20, 20, 20, 0.85); border-color: rgba(255, 107, 0, 0.3);">
+            <div class="flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-[#FF6B00]">
+              <svg class="w-4 h-4 text-[#FF6B00]"><use href="#i-trophy"></use></svg>
               Filosofi & Makna Kata "NORDELIA"
             </div>
             <p class="text-xs sm:text-sm text-stone-200 leading-relaxed">
-              Dari kata <strong class="text-[#AEC6CF] font-black">Nike</strong> (kemenangan), 
-              <strong class="text-[#FFC0CB] font-black">sports</strong>, 
-              <strong class="text-[#AEC6CF] font-black">academic</strong>, dan 
-              <strong class="text-[#FFE5B4] font-black">arts</strong>. 
+              Dari kata <strong class="text-[#FF6B00] font-black">Nike</strong> (kemenangan), 
+              <strong class="text-white font-black">sports</strong>, 
+              <strong class="text-[#CC4400] font-black">academic</strong>, dan 
+              <strong class="text-[#FF8533] font-black">arts</strong>. 
               <strong>Nordelia</strong> menggambarkan kesempatan para siswa untuk memenangi bidang yang mereka dalami di 4 kategori yang hadir di festival bulan bahasa ini, yaitu bidang 
-              <span class="text-[#FFC0CB] font-bold">Olahraga</span>, 
-              <span class="text-[#AEC6CF] font-bold">Akademik</span>, 
-              <span class="text-[#FFE5B4] font-bold">Seni</span>, dan 
-              <span class="text-[#FFB7C5] font-bold">Bahasa</span>.
+              <span class="text-white font-bold">Olahraga</span>, 
+              <span class="text-[#CC4400] font-bold">Akademik</span>, 
+              <span class="text-[#FF8533] font-bold">Seni</span>, dan 
+              <span class="text-[#FF6B00] font-bold">Bahasa</span>.
             </p>
 
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-center text-[11px] font-bold">
-              <div class="p-2 rounded-xl border border-[#AEC6CF]/30 bg-[#AEC6CF]/10 text-[#AEC6CF]">
+              <div class="p-2 rounded-xl border border-[#FF6B00]/40 bg-[#FF6B00]/15 text-[#FF6B00]">
                 <div class="text-[9px] uppercase tracking-wider text-white/60">Nike</div>
                 <div>Kemenangan</div>
               </div>
-              <div class="p-2 rounded-xl border border-[#FFC0CB]/30 bg-[#FFC0CB]/10 text-[#FFC0CB]">
+              <div class="p-2 rounded-xl border border-white/30 bg-white/10 text-white">
                 <div class="text-[9px] uppercase tracking-wider text-white/60">Sports</div>
                 <div>Olahraga</div>
               </div>
-              <div class="p-2 rounded-xl border border-[#AEC6CF]/30 bg-[#AEC6CF]/10 text-[#AEC6CF]">
+              <div class="p-2 rounded-xl border border-[#CC4400]/40 bg-[#CC4400]/15 text-[#CC4400]">
                 <div class="text-[9px] uppercase tracking-wider text-white/60">Academic</div>
                 <div>Akademik</div>
               </div>
-              <div class="p-2 rounded-xl border border-[#FFE5B4]/30 bg-[#FFE5B4]/10 text-[#FFE5B4]">
+              <div class="p-2 rounded-xl border border-[#FF8533]/40 bg-[#FF8533]/15 text-[#FF8533]">
                 <div class="text-[9px] uppercase tracking-wider text-white/60">Arts</div>
                 <div>Seni & Bahasa</div>
               </div>
@@ -71,30 +71,30 @@
 
           <!-- Quick Stats Pills -->
           <div class="flex flex-wrap items-center gap-2 pt-2 text-xs text-stone-300">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/40 border border-[#FFB7C5]/30">
-              <span class="w-2 h-2 rounded-full bg-[#FFB7C5] animate-ping"></span>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 border border-[#FF6B00]/40">
+              <span class="w-2 h-2 rounded-full bg-[#FF6B00] animate-ping"></span>
               <strong class="text-white">{{ summary.total_cabang }} Cabang Lomba</strong>
             </span>
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/40 border border-[#AEC6CF]/30">
-              <svg class="w-3.5 h-3.5 text-[#AEC6CF]"><use href="#i-check"></use></svg>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 border border-white/20">
+              <svg class="w-3.5 h-3.5 text-[#FF6B00]"><use href="#i-check"></use></svg>
               <span id="stat-total-reg">{{ summary.counts.total }} Peserta Terdaftar</span>
             </span>
           </div>
         </div>
 
-        <!-- Right Hero: GUMBALL MASCOT ELEMENT (img gumball ny) -->
+        <!-- Right Hero: GUMBALL MASCOT ELEMENT -->
         <div class="lg:col-span-5 flex flex-col items-center justify-center relative">
           <div class="relative w-full max-w-sm sm:max-w-md mx-auto p-4 rounded-3xl border backdrop-blur-xl text-center group"
-               style="background: linear-gradient(145deg, rgba(255,183,197,0.12) 0%, rgba(255,229,180,0.12) 50%, rgba(174,198,207,0.15) 100%); border-color: rgba(255, 229, 180, 0.35);">
+               style="background: linear-gradient(145deg, rgba(20,20,20,0.95) 0%, rgba(35,20,15,0.85) 100%); border-color: rgba(255, 107, 0, 0.35);">
             
-            <!-- Soft pastel glow behind mascot -->
-            <div class="absolute inset-0 rounded-3xl blur-xl opacity-30 -z-10 bg-gradient-to-tr from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF]"></div>
+            <!-- Orange glow behind mascot -->
+            <div class="absolute inset-0 rounded-3xl blur-xl opacity-25 -z-10 bg-gradient-to-tr from-[#CC4400] via-[#FF6B00] to-transparent"></div>
             
             <!-- Gumball Illustration Image Element -->
             <div class="relative w-full h-72 sm:h-80 flex items-center justify-center overflow-hidden">
               <img src="{{ url_for('static', filename='images/gumball.svg') }}"
                    alt="Gumball Mascot Nordelia 2026"
-                   class="w-full h-full object-contain filter drop-shadow-[0_15px_25px_rgba(0,0,0,0.4)] transition-transform duration-500 group-hover:scale-105" />
+                   class="w-full h-full object-contain filter drop-shadow-[0_15px_25px_rgba(0,0,0,0.6)] transition-transform duration-500 group-hover:scale-105" />
             </div>
 
             <div class="pt-2 pb-1 space-y-1">
@@ -109,7 +109,7 @@
 
             <!-- Quick Action from Mascot -->
             <div class="mt-3">
-              <a href="#section-categories" class="p-2 rounded-xl bg-black/40 hover:bg-white/10 text-[#FFB7C5] border border-[#FFB7C5]/30 text-xs font-bold block text-center">
+              <a href="#section-categories" class="p-2 rounded-xl bg-black/60 hover:bg-[#FF6B00] hover:text-black text-[#FF6B00] border border-[#FF6B00]/40 text-xs font-bold block text-center transition-colors">
                 Lihat 4 Kategori
               </a>
             </div>
@@ -120,14 +120,14 @@
     </div>
   </section>
 
-  <!-- 9 MAIN CATEGORIES SELECTOR (BUTTON KLIK -> MASUK KE CHILDREN CABANG LOMBA) -->
+  <!-- 9 MAIN CATEGORIES SELECTOR -->
   <section id="section-categories" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8 scroll-mt-24">
     <div class="text-center max-w-3xl mx-auto mb-10 space-y-2">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest text-[#FFE5B4] bg-[#FFE5B4]/10 border border-[#FFE5B4]/30">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest text-[#FF6B00] bg-[#FF6B00]/10 border border-[#FF6B00]/30">
         Sembilan Kategori Kompetisi Nordelia
       </div>
       <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight">
-        Pilih Kategori untuk Melihat <span class="bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] bg-clip-text text-transparent">Cabang-Cabangnya</span>
+        Pilih Kategori untuk Melihat <span class="bg-gradient-to-r from-white via-[#FF6B00] to-[#CC4400] bg-clip-text text-transparent">Cabang-Cabangnya</span>
       </h2>
       <p class="text-xs sm:text-sm text-stone-300">
         Klik salah satu tombol kategori di bawah ini. Kategori dengan sub-cabang akan masuk ke halaman pemilihan cabang.
@@ -140,23 +140,23 @@
         <button type="button"
                 data-category-select="{{ cat.id }}"
                 data-has-sub="{{ 'true' if cat.hasSubEvents else 'false' }}"
-                class="category-btn text-left p-5 rounded-2xl border transition-all duration-300 relative overflow-hidden group hover:-translate-y-1"
-                style="background: rgba(22, 18, 15, 0.75); border-color: rgba(255, 255, 255, 0.15);">
+                class="category-btn text-left p-5 rounded-2xl border transition-all duration-300 relative overflow-hidden group hover:-translate-y-1 hover:border-[#FF6B00]/50"
+                style="background: rgba(20, 20, 20, 0.85); border-color: rgba(255, 107, 0, 0.2);">
           <div class="flex items-center justify-between mb-3">
-            <span class="text-xs font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-black/40 text-white border border-white/15">
+            <span class="text-xs font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-black/60 text-white border border-white/15">
               {% if cat.hasSubEvents %}{{ cat.subEvents|length }} Cabang{% else %}Direct{% endif %}
             </span>
-            <div class="w-8 h-8 rounded-full flex items-center justify-center bg-black/40 text-white group-hover:scale-110 transition-transform">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center bg-black/60 text-[#FF6B00] group-hover:scale-110 group-hover:bg-[#FF6B00] group-hover:text-black transition-all">
               <svg class="w-4 h-4"><use href="#i-chevron"></use></svg>
             </div>
           </div>
-          <h3 class="text-lg font-black text-white tracking-tight leading-snug">
+          <h3 class="text-lg font-black text-white tracking-tight leading-snug group-hover:text-[#FF6B00] transition-colors">
             {{ cat.name }}
           </h3>
           <p class="text-xs text-stone-300 mt-2 line-clamp-2 leading-relaxed">
             {% if cat.description %}{{ cat.description }}{% else %}Klik untuk melihat cabang lomba{% endif %}
           </p>
-          <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#FFE5B4]">
+          <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#FF6B00]">
             <span><strong>{% if cat.hasSubEvents %}Pilih Cabang{% else %}Daftar Langsung{% endif %}</strong></span>
             <span>&rarr;</span>
           </div>
@@ -165,13 +165,13 @@
     </div>
 
     <!-- All Categories / Filter Bar & Search -->
-    <div class="mt-8 p-4 rounded-2xl bg-black/50 border border-white/10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+    <div class="mt-8 p-4 rounded-2xl bg-[#141414] border border-white/10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
       <div class="flex items-center gap-1.5 overflow-x-auto pb-1" id="category-filter-pills">
-        <button type="button" data-filter-cat="semua" class="cat-pill is-active px-4 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap bg-gradient-to-r from-[#FFB7C5] to-[#FFE5B4] text-black">
+        <button type="button" data-filter-cat="semua" class="cat-pill is-active px-4 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap bg-gradient-to-r from-[#CC4400] via-[#FF6B00] to-[#FF8533] text-black">
           Semua Cabang (49+)
         </button>
         {% for cat in categories %}
-          <button type="button" data-filter-cat="{{ cat.id }}" class="cat-pill px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-stone-900/80 text-stone-300 hover:text-white border border-white/10">
+          <button type="button" data-filter-cat="{{ cat.id }}" class="cat-pill px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-black/60 text-stone-300 hover:text-white border border-white/10">
             {{ cat.name }}
           </button>
         {% endfor %}
@@ -180,24 +180,24 @@
       <div class="relative min-w-[260px] sm:w-80">
         <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400"><use href="#i-search"></use></svg>
         <input id="cabang-search" type="text" placeholder="Cari cabang lomba atau tempat..."
-               class="w-full pl-10 pr-4 py-2 text-xs rounded-xl bg-stone-900 border border-white/20 text-white placeholder-stone-400 focus:outline-none focus:border-[#FFE5B4]" />
+               class="w-full pl-10 pr-4 py-2 text-xs rounded-xl bg-black border border-white/20 text-white placeholder-stone-400 focus:outline-none focus:border-[#FF6B00]" />
       </div>
     </div>
   </section>
 
-  <!-- CHILDREN CABANG LOMBA GRID (ANAK DARI KATEGORI YANG DIKLIK) -->
+  <!-- CHILDREN CABANG LOMBA GRID -->
   <section id="section-cabang" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 scroll-mt-24">
     <div class="flex items-center justify-between mb-6">
       <div>
         <h3 id="current-category-title" class="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
           <span>Daftar Cabang Lomba:</span>
-          <span class="text-[#FFE5B4]" id="current-category-name">Semua Kategori</span>
+          <span class="text-[#FF6B00]" id="current-category-name">Semua Kategori</span>
         </h3>
         <p class="text-xs text-stone-400 mt-0.5">Klik tombol "Daftar Lomba" pada cabang yang Anda minati untuk mengisi formulir pendaftaran.</p>
       </div>
 
       <div class="hidden sm:flex items-center gap-2">
-        <button type="button" data-open-sheet2-modal class="text-xs font-bold px-3 py-1.5 rounded-lg bg-stone-800 text-[#FFE5B4] border border-[#FFE5B4]/30 hover:bg-stone-700">
+        <button type="button" data-open-sheet2-modal class="text-xs font-bold px-3 py-1.5 rounded-lg bg-[#141414] text-[#FF6B00] border border-[#FF6B00]/40 hover:bg-[#1a1a1a]">
           Panduan Format Pendaftaran
         </button>
       </div>
@@ -219,17 +219,17 @@
                  data-name="{{ c.name }}"
                  data-pic="{{ c.pic }}"
                  data-tempat="{{ c.tempat }}"
-                 class="group rounded-2xl p-5 border backdrop-blur-md flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-                 style="background: rgba(22, 18, 15, 0.75); border-color: rgba(255, 255, 255, 0.1);">
+                 class="group rounded-2xl p-5 border backdrop-blur-md flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-[#FF6B00]/50 hover:shadow-2xl"
+                 style="background: rgba(20, 20, 20, 0.85); border-color: rgba(255, 107, 0, 0.2);">
           
           <div class="space-y-3.5">
             <!-- Header Badges -->
             <div class="flex items-center justify-between gap-2">
               <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md border
-                           {% if c.category == 'akademik' %}bg-[#AEC6CF]/15 text-[#AEC6CF] border-[#AEC6CF]/30
-                           {% elif c.category == 'bahasa' %}bg-[#FFB7C5]/15 text-[#FFB7C5] border-[#FFB7C5]/30
-                           {% elif c.category == 'seni' %}bg-[#FFE5B4]/15 text-[#FFE5B4] border-[#FFE5B4]/30
-                           {% else %}bg-[#FFC0CB]/15 text-[#FFC0CB] border-[#FFC0CB]/30{% endif %}">
+                           {% if c.category == 'akademik' %}bg-[#CC4400]/20 text-[#CC4400] border-[#CC4400]/40
+                           {% elif c.category == 'bahasa' %}bg-[#FF6B00]/20 text-[#FF6B00] border-[#FF6B00]/40
+                           {% elif c.category == 'seni' %}bg-white/15 text-white border-white/30
+                           {% else %}bg-[#FF8533]/20 text-[#FF8533] border-[#FF8533]/40{% endif %}">
                 {{ c.category }} • No. {{ c.no }}
               </span>
               {% if c.is_olimpiade_or_ai %}
@@ -238,19 +238,19 @@
                     Kuota Penuh
                   </span>
                 {% else %}
-                  <span class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40">
+                  <span class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-[#FF6B00]/20 text-[#FF8533] border border-[#FF6B00]/40">
                     Sisa {{ c.remaining_quota if c.remaining_quota is not none else (20 - (c.registered_count or 0)) }} Kuota
                   </span>
                 {% endif %}
               {% else %}
-                <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-950/60 text-emerald-300 border border-emerald-500/30">
+                <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-black/60 text-white border border-white/20">
                   Kuota Terbuka
                 </span>
               {% endif %}
             </div>
 
             <!-- Title -->
-            <h4 class="text-base sm:text-lg font-black text-white group-hover:text-[#FFE5B4] transition-colors leading-snug">
+            <h4 class="text-base sm:text-lg font-black text-white group-hover:text-[#FF6B00] transition-colors leading-snug">
               {{ c.name }}
             </h4>
 
@@ -258,31 +258,31 @@
             <div class="space-y-1.5 text-xs text-stone-300 pt-2 border-t border-white/10">
               <div class="flex items-start justify-between gap-2">
                 <span class="text-stone-400">Tempat Lomba:</span>
-                <span class="font-bold text-right text-stone-200">{{ c.tempat }}</span>
+                <span class="font-bold text-right text-white">{{ c.tempat }}</span>
               </div>
               {% if c.is_olimpiade_or_ai %}
                 <div class="flex items-start justify-between gap-2">
                   <span class="text-stone-400">Peserta Min / Max:</span>
-                  <span class="font-bold text-amber-300">5 / Kelas • Maks. 20</span>
+                  <span class="font-bold text-[#FF8533]">5 / Kelas • Maks. 20</span>
                 </div>
               {% elif c.is_literasi %}
                 <div class="flex items-start justify-between gap-2">
                   <span class="text-stone-400">Peserta Minimal:</span>
-                  <span class="font-bold text-[#FFE5B4]">2 / Kelas</span>
+                  <span class="font-bold text-white">2 / Kelas</span>
                 </div>
               {% endif %}
             </div>
 
             <!-- Notes / Rule snippet -->
-            <div class="p-2.5 rounded-xl bg-black/40 border border-white/5 text-[11px] text-stone-300 leading-relaxed">
-              <span class="font-bold text-[#FFE5B4]">Ketentuan:</span> {{ c.note }}
+            <div class="p-2.5 rounded-xl bg-black/50 border border-white/5 text-[11px] text-stone-300 leading-relaxed">
+              <span class="font-bold text-[#FF6B00]">Ketentuan:</span> {{ c.note }}
             </div>
 
-            <!-- Informasi Pendaftar & Sisa Kuota (DI SELURUH LOMBA) -->
-            <div class="p-3 rounded-xl bg-black/60 border border-white/10 space-y-1.5">
+            <!-- Informasi Pendaftar & Sisa Kuota -->
+            <div class="p-3 rounded-xl bg-black/70 border border-white/10 space-y-1.5">
               <div class="flex items-center justify-between text-xs">
                 <span class="text-stone-400 flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                  <span class="w-2 h-2 rounded-full bg-[#FF6B00]"></span>
                   Terdaftar Saat Ini:
                 </span>
                 <span class="font-black text-white bg-white/10 px-2 py-0.5 rounded-md">
@@ -292,11 +292,11 @@
               <div class="flex items-center justify-between text-xs pt-1 border-t border-white/10">
                 <span class="text-stone-400">Sisa Kuota:</span>
                 {% if c.is_olimpiade_or_ai %}
-                  <span class="font-black {% if c.is_full %}text-rose-400{% else %}text-amber-300{% endif %}">
+                  <span class="font-black {% if c.is_full %}text-rose-400{% else %}text-[#FF8533]{% endif %}">
                     {% if c.is_full %}Kuota Penuh (20/20){% else %}Sisa {{ c.remaining_quota if c.remaining_quota is not none else (20 - (c.registered_count or 0)) }} dari 20 Kuota{% endif %}
                   </span>
                 {% else %}
-                  <span class="font-bold text-emerald-400">Kuota Terbuka</span>
+                  <span class="font-bold text-white">Kuota Terbuka</span>
                 {% endif %}
               </div>
             </div>
@@ -306,15 +306,15 @@
           <div class="pt-4 mt-3 border-t border-white/10">
             {% if c.is_full %}
               <button type="button" disabled
-                      class="w-full py-2.5 rounded-xl text-xs font-black uppercase tracking-wider text-stone-400 bg-stone-800 cursor-not-allowed flex items-center justify-center gap-1.5">
+                      class="w-full py-2.5 rounded-xl text-xs font-black uppercase tracking-wider text-stone-400 bg-stone-900 cursor-not-allowed flex items-center justify-center gap-1.5">
                 <span>Kuota Penuh (20/20)</span>
               </button>
             {% else %}
               <button type="button"
                       data-register-cabang="{{ c.id }}"
-                      class="w-full py-2.5 rounded-xl text-xs font-black uppercase tracking-wider text-black bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] hover:brightness-110 shadow-md transition-transform hover:scale-[1.02] flex items-center justify-center gap-1.5">
+                      class="w-full py-2.5 rounded-xl text-xs font-black uppercase tracking-wider text-black bg-gradient-to-r from-[#CC4400] via-[#FF6B00] to-[#FF8533] hover:text-white hover:brightness-110 shadow-md transition-all hover:scale-[1.02] flex items-center justify-center gap-1.5">
                 <span><strong>Daftar Lomba</strong></span>
-                <svg class="w-3.5 h-3.5 text-black"><use href="#i-chevron"></use></svg>
+                <svg class="w-3.5 h-3.5"><use href="#i-chevron"></use></svg>
               </button>
             {% endif %}
           </div>
@@ -326,28 +326,28 @@
 </div>
 
 <!-- ========================================================================= -->
-<!-- DYNAMIC REGISTRATION FORM MODAL (FORMAT SHEET 2) -->
+<!-- DYNAMIC REGISTRATION FORM MODAL -->
 <!-- ========================================================================= -->
-<div id="modal-register" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-  <div class="relative w-full max-w-xl rounded-3xl p-6 sm:p-8 bg-[#181311] border border-[#FFB7C5]/40 max-h-[92vh] overflow-y-auto shadow-2xl">
+<div id="modal-register" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+  <div class="relative w-full max-w-xl rounded-3xl p-6 sm:p-8 bg-[#141414] border border-[#FF6B00]/40 max-h-[92vh] overflow-y-auto shadow-2xl">
     
     <button type="button" id="btn-close-register-modal" class="absolute top-5 right-5 p-2 rounded-full bg-white/10 text-stone-300 hover:text-white" aria-label="Tutup">
       <svg class="w-5 h-5"><use href="#i-x"></use></svg>
     </button>
 
     <div class="flex items-center gap-3 mb-4">
-      <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-gradient-to-tr from-[#FFB7C5] to-[#FFE5B4] text-black font-black">
+      <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-gradient-to-tr from-[#CC4400] to-[#FF6B00] text-black font-black">
         <svg class="w-5 h-5"><use href="#i-trophy"></use></svg>
       </div>
       <div>
-        <span id="form-badge-category" class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-white/10 text-[#FFE5B4]">
+        <span id="form-badge-category" class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-white/10 text-[#FF6B00]">
           Kategori
         </span>
         <h3 id="form-cabang-title" class="text-xl sm:text-2xl font-black text-white">Formulir Pendaftaran</h3>
       </div>
     </div>
 
-    <div id="form-rule-box" class="p-3 rounded-xl bg-black/40 border border-white/10 text-xs text-stone-300 mb-5">
+    <div id="form-rule-box" class="p-3 rounded-xl bg-black/50 border border-white/10 text-xs text-stone-300 mb-5">
       <!-- Rule injected dynamically -->
     </div>
 
@@ -363,7 +363,7 @@
 
       <div class="pt-2">
         <button type="submit" id="btn-submit-registration"
-                class="w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-wider text-black bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] hover:brightness-110 shadow-lg transition-transform hover:scale-[1.01] flex items-center justify-center gap-2">
+                class="w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-wider text-black bg-gradient-to-r from-[#CC4400] via-[#FF6B00] to-[#FF8533] hover:text-white hover:brightness-110 shadow-lg transition-all hover:scale-[1.01] flex items-center justify-center gap-2">
           <span><strong>Kirim Pendaftaran</strong></span>
         </button>
       </div>

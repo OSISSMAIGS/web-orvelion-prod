@@ -291,8 +291,11 @@ def nordelia_category(category_id: str):
 def nordelia_spreadsheet():
     selected_cat = request.args.get("category", "semua")
     selected_cabang = request.args.get("cabang", "")
+    force_sync = request.args.get("sync") == "1"
+    if force_sync:
+        storage.invalidate_cache()
 
-    all_regs = storage.get_all_registrations()
+    all_regs = storage.get_all_registrations(force_refresh=force_sync)
     if selected_cabang:
         regs = [r for r in all_regs if r.get("cabang_id") == selected_cabang or r.get("sheet_name") == selected_cabang or r.get("cabang_name") == selected_cabang]
     elif selected_cat and selected_cat != "semua":
@@ -413,14 +416,38 @@ def api_nordelia_cabang_quota():
     cabang_id = request.args.get("cabang_id", "")
     if not cabang_id:
         return jsonify({"error": "cabang_id is required"}), 400
+    if request.args.get("refresh") == "1":
+        storage.invalidate_cache()
     count = storage.get_cabang_count(cabang_id)
     is_limited = cabang_id in OLIMPIADE_9_DAN_AI_IDS
+    rem = max(0, 20 - count) if is_limited else None
     return jsonify({
         "cabang_id": cabang_id,
         "count": count,
         "is_limited": is_limited,
         "max_quota": 20 if is_limited else None,
+        "remaining_quota": rem,
         "is_full": (count >= 20) if is_limited else False,
+        "source": "google_sheet",
+    })
+
+
+@bp.get("/api/nordelia/sync")
+def api_nordelia_sync():
+    res = storage.fetch_from_google_sheet(force_refresh=True)
+    if res:
+        return jsonify({
+            "success": True,
+            "message": "Data berhasil disinkronkan langsung dari Google Sheet",
+            "total": len(res.get("registrations", [])),
+            "counts": res.get("counts", {}),
+            "source": res.get("source", "google_sheet"),
+        })
+    return jsonify({
+        "success": False,
+        "message": "Gagal menghubungi Google Sheet, menggunakan cadangan lokal",
+        "counts": storage.get_counts_by_cabang(),
+        "source": "local_fallback",
     })
 
 

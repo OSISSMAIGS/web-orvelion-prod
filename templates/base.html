@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#FD8C5A" />
+  <meta name="theme-color" content="#FF6B00" />
   <meta name="description" content="{{ site.description }}" />
   <title>{% block title %}{{ site.title }}{% endblock %}</title>
   <link rel="icon" href="{{ url_for('static', filename='images/orvelion.jpg') }}" />
@@ -14,18 +14,22 @@
         extend: {
           colors: {
             orvelion: {
-              coral: "#FD8C5A",
-              rust: "#9C381C",
-              peach: "#FDB18F",
-              ember: "#D9530D",
-              apricot: "#FFAE7A",
-              amber: "#FFD495",
-              lilac: "#F9EDFF",
-              blush: "#FFE7ED",
-              rose: "#E6B1B5",
-              dark: "#0d0b0a",
-              surface: "#151210",
-              card: "#1c1714",
+              coral: "#FF6B00",
+              rust: "#CC4400",
+              peach: "#E5E5E5",
+              ember: "#B33800",
+              apricot: "#FF8533",
+              amber: "#FF7A00",
+              lilac: "#FFFFFF",
+              blush: "#FFFFFF",
+              rose: "#E5E5E5",
+              dark: "#0a0a0a",
+              surface: "#121212",
+              card: "#181818",
+              orange: "#FF6B00",
+              darkorange: "#CC4400",
+              black: "#000000",
+              white: "#FFFFFF",
             },
           },
         },
@@ -34,7 +38,7 @@
   </script>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}" />
 </head>
-<body class="min-h-screen flex flex-col bg-orvelion-dark text-orvelion-lilac selection:bg-orvelion-coral selection:text-black">
+<body class="min-h-screen flex flex-col bg-orvelion-dark text-white selection:bg-orvelion-coral selection:text-black">
   {% include "partials/icons.html" %}
   {% if show_chrome %}
     {% include "partials/navbar.html" %}

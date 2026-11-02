@@ -2,35 +2,35 @@
 {% block title %}Ruang Antrean | {{ site.name }}{% endblock %}
 {% block content %}
 <div id="waiting-room" data-return-url="{{ return_url }}" class="min-h-[80vh] flex items-center justify-center px-4 py-12">
-  <div class="max-w-lg w-full rounded-3xl p-7 sm:p-10 bg-[#161210] border border-orvelion-coral/25 shadow-2xl text-center space-y-6 relative overflow-hidden">
+  <div class="max-w-lg w-full rounded-3xl p-7 sm:p-10 bg-[#141414] border border-orvelion-coral/30 shadow-2xl text-center space-y-6 relative overflow-hidden">
     <div class="relative mx-auto w-24 h-24 sm:w-28 sm:h-28">
-      <div class="absolute -inset-2 rounded-full border-2 border-dashed border-orvelion-coral/40 spin-slow"></div>
-      <div class="relative w-full h-full rounded-full overflow-hidden border border-orvelion-coral/30 bg-[#110e0c]">
+      <div class="absolute -inset-2 rounded-full border-2 border-dashed border-orvelion-coral/50 spin-slow"></div>
+      <div class="relative w-full h-full rounded-full overflow-hidden border border-orvelion-coral/40 bg-[#0a0a0a]">
         <img src="{{ url_for('static', filename='images/orvelion.jpg') }}" alt="Orvelion Logo" class="w-full h-full object-cover" />
       </div>
     </div>
     <div class="space-y-2">
-      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orvelion-amber/10 border border-orvelion-amber/20 text-orvelion-amber text-xs font-semibold">2-Core Safety Guard Aktif</div>
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orvelion-coral/15 border border-orvelion-coral/30 text-orvelion-coral text-xs font-semibold">2-Core Safety Guard Aktif</div>
       <h1 class="text-2xl sm:text-3xl font-black text-white">Ruang Antrean <span class="text-gradient-orvelion">Orvélion</span></h1>
-      <p class="text-xs sm:text-sm text-orvelion-peach/80 leading-relaxed">Situs ini sedang melayani kapasitas optimal (<strong class="text-white">90 pengguna aktif</strong>). Anda berada di antrean prioritas agar pengalaman tetap lancar.</p>
+      <p class="text-xs sm:text-sm text-white/80 leading-relaxed">Situs ini sedang melayani kapasitas optimal (<strong class="text-white">90 pengguna aktif</strong>). Anda berada di antrean prioritas agar pengalaman tetap lancar.</p>
     </div>
-    <div class="p-4 rounded-2xl bg-[#110e0c] border border-white/5 space-y-3">
+    <div class="p-4 rounded-2xl bg-[#0a0a0a] border border-white/10 space-y-3">
       <div class="flex items-center justify-between text-xs font-mono">
-        <span class="text-orvelion-peach/70">Kapasitas Terisi</span>
-        <span id="queue-count" class="text-orvelion-amber font-bold">90 / 90 Slot</span>
+        <span class="text-white/70">Kapasitas Terisi</span>
+        <span id="queue-count" class="text-orvelion-coral font-bold">90 / 90 Slot</span>
       </div>
-      <div class="w-full h-2 rounded-full bg-white/5 overflow-hidden">
-        <div id="queue-bar" class="h-full bg-gradient-to-r from-orvelion-amber to-orvelion-coral rounded-full" style="width:100%"></div>
+      <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+        <div id="queue-bar" class="h-full bg-gradient-to-r from-orvelion-rust to-orvelion-coral rounded-full" style="width:100%"></div>
       </div>
-      <div class="flex items-center justify-between text-[11px] text-orvelion-peach/60 pt-1">
+      <div class="flex items-center justify-between text-[11px] text-white/60 pt-1">
         <span>Pemeriksaan ulang dalam: <strong id="queue-countdown" class="text-white font-mono">3s</strong></span>
-        <span id="queue-status" class="text-orvelion-coral">Siaga</span>
+        <span id="queue-status" class="text-orvelion-coral font-semibold">Siaga</span>
       </div>
     </div>
-    <div class="text-xs text-orvelion-peach/70 bg-[#191411] p-3 rounded-xl border border-white/5">
+    <div class="text-xs text-white/75 bg-[#181818] p-3 rounded-xl border border-white/10">
       ✦ Halaman ini akan <strong>terbuka otomatis</strong> begitu slot tersedia. Mohon jangan menutup tab ini.
     </div>
-    <button id="try-access" type="button" class="w-full py-3 px-5 rounded-full text-xs font-bold uppercase tracking-wider text-black bg-gradient-to-r from-orvelion-amber via-orvelion-coral to-orvelion-apricot">Coba Akses Sekarang</button>
+    <button id="try-access" type="button" class="w-full py-3 px-5 rounded-full text-xs font-bold uppercase tracking-wider text-black bg-gradient-to-r from-orvelion-rust via-orvelion-coral to-orvelion-apricot hover:brightness-110 shadow-lg">Coba Akses Sekarang</button>
   </div>
 </div>
 {% endblock %}
