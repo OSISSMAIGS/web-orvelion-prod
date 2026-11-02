@@ -461,15 +461,18 @@ function initNordelia() {
       const data = await res.json();
 
       if (data.success) {
-        formAlert.className = "p-3 rounded-xl mb-4 text-xs font-bold bg-emerald-950/80 text-emerald-300 border border-emerald-500/40";
-        formAlert.textContent = data.message || "Pendaftaran berhasil dicatat!";
-        formAlert.classList.remove("hidden");
-
-        setTimeout(() => {
-          closeRegisterModal();
-          regForm.reset();
+        closeRegisterModal();
+        regForm.reset();
+        if (typeof window.showNordeliaRegisteredPopup === "function") {
+          window.showNordeliaRegisteredPopup({
+            participantName: data.participant_name || payload.nama_lengkap || payload.nama_tim || payload.nama,
+            cabangName: data.cabang_name,
+            groupLink: data.group_link,
+            groupLabel: data.group_label,
+          });
+        } else {
           window.location.reload();
-        }, 1200);
+        }
 
       } else {
         formAlert.className = "p-3 rounded-xl mb-4 text-xs font-bold bg-rose-950/80 text-rose-300 border border-rose-500/40";

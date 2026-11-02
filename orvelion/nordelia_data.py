@@ -33,6 +33,9 @@ NORDELIA_INFO = {
         "orange": "#FFE5B4",     # Oranye / Krem Pastel (Bagian Tengah Bawah)
         "blue": "#AEC6CF",       # Biru Muda Pastel (Sisi Kanan)
     },
+    # Isi juga lewat .env: NORDELIA_GROUP_LINK=https://chat.whatsapp.com/...
+    "group_link": "",
+    "group_label": "Masuk Grup WhatsApp",
 }
 
 CATEGORIES = [
@@ -108,7 +111,6 @@ FORMAT_REGISTRASI = {
         "fields": [
             {"name": "nama_lengkap", "label": "1.) NAMA LENGKAP", "type": "text", "required": True, "placeholder": "Contoh: Budi Pratama"},
             {"name": "kelas", "label": "2.) KELAS (Cth: 10.1 CGC, 10.2 MAYOR)", "type": "text", "required": True, "placeholder": "Contoh: 10.1 CGC atau 10.2 MAYOR"},
-            {"name": "whatsapp", "label": "3.) Nomor WhatsApp Peserta", "type": "tel", "required": True, "placeholder": "Contoh: 081234567890"},
         ],
     },
     # 2. Format Debat LDBI & NSDC (Sheet 2)
@@ -119,7 +121,6 @@ FORMAT_REGISTRASI = {
             {"name": "kelas", "label": "2.) Asal Kelas Tim", "type": "text", "required": True, "placeholder": "Contoh: 11.1 MAYOR & 11.2 CGC"},
             {"name": "speaker_nsdc", "label": "3.) 1st Speaker, 2nd Speaker and 3rd Speaker (NSDC) Berikan (-) Jika tidak ikut serta", "type": "textarea", "required": True, "placeholder": "1st Speaker: Nama (Kelas)\n2nd Speaker: Nama (Kelas)\n3rd Speaker: Nama (Kelas)\n(Ketik \'-\' jika tidak ikut NSDC)"},
             {"name": "speaker_ldbi", "label": "4.) Pembicara 1, Pembicara 2, Pembicara 3 (LDBI) Berikan (-) Jika tidak ikut serta", "type": "textarea", "required": True, "placeholder": "Pembicara 1: Nama (Kelas)\nPembicara 2: Nama (Kelas)\nPembicara 3: Nama (Kelas)\n(Ketik \'-\' jika tidak ikut LDBI)"},
-            {"name": "whatsapp", "label": "5.) Nomor WhatsApp Official / Kontak Tim", "type": "tel", "required": True, "placeholder": "Contoh: 081234567890"},
         ],
     },
     # 3. Format FLS3N Vokal Solo Putra & Putri (Sheet 2)
@@ -130,7 +131,6 @@ FORMAT_REGISTRASI = {
             {"name": "kelas", "label": "2. Kelas :", "type": "text", "required": True, "placeholder": "Contoh: 11.1 CGC"},
             {"name": "link_penyisihan", "label": "3. Link lagu karoke babak penyisihan :", "type": "url", "required": True, "placeholder": "https://youtube.com/... atau Link Google Drive"},
             {"name": "link_final", "label": "4. Link lagu karoke babak final :", "type": "url", "required": True, "placeholder": "https://youtube.com/... atau Link Google Drive"},
-            {"name": "whatsapp", "label": "5. Nomor WhatsApp Peserta :", "type": "tel", "required": True, "placeholder": "Contoh: 081234567890"},
         ],
     },
     # 4. Format Komik Digital, Poster, Foto, Kriya (Sheet 2)
@@ -140,7 +140,6 @@ FORMAT_REGISTRASI = {
             {"name": "nama_lengkap", "label": "1. Nama :", "type": "text", "required": True, "placeholder": "Contoh: Wahyu Satria"},
             {"name": "kelas", "label": "2. Kelas :", "type": "text", "required": True, "placeholder": "Contoh: 10.3 MAYOR"},
             {"name": "link_karya", "label": "3. Link Portofolio / Berkas Karya :", "type": "url", "required": False, "placeholder": "Link Google Drive / PDF karya (bisa disusulkan)"},
-            {"name": "whatsapp", "label": "4. Nomor WhatsApp Peserta :", "type": "tel", "required": True, "placeholder": "Contoh: 081234567890"},
         ],
     },
     # 5. Format Cosplay (Sheet 2: Nama Anggota 1-2-3, Kelas Anggota 1-2-3)
@@ -150,7 +149,6 @@ FORMAT_REGISTRASI = {
             {"name": "nama_lengkap", "label": "Nama Anggota 1-2-3 :", "type": "textarea", "required": True, "placeholder": "Anggota 1: Tommy (10.1)\nAnggota 2: Jessica (10.2)\nAnggota 3: -"},
             {"name": "kelas", "label": "Kelas Anggota 1-2-3 :", "type": "text", "required": True, "placeholder": "Contoh: 10.1 CGC & 10.2 MAYOR"},
             {"name": "karakter", "label": "Karakter & Anime / Game yang Dibawakan :", "type": "text", "required": True, "placeholder": "Contoh: Roronoa Zoro (One Piece)"},
-            {"name": "whatsapp", "label": "Nomor WhatsApp Kontak :", "type": "tel", "required": True, "placeholder": "Contoh: 081234567890"},
         ],
     },
     # 6. Format Basket (Sheet 2: Nama Anggota 1-2-3-Cadangan(opsional), Kelas)
@@ -160,7 +158,6 @@ FORMAT_REGISTRASI = {
             {"name": "nama_tim", "label": "Nama Tim / Kontingen :", "type": "text", "required": True, "placeholder": "Contoh: Tim Basket Mayor A"},
             {"name": "nama_lengkap", "label": "Nama Anggota 1-2-3-Cadangan (opsional) :", "type": "textarea", "required": True, "placeholder": "1. Pemain 1 (Kapten)\n2. Pemain 2\n3. Pemain 3\n4. Cadangan (opsional)"},
             {"name": "kelas", "label": "Asal Kelas Kontingen :", "type": "text", "required": True, "placeholder": "Contoh: 10.2 MAYOR"},
-            {"name": "whatsapp", "label": "Nomor WhatsApp Kapten / Kontak :", "type": "tel", "required": True, "placeholder": "Contoh: 081234567890"},
         ],
     },
     # 7. Format Futsal (Sheet 2: Nama Anggota 1-2-3-4-5-Cadangan(opsional), Kelas)
@@ -170,7 +167,6 @@ FORMAT_REGISTRASI = {
             {"name": "nama_tim", "label": "Nama Tim / Kontingen :", "type": "text", "required": True, "placeholder": "Contoh: Futsal CGC Squad"},
             {"name": "nama_lengkap", "label": "Nama Anggota 1-2-3-4-5-Cadangan (opsional) :", "type": "textarea", "required": True, "placeholder": "1. Pemain 1 (Kiper)\n2. Pemain 2\n3. Pemain 3\n4. Pemain 4\n5. Pemain 5\nCadangan: Nama 6, Nama 7, ..."},
             {"name": "kelas", "label": "Asal Kelas Kontingen :", "type": "text", "required": True, "placeholder": "Contoh: 11.1 CGC"},
-            {"name": "whatsapp", "label": "Nomor WhatsApp Kapten :", "type": "tel", "required": True, "placeholder": "Contoh: 081234567890"},
         ],
     },
     # 8. Format Voli (Sheet 2: Nama Anggota 1-2-3-4-5-Cadangan(opsional), Kelas)
@@ -180,7 +176,6 @@ FORMAT_REGISTRASI = {
             {"name": "nama_tim", "label": "Nama Tim / Kontingen :", "type": "text", "required": True, "placeholder": "Contoh: Voli Mayor Putri/Putra"},
             {"name": "nama_lengkap", "label": "Nama Anggota 1-2-3-4-5-Cadangan (opsional) :", "type": "textarea", "required": True, "placeholder": "1. Pemain 1 (Kapten)\n2. Pemain 2\n3. Pemain 3\n4. Pemain 4\n5. Pemain 5\nCadangan: Nama 6, ..."},
             {"name": "kelas", "label": "Asal Kelas Kontingen :", "type": "text", "required": True, "placeholder": "Contoh: 10.3 MAYOR"},
-            {"name": "whatsapp", "label": "Nomor WhatsApp Kapten :", "type": "tel", "required": True, "placeholder": "Contoh: 081234567890"},
         ],
     },
 }

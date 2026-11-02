@@ -15,6 +15,7 @@ import io
 import json
 import os
 import sqlite3
+import ssl
 import time
 import urllib.error
 import urllib.parse
@@ -169,6 +170,17 @@ class NordeliaStorage:
 
         return entry
 
+    def retry_unsynced(self) -> int:
+        """Kirim ulang pendaftaran lokal yang belum masuk Google Sheet."""
+        sent = 0
+        for entry in self.get_all_registrations():
+            if entry.get("synced_to_sheets"):
+                continue
+            if push_to_google_sheet(entry):
+                self._mark_synced(entry["id"])
+                sent += 1
+        return sent
+
     def _mark_synced(self, reg_id: int):
         try:
             conn = sqlite3.connect(self.db_path)
@@ -178,6 +190,24 @@ class NordeliaStorage:
             conn.close()
         except Exception as e:
             print(f"[DB] Gagal update sync status: {e}")
+        self._mark_json_synced(reg_id)
+
+    def _mark_json_synced(self, reg_id: int):
+        if not os.path.exists(self.json_path):
+            return
+        try:
+            with open(self.json_path, "r", encoding="utf-8") as f:
+                items = json.load(f)
+            changed = False
+            for item in items:
+                if item.get("id") == reg_id and not item.get("synced_to_sheets"):
+                    item["synced_to_sheets"] = True
+                    changed = True
+            if changed:
+                with open(self.json_path, "w", encoding="utf-8") as f:
+                    json.dump(items, f, indent=2, ensure_ascii=False)
+        except Exception as e:
+            print(f"[JSON] Gagal update sync status: {e}")
 
     def _append_json(self, entry: Dict[str, Any]):
         items = []
@@ -286,6 +316,15 @@ class NordeliaStorage:
 storage = NordeliaStorage()
 
 
+def _ssl_context() -> ssl.SSLContext:
+    """Python.org di macOS sering tidak punya CA bundle default; pakai certifi."""
+    try:
+        import certifi
+        return ssl.create_default_context(cafile=certifi.where())
+    except Exception:
+        return ssl.create_default_context()
+
+
 def push_to_google_sheet(entry: Dict[str, Any]) -> bool:
     """
     Sinkronisasi real-time ke Google Spreadsheet:
@@ -321,8 +360,12 @@ def push_to_google_sheet(entry: Dict[str, Any]) -> bool:
                 },
                 method="POST",
             )
-            with urllib.request.urlopen(req, timeout=12) as resp:
+            with urllib.request.urlopen(req, timeout=20, context=_ssl_context()) as resp:
+                body = resp.read().decode("utf-8", errors="replace")
                 if resp.status in (200, 201, 302, 303):
+                    if '"status":"error"' in body.replace(" ", ""):
+                        print(f"[SHEETS-WEBHOOK] Apps Script error: {body[:400]}")
+                        return False
                     return True
         except Exception as e:
             print(f"[SHEETS-WEBHOOK] Gagal push real-time ke Google Apps Script: {e}")

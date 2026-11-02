@@ -190,6 +190,8 @@
   </div>
 </div>
 
+{% include "partials/nordelia_success.html" %}
+
 <script id="nordelia-formats-json" type="application/json">{{ format_registrasi | tojson | safe }}</script>
 <script id="nordelia-cabang-json" type="application/json">{{ cabang_lomba | tojson | safe }}</script>
 
@@ -351,15 +353,18 @@ document.addEventListener("DOMContentLoaded", function () {
       const data = await res.json();
 
       if (data.success) {
-        formAlert.className = "p-3 rounded-xl mb-4 text-xs font-bold bg-emerald-950/80 text-emerald-300 border border-emerald-500/40";
-        formAlert.textContent = data.message || "Pendaftaran berhasil dicatat!";
-        formAlert.classList.remove("hidden");
-
-        setTimeout(() => {
-          closeRegisterModal();
-          regForm.reset();
+        closeRegisterModal();
+        regForm.reset();
+        if (typeof window.showNordeliaRegisteredPopup === "function") {
+          window.showNordeliaRegisteredPopup({
+            participantName: data.participant_name || payload.nama_lengkap || payload.nama_tim || payload.nama,
+            cabangName: data.cabang_name,
+            groupLink: data.group_link,
+            groupLabel: data.group_label,
+          });
+        } else {
           window.location.reload();
-        }, 1200);
+        }
 
       } else {
         formAlert.className = "p-3 rounded-xl mb-4 text-xs font-bold bg-rose-950/80 text-rose-300 border border-rose-500/40";
@@ -379,7 +384,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Auto open jika hanya 1 sub event (misal Literasi Numerasi)
   const allSubBtns = document.querySelectorAll("[data-register-sub]");
-  if (allSubBtns.length === 1) {
+  let justRegistered = false;
+  try { justRegistered = sessionStorage.getItem("nordelia_just_registered") === "1"; sessionStorage.removeItem("nordelia_just_registered"); } catch (e) {}
+  if (allSubBtns.length === 1 && !justRegistered) {
     setTimeout(() => {
       allSubBtns[0].click();
     }, 250);

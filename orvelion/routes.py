@@ -32,6 +32,16 @@ from orvelion.sheets_service import (
 )
 
 
+def resolve_group_link(cabang_info=None):
+    if cabang_info and cabang_info.get("group_link"):
+        return cabang_info["group_link"].strip()
+    return (
+        get_config("NORDELIA_GROUP_LINK")
+        or NORDELIA_INFO.get("group_link")
+        or ""
+    ).strip()
+
+
 def load_nordelia_events():
     try:
         events_path = os.path.join(os.path.dirname(__file__), "..", "nordelia_events.json")
@@ -159,6 +169,8 @@ def nordelia():
             registrations=all_regs[:10],
             spreadsheet_url=spreadsheet_url,
             spreadsheet_id=get_config("NORDELIA_SPREADSHEET_ID"),
+            group_link=resolve_group_link(),
+            group_label=get_config("NORDELIA_GROUP_LABEL") or NORDELIA_INFO.get("group_label", "Masuk Grup WhatsApp"),
         ),
     )
 
@@ -269,6 +281,8 @@ def nordelia_category(category_id: str):
             format_registrasi=FORMAT_REGISTRASI,
             cabang_lomba=build_decorated_cabang_list(),
             summary=storage.get_summary_stats(),
+            group_link=resolve_group_link(),
+            group_label=get_config("NORDELIA_GROUP_LABEL") or NORDELIA_INFO.get("group_label", "Masuk Grup WhatsApp"),
         ),
     )
 
@@ -380,6 +394,11 @@ def api_nordelia_register():
             "message": f"Pendaftaran cabang '{cabang_info['name']}' berhasil dicatat! Terima kasih telah mendaftar.",
             "entry": saved_entry,
             "quota_info": quota_info,
+            "already_registered": True,
+            "cabang_name": cabang_info["name"],
+            "participant_name": saved_entry.get("participant_name"),
+            "group_link": resolve_group_link(cabang_info),
+            "group_label": get_config("NORDELIA_GROUP_LABEL") or NORDELIA_INFO.get("group_label", "Masuk Grup WhatsApp"),
         })
 
     except Exception as e:

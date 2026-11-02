@@ -1,0 +1,90 @@
+<div id="modal-registered" class="hidden fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
+     data-group-link="{{ group_link or '' }}"
+     data-group-label="{{ group_label or 'Masuk Grup WhatsApp' }}">
+  <div class="relative w-full max-w-md rounded-3xl p-6 sm:p-8 bg-[#181311] border border-[#FFE5B4]/50 shadow-2xl text-center">
+    <button type="button" id="btn-close-registered" class="absolute top-4 right-4 p-2 rounded-full bg-white/10 text-stone-300 hover:text-white" aria-label="Tutup">
+      <svg class="w-5 h-5"><use href="#i-x"></use></svg>
+    </button>
+
+    <div class="mx-auto w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-tr from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] text-black mb-4">
+      <svg class="w-8 h-8"><use href="#i-check"></use></svg>
+    </div>
+
+    <p class="text-[10px] font-black uppercase tracking-[0.2em] text-[#FFE5B4] mb-2">Nordelia 2026</p>
+    <h3 class="text-2xl sm:text-3xl font-black text-white leading-tight">
+      Kamu sudah terdaftar
+    </h3>
+    <p id="registered-detail" class="mt-2 text-sm text-stone-300">
+      Pendaftaranmu sudah dicatat panitia.
+    </p>
+
+    <div class="mt-5 p-4 rounded-2xl bg-black/50 border border-white/10 text-left space-y-3">
+      <p class="text-[11px] font-bold uppercase tracking-wider text-stone-400">Masuk grup</p>
+      <p class="text-xs text-stone-300">
+        Gabung grup resmi agar info teknis, jadwal, dan pengumuman lomba tidak terlewat.
+      </p>
+      <a id="btn-join-group" href="#" target="_blank" rel="noopener noreferrer"
+         class="hidden w-full py-3 rounded-xl font-black text-xs uppercase tracking-wider text-black bg-gradient-to-r from-[#FFB7C5] via-[#FFE5B4] to-[#AEC6CF] hover:brightness-110 text-center">
+        Masuk Grup
+      </a>
+      <div id="group-link-empty" class="hidden text-[11px] text-amber-200/90 bg-amber-950/40 border border-amber-500/30 rounded-xl px-3 py-2">
+        Link grup belum diisi panitia. Isi <span class="font-mono">NORDELIA_GROUP_LINK</span> di file <span class="font-mono">.env</span>.
+      </div>
+    </div>
+
+    <button type="button" id="btn-registered-done"
+            class="mt-5 w-full py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-stone-200 bg-white/10 hover:bg-white/15 border border-white/10">
+      Selesai
+    </button>
+  </div>
+</div>
+
+<script>
+(function () {
+  const modal = document.getElementById("modal-registered");
+  if (!modal) return;
+
+  function closeAndReload() {
+    modal.classList.add("hidden");
+    document.body.classList.remove("overflow-hidden");
+    window.location.reload();
+  }
+
+  document.getElementById("btn-close-registered")?.addEventListener("click", closeAndReload);
+  document.getElementById("btn-registered-done")?.addEventListener("click", closeAndReload);
+  modal.addEventListener("click", function (e) {
+    if (e.target === modal) closeAndReload();
+  });
+
+  window.showNordeliaRegisteredPopup = function (opts) {
+    opts = opts || {};
+    const detail = document.getElementById("registered-detail");
+    const joinBtn = document.getElementById("btn-join-group");
+    const emptyBox = document.getElementById("group-link-empty");
+    const nama = opts.participantName || "";
+    const cabang = opts.cabangName || "";
+    if (detail) {
+      detail.textContent = [nama, cabang].filter(Boolean).length
+        ? (nama ? nama : "Peserta") + " sudah terdaftar di " + (cabang || "cabang lomba ini") + "."
+        : "Pendaftaranmu sudah dicatat panitia.";
+    }
+
+    const link = (opts.groupLink || modal.getAttribute("data-group-link") || "").trim();
+    const label = opts.groupLabel || modal.getAttribute("data-group-label") || "Masuk Grup";
+    if (link) {
+      joinBtn.href = link;
+      joinBtn.textContent = label;
+      joinBtn.classList.remove("hidden");
+      emptyBox.classList.add("hidden");
+    } else {
+      joinBtn.classList.add("hidden");
+      emptyBox.classList.remove("hidden");
+    }
+
+    document.getElementById("modal-register")?.classList.add("hidden");
+    modal.classList.remove("hidden");
+    document.body.classList.add("overflow-hidden");
+    try { sessionStorage.setItem("nordelia_just_registered", "1"); } catch (e) {}
+  };
+})();
+</script>
