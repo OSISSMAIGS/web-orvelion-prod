@@ -113,3 +113,36 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* ---- Navigasi halus (soft-nav) ---- */
+main.soft-leave {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 110ms ease, transform 110ms ease;
+}
+
+main.soft-enter {
+  animation: soft-enter 160ms ease both;
+}
+
+@keyframes soft-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Hormati preferensi pengguna yang memilih kurangi gerakan */
+@media (prefers-reduced-motion: reduce) {
+  main.soft-leave,
+  main.soft-enter {
+    animation: none;
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}

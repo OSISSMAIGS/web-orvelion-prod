@@ -32,25 +32,25 @@ SOCIAL_LINKS = [
 PILLARS = [
     {
         "title": "Courage (Keberanian)",
-        "desc": "Menghadapi setiap tantangan dengan keberanian tanpa ragu, mendobrak batasan lama untuk menciptakan terobosan nyata bagi civitas akademika.",
+        "desc": "Berani mencoba, berani salah, berani jadi yang pertama melangkah. Keberanian seperti inilah yang mendobrak batasan lama.",
         "icon": "zap",
         "tone": "ember",
     },
     {
         "title": "Nobility (Kemuliaan)",
-        "desc": "Menjunjung tinggi etika, rasa hormat, dan ketulusan dalam mengabdi. Pemimpin yang mulia adalah pelayan bagi sesama kawula muda.",
+        "desc": "Menjunjung etika, rasa hormat, dan ketulusan dalam mengabdi. Bagi kami, pemimpin sejati adalah pelayan bagi teman-temannya.",
         "icon": "shield",
         "tone": "amber",
     },
     {
         "title": "Tenacity (Ketangguhan)",
-        "desc": "Layaknya sang harimau yang gigih dan pantang menyerah, Kabinet Orvélion siap menuntaskan setiap program kerja hingga puncak keberhasilan.",
+        "desc": "Seperti harimau, kami gigih dan pantang menyerah. Setiap program kerja dituntaskan sampai selesai, bukan berhenti di tengah jalan.",
         "icon": "award",
         "tone": "coral",
     },
     {
         "title": "Empathy (Keharmonisan)",
-        "desc": "Mendengarkan dengan hati, merangkul setiap keunikan dan aspirasi siswa tanpa membedakan, demi terciptanya sinergi persaudaraan sejati.",
+        "desc": "Mendengarkan dengan hati dan merangkul semua siswa tanpa membedakan. Setiap suara berharga dan layak didengar.",
         "icon": "heart",
         "tone": "rose",
     },
@@ -67,24 +67,40 @@ DIVISIONS = [
 
 MISSIONS = [
     {
-        "title": "Akselerasi Bakat & Prestasi",
-        "desc": "Menyelenggarakan program kompetisi dan pembinaan multi-disiplin (akademik, seni, olahraga, dan riset sains).",
+        "title": "Pengembangan Bakat & Prestasi",
+        "desc": "Menghadirkan kompetisi dan pembinaan di bidang akademik, seni, olahraga, dan riset sains.",
     },
     {
         "title": "Harmoni & Kesejahteraan Siswa",
-        "desc": "Membangun ruang aman yang suportif, peka terhadap kesehatan mental siswa, dan mempererat kebersamaan antar angkatan.",
+        "desc": "Menjaga ruang yang aman dan suportif, peduli kesehatan mental siswa, serta mempererat kebersamaan antar angkatan.",
     },
     {
-        "title": "Modernisasi Aspirasi Digital",
-        "desc": "Mengoptimalkan kanal komunikasi transparan, media sosial interaktif, dan portal web untuk menampung kritik dan saran siswa secara real-time.",
+        "title": "Kanal Aspirasi Digital",
+        "desc": "Membuka jalur aspirasi lewat media sosial dan situs web ini, supaya kritik dan saran siswa mudah tersampaikan dan ditindaklanjuti.",
     },
     {
         "title": "Kemitraan & Aksi Sosial",
-        "desc": "Memperluas sinergi dengan alumni dan organisasi eksternal melalui pengabdian masyarakat dan bakti kepemudaan.",
+        "desc": "Memperluas kerja sama dengan alumni dan organisasi luar melalui pengabdian masyarakat dan bakti sosial.",
     },
 ]
 
 EVENTS = [
+    {
+        "id": "nordelia",
+        "title": "Nordelia 2026: Festival Litnum, Olimpiade, Bahasa, Seni & Olahraga",
+        "category": "Unggulan",
+        "date": "Periode Bulan Bahasa 2026",
+        "time": "Pendaftaran online dibuka",
+        "location": "SMA Ignatius Global School",
+        "status": "Pendaftaran Dibuka",
+        "description": "Festival lomba tahunan SMA IGS: Literasi & Numerasi, Olimpiade Sains & AI, debat, bahasa asing, FLS3N, sampai O2SN — 41 cabang lomba yang bisa didaftar lewat satu formulir online.",
+        "highlight": "41 Cabang Lomba • Satu Formulir Online untuk Semua",
+        "target": "Seluruh Siswa SMA IGS",
+        # Pintu masuk formulir pendaftaran online event ini. Isi nilai URL
+        # (mis. "/daftar") HANYA saat event itu benar-benar membuka daftar;
+        # tombolnya lalu muncul otomatis di kartu & modal detail event terkait.
+        "daftar_url": "/daftar",
+    },
     {
         "id": "igs-cup",
         "title": "IGS CUP 2026/2027: Rise of the Champions",
@@ -96,18 +112,6 @@ EVENTS = [
         "description": "Kompetisi olahraga dan e-sports tahunan bergengsi antar pelajar se-Sumatera Selatan. Mempertandingkan basket, futsal, bulu tangkis, dan Mobile Legends.",
         "highlight": "Total Hadiah Puluhan Juta Rupiah & Piala Bergilir IGS",
         "target": "Siswa SMA/SMK se-Sumatera Selatan",
-    },
-    {
-        "id": "bulan-bahasa",
-        "title": "Gita Nusantara: Bulan Bahasa & Seni 2026",
-        "category": "Seni",
-        "date": "28 - 30 Oktober 2026",
-        "time": "09:00 - 15:30 WIB",
-        "location": "Auditorium Utama Lantai 4 IGS",
-        "status": "Pendaftaran Dibuka",
-        "description": "Pesta apresiasi sastra, teater monolog, orasi kebangsaan, cipta puisi, dan pameran instalasi seni rupa karya siswa SMA IGS.",
-        "highlight": "Special Performance Teater Siswa & Guest Poet",
-        "target": "Seluruh Siswa SMA IGS & Umum",
     },
     {
         "id": "orvelion-leadership",
@@ -196,7 +200,7 @@ CABINETS = [
         "symbol": "Sang Naga Timur (The Azure Dragon)",
         "image": "ardraxis.png",
         "tagline": "“Mengalir Bijak, Mengguncang Cakrawala”",
-        "philosophy": "Melambangkan kebijaksanaan yang mendalam, kelincahan dalam beradaptasi menghadapi tantangan zaman, serta kekuatan visioner yang merangkul seluruh elemen siswa tanpa gentar.",
+        "philosophy": "Naga yang melambangkan kebijaksanaan, kelincahan beradaptasi, dan visi yang merangkul seluruh elemen siswa.",
         "achievements": [
             "Penyelenggaraan IGS Youth Innovation Carnival Tingkat Provinsi",
             "Implementasi sistem E-Voting & transparansi aspirasi siswa real-time",
@@ -212,7 +216,7 @@ CABINETS = [
         "symbol": "Sang Phoenix Api (The Resurgent Phoenix)",
         "image": "crecenden.png",
         "tagline": "“Terlahir Kembali dalam Kobaran Prestasi”",
-        "philosophy": "Mengadopsi kekuatan burung phoenix yang senantiasa bangkit dengan api yang lebih berkobar. Simbol kebangkitan gairah berkarya, optimisme membara, dan inovasi yang tak pernah padam.",
+        "philosophy": "Phoenix yang selalu bangkit dengan kobaran api lebih besar: simbol semangat berkarya dan inovasi yang tak pernah padam.",
         "achievements": [
             "Revitalisasi total festival seni 'CreceArt Fest & Exhibition'",
             "Rekor partisipasi delegasi lomba akademik dan olahraga terbanyak",
@@ -228,7 +232,7 @@ CABINETS = [
         "symbol": "Sang Rusa Berbintang & Perisai (The Celestial Stag)",
         "image": "asteration.png",
         "tagline": "“Bercahaya di Langit Malam, Menjaga Persaudaraan”",
-        "philosophy": "Rusa bertanduk anggun berpadu dengan perisai bintang melambangkan keagungan martabat, ketenangan dalam mengambil keputusan, serta komitmen menjadi pelindung kehangatan keluarga besar sekolah.",
+        "philosophy": "Rusa bertanduk dan perisai bintang, simbol ketenangan dalam mengambil keputusan serta komitmen menjaga kehangatan keluarga besar sekolah.",
         "achievements": [
             "Penyelenggaraan IGS Cup Reborn pasca masa transisi",
             "Pendirian kanal Forum Aspirasi Siswa Terbuka dan Konseling Sebaya",

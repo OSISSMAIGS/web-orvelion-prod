@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% block title %}Daftar Lomba Nordelia 2026 | {{ site.name }}{% endblock %}
+{% block content %}
+<script id="daftar-data" type="application/json">{{ kategori_lomba | tojson | safe }}</script>
+
+<section class="relative pt-6 pb-12 border-b border-orvelion-coral/15">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="space-y-4 max-w-3xl">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orvelion-card border border-orvelion-coral/30 text-xs font-semibold text-orvelion-amber">
+        <svg class="w-3.5 h-3.5 text-orvelion-coral"><use href="#i-trophy"></use></svg>
+        Nordelia 2026 • Formulir Resmi Panitia
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight">Daftar Lomba <span class="text-gradient-orvelion">Nordelia 2026</span></h1>
+      <p class="text-sm sm:text-base text-orvelion-peach/85">Festival Litnum, Olimpiade, Bahasa, Seni, dan Olahraga SMA IGS. Satu formulir untuk semua cabang — data kamu langsung masuk rekap panitia, tanpa ribet.</p>
+    </div>
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+    <!-- ============ FORMULIR ============ -->
+    <div class="lg:col-span-7">
+      <div id="daftar-root" data-preselect="{{ preselect }}" class="glass-card rounded-2xl p-6 sm:p-8 space-y-7">
+
+        {% if not webhook_aktif %}
+        <div class="p-4 rounded-xl bg-orvelion-rust/25 border border-orvelion-ember/40 text-xs text-orvelion-peach/90">
+          <p class="font-bold text-orvelion-amber">Pendaftaran online belum aktif.</p>
+          <p class="mt-1">Formulir sudah siap dipakai, tapi tautan rekap panitia belum dipasang di server. Hubungi pengurus OSIS kalau ini keliru.</p>
+        </div>
+        {% endif %}
+
+        <!-- Langkah 1: kategori -->
+        <div class="space-y-3">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-orvelion-coral/15 border border-orvelion-coral/40 text-[11px] font-bold text-orvelion-amber flex items-center justify-center">1</span>
+            <label class="text-xs font-bold uppercase tracking-wider text-orvelion-amber">Pilih Bidang Lomba</label>
+          </div>
+          <div id="daftar-kategori" class="flex flex-wrap gap-2">
+            {% for kat in kategori_lomba %}
+              <button type="button" data-kat="{{ kat.id }}" class="daftar-kat-btn px-4 py-2.5 rounded-xl text-xs font-semibold bg-orvelion-card text-orvelion-peach/75 border border-orvelion-coral/20 hover:border-orvelion-coral/50">
+                {{ kat.nama }}
+              </button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Langkah 2: lomba + cabang -->
+        <div class="space-y-4">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-orvelion-coral/15 border border-orvelion-coral/40 text-[11px] font-bold text-orvelion-amber flex items-center justify-center">2</span>
+            <label class="text-xs font-bold uppercase tracking-wider text-orvelion-amber">Pilih Lomba &amp; Cabangnya</label>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1.5">
+              <label for="daftar-lomba" class="text-[11px] font-semibold text-orvelion-peach/70">Lomba</label>
+              <div class="relative">
+                <select id="daftar-lomba" class="w-full appearance-none px-4 py-3 rounded-xl bg-black/40 border border-orvelion-coral/25 text-sm text-white focus:outline-none focus:border-orvelion-amber"></select>
+                <svg class="w-4 h-4 absolute right-3.5 top-1/2 -translate-y-1/2 text-orvelion-peach/50 pointer-events-none"><use href="#i-chevron"></use></svg>
+              </div>
+            </div>
+            <div id="daftar-sub-wrap" class="space-y-1.5 hidden">
+              <label for="daftar-sub" class="text-[11px] font-semibold text-orvelion-peach/70">Cabang</label>
+              <div class="relative">
+                <select id="daftar-sub" class="w-full appearance-none px-4 py-3 rounded-xl bg-black/40 border border-orvelion-coral/25 text-sm text-white focus:outline-none focus:border-orvelion-amber"></select>
+                <svg class="w-4 h-4 absolute right-3.5 top-1/2 -translate-y-1/2 text-orvelion-peach/50 pointer-events-none"><use href="#i-chevron"></use></svg>
+              </div>
+            </div>
+          </div>
+          <p id="daftar-cabang-error" class="hidden text-[11px] text-rose-300"></p>
+        </div>
+
+        <!-- Langkah 3: data diri -->
+        <div class="space-y-4">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-orvelion-coral/15 border border-orvelion-coral/40 text-[11px] font-bold text-orvelion-amber flex items-center justify-center">3</span>
+            <label class="text-xs font-bold uppercase tracking-wider text-orvelion-amber">Isi Data Kamu</label>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1.5">
+              <label for="daftar-nama" class="text-[11px] font-semibold text-orvelion-peach/70">Nama Lengkap</label>
+              <input id="daftar-nama" type="text" maxlength="60" autocomplete="name" placeholder="cth: Budi Pratama" class="w-full px-4 py-3 rounded-xl bg-black/40 border border-orvelion-coral/25 text-sm text-white placeholder-orvelion-peach/35 focus:outline-none focus:border-orvelion-amber" />
+              <p id="daftar-nama-error" class="hidden text-[11px] text-rose-300"></p>
+            </div>
+            <div class="space-y-1.5">
+              <label for="daftar-kelas" class="text-[11px] font-semibold text-orvelion-peach/70">Kelas</label>
+              <input id="daftar-kelas" type="text" maxlength="24" placeholder="cth: 10.1 CGC" list="daftar-kelas-list" class="w-full px-4 py-3 rounded-xl bg-black/40 border border-orvelion-coral/25 text-sm text-white placeholder-orvelion-peach/35 focus:outline-none focus:border-orvelion-amber" />
+              <datalist id="daftar-kelas-list">
+                {% for k in kelas_contoh %}<option value="{{ k }}"></option>{% endfor %}
+              </datalist>
+              <p id="daftar-kelas-error" class="hidden text-[11px] text-rose-300"></p>
+            </div>
+          </div>
+          <div class="space-y-1.5">
+            <label for="daftar-wa" class="text-[11px] font-semibold text-orvelion-peach/70">Nomor WhatsApp Aktif</label>
+            <input id="daftar-wa" type="tel" inputmode="tel" maxlength="18" autocomplete="tel" placeholder="cth: 081234567890" class="w-full sm:max-w-sm px-4 py-3 rounded-xl bg-black/40 border border-orvelion-coral/25 text-sm text-white placeholder-orvelion-peach/35 focus:outline-none focus:border-orvelion-amber" />
+            <p id="daftar-wa-error" class="hidden text-[11px] text-rose-300"></p>
+            <p class="text-[11px] text-orvelion-peach/55">Nomor ini dipakai panitia buat konfirmasi &amp; pengumuman. Pastikan aktif ya.</p>
+          </div>
+        </div>
+
+        <div id="daftar-global-error" class="hidden p-3.5 rounded-xl bg-orvelion-rust/30 border border-orvelion-ember/50 text-xs text-orvelion-peach/90"></div>
+
+        <button id="daftar-submit" type="button" class="w-full py-3.5 rounded-full font-bold text-xs uppercase tracking-wider text-black bg-gradient-to-r from-orvelion-coral to-orvelion-amber hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed">
+          Kirim Pendaftaran
+        </button>
+        <p class="text-center text-[11px] text-orvelion-peach/50">Mau ikut lebih dari satu lomba? Isi formulir ini lagi untuk tiap lombanya, ya.</p>
+      </div>
+    </div>
+
+    <!-- ============ PANDUAN SINGKAT ============ -->
+    <aside class="lg:col-span-5 space-y-5">
+      <div class="glass-card rounded-2xl p-6 space-y-4">
+        <div class="flex items-center gap-2 text-xs font-semibold text-orvelion-amber">
+          <svg class="w-4 h-4 text-orvelion-coral"><use href="#i-compass"></use></svg>
+          Alurnya Gimana?
+        </div>
+        <ol class="space-y-3.5 text-xs text-orvelion-peach/85">
+          <li class="flex gap-3">
+            <svg class="w-4 h-4 mt-0.5 text-orvelion-coral shrink-0"><use href="#i-check"></use></svg>
+            <span><b class="text-white">Pilih cabang</b> — semua lomba Nordelia ada di satu formulir ini, dari Literasi sampai O2SN.</span>
+          </li>
+          <li class="flex gap-3">
+            <svg class="w-4 h-4 mt-0.5 text-orvelion-coral shrink-0"><use href="#i-check"></use></svg>
+            <span><b class="text-white">Kirim data</b> — langsung masuk rekap panitia secara real-time. Gak perlu screenshot-screenshot ke pengurus.</span>
+          </li>
+          <li class="flex gap-3">
+            <svg class="w-4 h-4 mt-0.5 text-orvelion-coral shrink-0"><use href="#i-check"></use></svg>
+            <span><b class="text-white">Tunggu konfirmasi</b> — panitia menghubungi lewat WhatsApp yang kamu isi di atas.</span>
+          </li>
+        </ol>
+      </div>
+
+      <div class="glass-card rounded-2xl p-6 space-y-3">
+        <div class="flex items-center gap-2 text-xs font-semibold text-orvelion-amber">
+          <svg class="w-4 h-4 text-orvelion-coral"><use href="#i-shield-check"></use></svg>
+          Data yang Dikumpulin
+        </div>
+        <p class="text-xs text-orvelion-peach/85">Cuma empat: <b class="text-white">nama, kelas, nomor WhatsApp, dan pilihan lomba</b>. Tidak diminta yang lain, dan datanya cuma dipakai buat keperluan Nordelia 2026.</p>
+      </div>
+
+      <div class="rounded-2xl p-6 bg-gradient-to-br from-orvelion-rust/30 to-orvelion-card border border-orvelion-coral/25 space-y-2.5">
+        <div class="flex items-center gap-2 text-xs font-semibold text-orvelion-amber">
+          <svg class="w-4 h-4 text-orvelion-coral"><use href="#i-users"></use></svg>
+          Bingung atau Ada Kendala?
+        </div>
+        <p class="text-xs text-orvelion-peach/85">Langsung hubungi panitia lewat Instagram <a href="https://www.instagram.com/osis.smaigs/" class="font-semibold text-orvelion-amber underline underline-offset-2">@osis.smaigs</a> atau datang ke Sekretariat OSIS lantai 2.</p>
+      </div>
+    </aside>
+  </div>
+</section>
+{% endblock %}

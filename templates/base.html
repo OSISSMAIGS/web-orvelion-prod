@@ -6,33 +6,11 @@
   <meta name="theme-color" content="#FD8C5A" />
   <meta name="description" content="{{ site.description }}" />
   <title>{% block title %}{{ site.title }}{% endblock %}</title>
-  <link rel="icon" href="{{ url_for('static', filename='images/orvelion.jpg') }}" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            orvelion: {
-              coral: "#FD8C5A",
-              rust: "#9C381C",
-              peach: "#FDB18F",
-              ember: "#D9530D",
-              apricot: "#FFAE7A",
-              amber: "#FFD495",
-              lilac: "#F9EDFF",
-              blush: "#FFE7ED",
-              rose: "#E6B1B5",
-              dark: "#0d0b0a",
-              surface: "#151210",
-              card: "#1c1714",
-            },
-          },
-        },
-      },
-    };
-  </script>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}" />
+  <link rel="icon" type="image/png" sizes="64x64" href="{{ url_for('static', filename='images/favicon-64.png') }}" />
+  <!-- Tailwind di-build statis (tools/build-css.sh) — bukan Play CDN lagi,
+       supaya tidak ada kompilator CSS berat yang jalan di browser pengunjung. -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css', v=asset_v) }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css', v=asset_v) }}" />
 </head>
 <body class="min-h-screen flex flex-col bg-orvelion-dark text-orvelion-lilac selection:bg-orvelion-coral selection:text-black">
   {% include "partials/icons.html" %}
@@ -45,6 +23,6 @@
   {% if show_chrome %}
     {% include "partials/footer.html" %}
   {% endif %}
-  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/app.js', v=asset_v) }}"></script>
 </body>
 </html>
