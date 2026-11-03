@@ -13,6 +13,7 @@ _extracted_src/
 
 # Data pendaftar — jangan pernah masuk repo (berisi nama/kelas/WA).
 nordelia_registrations.json
+nordelia_antrian.json
 *.json.local
 
 # File sampah sistem operasi.

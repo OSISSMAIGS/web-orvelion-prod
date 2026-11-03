@@ -70,6 +70,17 @@ def daftar():
     )
 
 
+@bp.get("/api/nordelia/kuota")
+def api_nordelia_kuota():
+    """Sisa kuota cabang berkuota (untuk indikator di formulir /daftar)."""
+    data = nordelia.ambil_kuota()
+    if data is None:
+        # Webhook belum aktif/tidak terjangkau — jangan bikin form error;
+        # kuota tetap ditegakkan di Apps Script saat pendaftaran masuk.
+        return jsonify({"ok": False, "kuota": {}})
+    return jsonify({"ok": True, "kuota": data})
+
+
 @bp.post("/daftar")
 def daftar_kirim():
     data = request.get_json(silent=True) or {}
@@ -88,20 +99,27 @@ def daftar_kirim():
     if payload is None:
         return jsonify({"ok": False, "errors": {"cabang_id": "Cabang lomba tidak dikenal."}}), 400
 
-    sukses, pesan = nordelia.kirim_ke_webhook(payload)
+    sukses, pesan, mengantre = nordelia.kirim_ke_webhook(payload)
     if not sukses:
         return jsonify({"ok": False, "errors": {"_global": pesan}}), 502
 
-    return jsonify({
+    jawaban = {
         "ok": True,
         "message": pesan,
         "ringkasan": {
             "nama": payload["nama_lengkap"],
             "kelas": payload["kelas"],
-            "cabang": payload["cabang_name"],
+            "cabang": payload["cabang_name"] + (
+                f" ({payload['jenis_debat']})" if payload.get("jenis_debat") else ""
+            ),
             "kategori": payload["category_id"].upper(),
         },
-    })
+    }
+    if mengantre:
+        # Webhook sedang gangguan: data sudah di antrian lokal. Sampaikan
+        # sebagai catatan sukses supaya pendaftar tidak mengulang (dobel).
+        jawaban["catatan"] = pesan
+    return jsonify(jawaban)
 
 
 @bp.get("/before-us")

@@ -19,6 +19,8 @@ Buka [http://127.0.0.1:5000](http://127.0.0.1:5000).
 - `orvelion/` — aplikasi Flask, data konten, pelindung kapasitas, dan modul pendaftaran (`nordelia.py`)
 - `templates/` — halaman Jinja
 - `static/` — CSS, JavaScript, dan gambar
+- `Code.gs` — backend Google Apps Script untuk spreadsheet panitia (satu-satunya; jangan bikin file duplikat)
+- `tools/cek-konsistensi.py` — cek nama tab situs vs Code.gs
 
 ## Pendaftaran Lomba Nordelia (halaman `/daftar`)
 
@@ -37,10 +39,29 @@ Supaya aktif:
 1. Salin `.env.example` jadi `.env` di akar repo.
 2. Isi `GOOGLE_SHEET_WEBHOOK_URL` dengan URL deployment Apps Script panitia
    (yang diakhiri `/exec`).
-3. Jalankan ulang `python app.py`.
+3. Pastikan **`Code.gs` versi terbaru** sudah terpasang di spreadsheet panitia:
+   Extensions → Apps Script → tempel seluruh isi `Code.gs` → jalankan fungsi
+   `setupNordeliaSpreadsheet` sekali → Deploy ulang (Manage deployments →
+   Edit → Version: *New version*). Lewat langkah deploy = kode lama yang
+   masih jalan — jebakan paling sering.
+4. Jalankan ulang `python app.py`.
 
 Tanpa `.env`, halaman tetap terbuka tapi menampilkan pemberitahuan bahwa
 pendaftaran online belum aktif — tidak ada yang crash.
+
+Fitur pendukung:
+
+- **Kuota cabang** — 10 cabang Olimpiade (9 sains + Kecerdasan Artifisial)
+  dibatasi 20 peserta. Ditegakkan di `Code.gs` saat menulis baris (sumber
+  kebenaran); formulir menampilkan sisa tempat lewat `GET /api/nordelia/kuota`
+  (di-cache 60 detik, jadi tidak membebani webhook).
+- **Anti hilang data** — kalau webhook sedang gangguan saat pendaftar
+  mengirim, payload disimpan ke `nordelia_antrian.json` (sudah di-gitignore)
+  dan otomatis dikirim ulang oleh pekerja latar setiap 5 menit. Pendaftar
+  tetap diberi kabar sukses supaya tidak mengulang (yang bikin data dobel).
+- **Nama tab terpusat** — situs mengirim `target_sheet` eksplisit. Nama-nama
+  itu harus sama dengan `DAFTAR_CABANG_LOMBA` di `Code.gs`; cek dengan
+  `python tools/cek-konsistensi.py` setiap kali menambah/mengubah cabang.
 
 Kenapa dikirim lewat server Flask, bukan langsung dari browser? Supaya URL
 webhook tidak tersebar di kode halaman (bisa dipakai spam) dan semua input

@@ -4,6 +4,7 @@ from flask import Flask, render_template, request
 
 from orvelion.config import Config
 from orvelion.content import NAV_LINKS, SITE, SOCIAL_LINKS
+from orvelion.nordelia import mulai_pekerja_antrian
 from orvelion.queue import init_queue
 from orvelion.routes import bp as pages_bp
 
@@ -33,6 +34,9 @@ def create_app() -> Flask:
     )
     app.config.from_object(Config)
     init_queue(app)
+    # Pekerja latar belakang: kirim ulang pendaftaran yang mengantre karena
+    # webhook sempat gangguan (file nordelia_antrian.json).
+    mulai_pekerja_antrian()
     app.register_blueprint(pages_bp)
 
     asset_v = _asset_version(app.static_folder)

@@ -290,6 +290,67 @@ function initDaftar() {
 
   const state = { kat: null, lomba: null, sub: null };
 
+  // ---- Sisa kuota cabang berkuota (Olimpiade + AI, maks 20) ----
+  // Sumber: GET /api/nordelia/kuota -> Apps Script ?counts=1 (cache 60 dtk
+  // di server). Kalau gagal diambil, indikator cuma disembunyikan —
+  // kuota tetap ditegakkan di Apps Script saat pendaftaran masuk.
+  let kuotaCache = null;
+
+  const sheetDariPilihan = (p) => {
+    if (!p) return null;
+    const l = p.lomba;
+    if (!l.subs) return l.sheet || p.cabang;
+    if (l.sheet_map && l.sheet_map[p.sub]) return l.sheet_map[p.sub];
+    if (l.sheet_fmt) return l.sheet_fmt.includes("{}") ? l.sheet_fmt.replace("{}", p.sub) : l.sheet_fmt;
+    return p.sub;
+  };
+
+  const muatKuota = async () => {
+    if (kuotaCache) return kuotaCache;
+    try {
+      const res = await fetch("/api/nordelia/kuota");
+      const data = await res.json();
+      kuotaCache = data && data.ok ? data.kuota || {} : {};
+    } catch (_e) {
+      kuotaCache = {};
+    }
+    return kuotaCache;
+  };
+
+  const perbaruiKuota = async () => {
+    const el = $("#daftar-kuota");
+    if (!el) return;
+    const pilihan = semuaCabang.find(
+      (c) => c.kat === state.kat && c.lomba === state.lomba && (!c.lomba.subs || c.sub === state.sub)
+    );
+    if (!pilihan) {
+      el.classList.add("hidden");
+      delete el.dataset.penuh;
+      return;
+    }
+    const sheet = sheetDariPilihan(pilihan);
+    const kuota = await muatKuota();
+    const info = sheet ? kuota[sheet] : null;
+    if (!info) {
+      el.classList.add("hidden");
+      delete el.dataset.penuh;
+      return;
+    }
+    const sisa = Math.max(0, (info.maks || 0) - (info.terpakai || 0));
+    el.classList.remove("hidden");
+    if (sisa > 0) {
+      el.dataset.penuh = "";
+      el.classList.remove("text-rose-300");
+      el.classList.add("text-orvelion-peach/70");
+      el.textContent = `Sisa kuota ${sheet}: ${sisa} dari ${info.maks} tempat.`;
+    } else {
+      el.dataset.penuh = "1";
+      el.classList.add("text-rose-300");
+      el.classList.remove("text-orvelion-peach/70");
+      el.textContent = `Kuota ${sheet} sudah penuh (${info.maks}/${info.maks}). Pilih cabang lain ya.`;
+    }
+  };
+
   const setErr = (key, pesan) => {
     const el = $(`#daftar-${key}-error`);
     if (!el) return;
@@ -369,6 +430,7 @@ function initDaftar() {
         }
       }
     }
+    perbaruiKuota();
   };
 
   katBtns.forEach((btn) => {
@@ -385,11 +447,13 @@ function initDaftar() {
     state.sub = null;
     renderSub();
     setErr("cabang", "");
+    perbaruiKuota();
   });
 
   subSel.addEventListener("change", () => {
     state.sub = subSel.value || null;
     setErr("cabang", "");
+    perbaruiKuota();
   });
 
   [namaEl, kelasEl, waEl].forEach((el) =>
@@ -406,6 +470,8 @@ function initDaftar() {
       (c) => c.kat === state.kat && c.lomba === state.lomba && (!c.lomba.subs || c.sub === state.sub)
     );
     if (!pilihan) galat.cabang = "Pilih bidang, lomba, dan cabangnya dulu ya.";
+    if ($("#daftar-kuota")?.dataset.penuh)
+      galat.cabang = "Kuota cabang ini sudah penuh. Pilih cabang lain ya.";
     if (nama.length < 3 || nama.length > 60 || !/[A-Za-z\u00C0-\u024F]/.test(nama))
       galat.nama = "Isi nama lengkap (3-60 karakter, huruf).";
     if (!/^1[0-2]\s*[.,:\-]?\s*\S+(?:\s\S+){0,2}$/.test(kelas))
@@ -416,7 +482,7 @@ function initDaftar() {
     return galat;
   };
 
-  const tampilkanSukses = (ringkasan) => {
+  const tampilkanSukses = (ringkasan, catatan) => {
     root.innerHTML = `
       <div class="py-10 text-center space-y-5">
         <div class="w-16 h-16 mx-auto rounded-full bg-emerald-950/70 border border-emerald-500/40 flex items-center justify-center">
@@ -432,6 +498,7 @@ function initDaftar() {
           <div class="flex justify-between gap-4"><span class="text-orvelion-peach/60">Cabang</span><b class="text-white">${ringkasan.cabang}</b></div>
           <div class="flex justify-between gap-4"><span class="text-orvelion-peach/60">Bidang</span><b class="text-white uppercase">${ringkasan.kategori}</b></div>
         </div>
+        ${catatan ? `<p class="max-w-sm mx-auto text-[11px] text-orvelion-peach/60">${catatan}</p>` : ""}
         <button id="daftar-ulang" type="button" class="px-6 py-3 rounded-full font-semibold text-xs text-orvelion-peach/80 bg-black/40 border border-orvelion-coral/25">Daftar Lomba Lagi</button>
       </div>`;
     $("#daftar-ulang")?.addEventListener("click", () => window.location.reload());
@@ -470,7 +537,7 @@ function initDaftar() {
       });
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.ok) {
-        tampilkanSukses(data.ringkasan || {});
+        tampilkanSukses(data.ringkasan || {}, data.catatan || "");
         return;
       }
       const errors = (data && data.errors) || {};
