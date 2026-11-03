@@ -19,3 +19,5 @@ nordelia_antrian.json
 # File sampah sistem operasi.
 .DS_Store
 Thumbs.db
+nordelia_credentials.json
+*credentials*.json
