@@ -25,9 +25,9 @@
         {% endfor %}
       </nav>
 
-      <div class="hidden md:flex items-center">
-        <a href="/event" class="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white bg-gradient-to-r from-orvelion-coral to-orvelion-ember rounded-full hover:brightness-110 shadow-md">
-          Agenda 26-27
+      <div class="hidden md:flex items-center gap-2.5">
+        <a href="/event" class="px-3.5 py-2 text-xs font-semibold uppercase tracking-wider text-white bg-orvelion-card border border-orvelion-coral/30 rounded-full hover:bg-white/10 shadow-md">
+          Agenda
         </a>
       </div>
 
@@ -43,13 +43,19 @@
         <a href="{{ link.href }}" data-close-nav
            class="flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium
                   {% if active_page == link.id %}bg-gradient-to-r from-orvelion-rust/80 to-orvelion-ember/80 text-white border border-orvelion-coral/40{% else %}text-orvelion-lilac hover:bg-white/5{% endif %}">
-          <span>{{ link.name }}</span>
+          <div class="flex items-center gap-2.5">
+            {% if link.id == 'home' %}<svg class="w-5 h-5"><use href="#i-flame"></use></svg>
+            {% elif link.id == 'event' %}<svg class="w-5 h-5"><use href="#i-calendar"></use></svg>
+            {% elif link.id == 'before-us' %}<svg class="w-5 h-5"><use href="#i-history"></use></svg>
+            {% else %}<svg class="w-5 h-5"><use href="#i-message"></use></svg>{% endif %}
+            <span>{{ link.name }}</span>
+          </div>
           <svg class="w-4 h-4 text-orvelion-peach/50"><use href="#i-chevron"></use></svg>
         </a>
       {% endfor %}
     </div>
-    <a href="/event" data-close-nav class="block w-full text-center py-3 text-sm font-semibold uppercase text-white bg-gradient-to-r from-orvelion-coral to-orvelion-ember rounded-xl">
-      Lihat Agenda Event Orvelion
+    <a href="/nordelia" data-close-nav class="block w-full text-center py-3 text-sm font-extrabold uppercase text-black bg-gradient-to-r from-[#CC4400] via-[#FF6B00] to-[#FF8533] hover:brightness-110 rounded-xl shadow-lg">
+      Daftar Festival Nordelia 2026
     </a>
   </div>
 </header>

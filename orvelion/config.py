@@ -1,4 +1,8 @@
 import os
+from orvelion.sheets_service import load_env_file
+
+# Muat variabel environment dari .env
+load_env_file()
 
 
 class Config:

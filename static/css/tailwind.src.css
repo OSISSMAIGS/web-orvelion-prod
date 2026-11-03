@@ -1,6 +1,0 @@
-/* Sumber build Tailwind — JANGAN edit tailwind.css (hasil build) langsung.
-   Menambah/mengubah kelas Tailwind di templates/ atau static/js/?
-   Jalankan: tools/build-css.sh  lalu commit hasilnya. */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;

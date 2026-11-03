@@ -1,0 +1,413 @@
+{
+  "event": {
+    "id": "nordelia",
+    "name": "NORDELIA",
+    "title": "Nordelia Festival",
+    "description": "Festival kompetisi akademik dan non-akademik terbesar SMA Ignatius Global School",
+    "banner": "images/nordelia_banner.jpg",
+    "date": "TBD",
+    "location": "SMA Ignatius Global School",
+    "registrationFormat": [
+      "Nama Lengkap",
+      "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+    ]
+  },
+  "categories": [
+    {
+      "id": "literasi-numerasi",
+      "name": "LITERASI NUMERASI",
+      "hasSubEvents": false,
+      "registrationFormat": [
+        "Nama Lengkap",
+        "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+      ]
+    },
+    {
+      "id": "literasi-bahasa-indonesia",
+      "name": "LITERASI BAHASA INDONESIA",
+      "hasSubEvents": false,
+      "registrationFormat": [
+        "Nama Lengkap",
+        "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+      ]
+    },
+    {
+      "id": "literasi-science",
+      "name": "LITERASI SCIENCE",
+      "hasSubEvents": false,
+      "registrationFormat": [
+        "Nama Lengkap",
+        "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+      ]
+    },
+    {
+      "id": "osn",
+      "name": "OSN",
+      "hasSubEvents": true,
+      "description": "Olimpiade Sains Nasional (9 Cabang Sains & Humaniora)",
+      "subEvents": [
+        {
+          "id": "olimpiade-matematika",
+          "name": "MATEMATIKA",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+          ]
+        },
+        {
+          "id": "olimpiade-fisika",
+          "name": "FISIKA",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+          ]
+        },
+        {
+          "id": "olimpiade-kimia",
+          "name": "KIMIA",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+          ]
+        },
+        {
+          "id": "olimpiade-biologi",
+          "name": "BIOLOGI",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+          ]
+        },
+        {
+          "id": "olimpiade-astronomi",
+          "name": "ASTRONOMI",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+          ]
+        },
+        {
+          "id": "olimpiade-geografi",
+          "name": "GEOGRAFI",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+          ]
+        },
+        {
+          "id": "olimpiade-informatika",
+          "name": "INFORMATIKA",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+          ]
+        },
+        {
+          "id": "olimpiade-ekonomi",
+          "name": "EKONOMI",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+          ]
+        },
+        {
+          "id": "olimpiade-kebumian",
+          "name": "KEBUMIAN",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "olimpiade-ai",
+      "name": "OLIMPIADE KECERDASAN ARTIFISIAL",
+      "hasSubEvents": false,
+      "registrationFormat": [
+        "Nama Lengkap",
+        "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+      ]
+    },
+    {
+      "id": "lomba-debat-indonesia",
+      "name": "LOMBA DEBAT INDONESIA",
+      "hasSubEvents": true,
+      "description": "Pilih jenis debat",
+      "subEvents": [
+        {
+          "id": "debat-bahasa-indonesia",
+          "name": "DEBAT BAHASA INDONESIA (LDBI)",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+          ]
+        },
+        {
+          "id": "debat-bahasa-inggris",
+          "name": "DEBAT BAHASA INGGRIS (NSDC)",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lomba-bahasa-asing",
+      "name": "LOMBA BAHASA ASING",
+      "hasSubEvents": true,
+      "description": "Pilih cabang bahasa asing",
+      "subEvents": [
+        {
+          "id": "olimpiade-bahasa-jerman",
+          "name": "OLIMPIADE BAHASA JERMAN",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+          ]
+        },
+        {
+          "id": "olimpiade-bahasa-jepang",
+          "name": "OLIMPIADE BAHASA JEPANG",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+          ]
+        },
+        {
+          "id": "olimpiade-bahasa-korea",
+          "name": "OLIMPIADE BAHASA KOREA",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+          ]
+        },
+        {
+          "id": "olimpiade-bahasa-mandarin",
+          "name": "OLIMPIADE BAHASA MANDARIN",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+          ]
+        },
+        {
+          "id": "olimpiade-bahasa-spanyol",
+          "name": "OLIMPIADE BAHASA SPANYOL",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+          ]
+        },
+        {
+          "id": "olimpiade-bahasa-prancis",
+          "name": "OLIMPIADE BAHASA PRANCIS",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+          ]
+        },
+        {
+          "id": "olimpiade-bahasa-arab",
+          "name": "OLIMPIADE BAHASA ARAB",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+          ]
+        },
+        {
+          "id": "kaligrafi-bahasa-arab",
+          "name": "KALIGRAFI BAHASA ARAB",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+          ]
+        },
+        {
+          "id": "menyanyi-bahasa-mandarin",
+          "name": "LOMBA MENYANYI BAHASA MANDARIN",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+          ]
+        },
+        {
+          "id": "cosplay-jepang",
+          "name": "COSPLAY (JEPANG)",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+          ]
+        },
+        {
+          "id": "story-telling-korea",
+          "name": "STORY TELLING KOREA",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fls3n",
+      "name": "FLS3N",
+      "hasSubEvents": true,
+      "description": "Pilih cabang FLS3N",
+      "subEvents": [
+        {
+          "id": "baca-puisi",
+          "name": "BACA PUISI",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas"
+          ]
+        },
+        {
+          "id": "cipta-puisi",
+          "name": "CIPTA PUISI",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas"
+          ]
+        },
+        {
+          "id": "menulis-cerpen",
+          "name": "MENULIS CERITA PENDEK",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas"
+          ]
+        },
+        {
+          "id": "monolog",
+          "name": "MONOLOG",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas"
+          ]
+        },
+        {
+          "id": "desain-poster",
+          "name": "DESAIN POSTER",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas",
+            "Link Portofolio"
+          ]
+        },
+        {
+          "id": "solo-gitar",
+          "name": "INSTRUMEN SOLO GITAR",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas"
+          ]
+        },
+        {
+          "id": "vokal-putri",
+          "name": "MENYANYI SOLO PUTRI",
+          "registrationFormat": [
+            "Nama & Kategori",
+            "Kelas",
+            "Link Lagu Penyisihan",
+            "Link Lagu Final"
+          ]
+        },
+        {
+          "id": "vokal-putra",
+          "name": "MENYANYI SOLO PUTRA",
+          "registrationFormat": [
+            "Nama & Kategori",
+            "Kelas",
+            "Link Lagu Penyisihan",
+            "Link Lagu Final"
+          ]
+        },
+        {
+          "id": "kriya",
+          "name": "KRIYA",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas"
+          ]
+        },
+        {
+          "id": "komik-digital",
+          "name": "KOMIK DIGITAL",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas",
+            "Link Portofolio"
+          ]
+        },
+        {
+          "id": "tari-kreasi",
+          "name": "TARI KREASI",
+          "registrationFormat": [
+            "Nama Tim",
+            "Kelas",
+            "Nama Peserta 1",
+            "Nama Peserta 2"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "o2sn",
+      "name": "O2SN",
+      "hasSubEvents": true,
+      "description": "Pilih cabang olahraga",
+      "subEvents": [
+        {
+          "id": "silat",
+          "name": "SILAT",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas"
+          ]
+        },
+        {
+          "id": "atletik",
+          "name": "ATLETIK",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas"
+          ]
+        },
+        {
+          "id": "basket",
+          "name": "BASKET",
+          "registrationFormat": [
+            "Nama Anggota 1-2-3-Cadangan",
+            "Kelas"
+          ]
+        },
+        {
+          "id": "futsal",
+          "name": "FUTSAL",
+          "registrationFormat": [
+            "Nama Anggota 1-2-3-4-5-Cadangan",
+            "Kelas"
+          ]
+        },
+        {
+          "id": "voli",
+          "name": "VOLI",
+          "registrationFormat": [
+            "Nama Anggota 1-2-3-4-5-Cadangan",
+            "Kelas"
+          ]
+        },
+        {
+          "id": "catur",
+          "name": "CATUR",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas"
+          ]
+        }
+      ]
+    }
+  ]
+}

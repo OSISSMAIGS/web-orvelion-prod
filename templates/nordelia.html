@@ -1,0 +1,316 @@
+{% extends "base.html" %}
+{% block title %}Nordelia 2026 | {{ site.name }}{% endblock %}
+{% block content %}
+<!-- Ambient Mesh Gradient (Hitam & Oren) -->
+<div class="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-30">
+  <div class="absolute -top-40 -left-40 w-[550px] h-[550px] rounded-full blur-[120px]" style="background: radial-gradient(circle, #CC4400 0%, rgba(204,68,0,0) 70%);"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-1/4 w-[600px] h-[450px] rounded-full blur-[140px]" style="background: radial-gradient(circle, #FF6B00 0%, rgba(255,107,0,0) 70%);"></div>
+  <div class="absolute -top-32 -right-32 w-[550px] h-[550px] rounded-full blur-[120px]" style="background: radial-gradient(circle, #CC4400 0%, rgba(204,68,0,0) 70%);"></div>
+</div>
+
+<div class="relative z-10">
+  <!-- HERO SECTION -->
+  <section class="relative pt-6 pb-12 sm:pb-16 border-b border-white/10 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        
+        <!-- Left Hero Text -->
+        <div class="lg:col-span-7 space-y-5 text-left">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wider backdrop-blur-md"
+               style="background: rgba(204, 68, 0, 0.15); border-color: #CC4400; color: #FFFFFF;">
+            <svg class="w-4 h-4 text-[#FF6B00]"><use href="#i-sparkles"></use></svg>
+            Festival Bulan Bahasa & Prestasi SMA IGS 2026
+          </div>
+
+          <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight leading-none">
+            FESTIVAL <br class="hidden sm:inline"/>
+            <span class="bg-gradient-to-r from-white via-[#FF6B00] to-[#CC4400] bg-clip-text text-transparent">
+              NORDELIA
+            </span>
+            <span class="text-xl sm:text-2xl font-bold block sm:inline text-white/80 sm:ml-3">2026</span>
+          </h1>
+
+          <!-- Etimologi Card -->
+          <div class="p-4 sm:p-5 rounded-2xl border backdrop-blur-md space-y-3"
+               style="background: rgba(20, 20, 20, 0.85); border-color: rgba(255, 107, 0, 0.3);">
+            <div class="flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-[#FF6B00]">
+              <svg class="w-4 h-4 text-[#FF6B00]"><use href="#i-trophy"></use></svg>
+              Filosofi & Makna Kata "NORDELIA"
+            </div>
+            <p class="text-xs sm:text-sm text-stone-200 leading-relaxed">
+              Dari kata <strong class="text-[#FF6B00] font-black">Nike</strong> (kemenangan), 
+              <strong class="text-white font-black">sports</strong>, 
+              <strong class="text-[#CC4400] font-black">academic</strong>, dan 
+              <strong class="text-[#FF8533] font-black">arts</strong>. 
+              <strong>Nordelia</strong> menggambarkan kesempatan para siswa untuk memenangi bidang yang mereka dalami di berbagai kategori kompetisi yang hadir di festival ini, yaitu bidang 
+              <span class="text-white font-bold">Olahraga</span>, 
+              <span class="text-[#CC4400] font-bold">Akademik</span>, 
+              <span class="text-[#FF8533] font-bold">Seni</span>, dan 
+              <span class="text-[#FF6B00] font-bold">Bahasa</span>.
+            </p>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-center text-[11px] font-bold">
+              <div class="p-2 rounded-xl border border-[#FF6B00]/40 bg-[#FF6B00]/15 text-[#FF6B00]">
+                <div class="text-[9px] uppercase tracking-wider text-white/60">Nike</div>
+                <div>Kemenangan</div>
+              </div>
+              <div class="p-2 rounded-xl border border-white/30 bg-white/10 text-white">
+                <div class="text-[9px] uppercase tracking-wider text-white/60">Sports</div>
+                <div>Olahraga</div>
+              </div>
+              <div class="p-2 rounded-xl border border-[#CC4400]/40 bg-[#CC4400]/15 text-[#CC4400]">
+                <div class="text-[9px] uppercase tracking-wider text-white/60">Academic</div>
+                <div>Akademik</div>
+              </div>
+              <div class="p-2 rounded-xl border border-[#FF8533]/40 bg-[#FF8533]/15 text-[#FF8533]">
+                <div class="text-[9px] uppercase tracking-wider text-white/60">Arts</div>
+                <div>Seni & Bahasa</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Stats Pills -->
+          <div class="flex flex-wrap items-center gap-2 pt-2 text-xs text-stone-300">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 border border-[#FF6B00]/40">
+              <span class="w-2 h-2 rounded-full bg-[#FF6B00] animate-ping"></span>
+              <strong class="text-white">{{ summary.total_cabang }} Cabang Lomba</strong>
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 border border-white/20">
+              <svg class="w-3.5 h-3.5 text-[#FF6B00]"><use href="#i-check"></use></svg>
+              <span id="stat-total-reg">{{ summary.counts.total }} Peserta Terdaftar</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Right Hero: GUMBALL MASCOT ELEMENT -->
+        <div class="lg:col-span-5 flex flex-col items-center justify-center relative">
+          <div class="relative w-full max-w-sm sm:max-w-md mx-auto p-4 rounded-3xl border backdrop-blur-xl text-center group"
+               style="background: linear-gradient(145deg, rgba(20,20,20,0.95) 0%, rgba(35,20,15,0.85) 100%); border-color: rgba(255, 107, 0, 0.35);">
+            
+            <!-- Orange glow behind mascot -->
+            <div class="absolute inset-0 rounded-3xl blur-xl opacity-25 -z-10 bg-gradient-to-tr from-[#CC4400] via-[#FF6B00] to-transparent"></div>
+            
+            <!-- Gumball Illustration Image Element -->
+            <div class="relative w-full h-72 sm:h-80 flex items-center justify-center overflow-hidden">
+              <img src="{{ url_for('static', filename='images/gumball.svg') }}"
+                   alt="Gumball Mascot Nordelia 2026"
+                   class="w-full h-full object-contain filter drop-shadow-[0_15px_25px_rgba(0,0,0,0.6)] transition-transform duration-500 group-hover:scale-105" />
+            </div>
+
+            <div class="pt-2 pb-1 space-y-1">
+              <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider bg-white/10 text-white border border-white/20">
+                Official Festival Mascot • Gumball
+              </div>
+              <h3 class="text-lg font-black text-white">Semangat Sang Pemenang!</h3>
+              <p class="text-xs text-stone-300 max-w-xs mx-auto">
+                "Pilih bidang favoritmu, isi formulirnya, dan jadilah juara di Nordelia 2026!"
+              </p>
+            </div>
+
+            <!-- Quick Action from Mascot -->
+            <div class="mt-3">
+              <a href="#section-categories" class="p-2 rounded-xl bg-black/60 hover:bg-[#FF6B00] hover:text-black text-[#FF6B00] border border-[#FF6B00]/40 text-xs font-bold block text-center transition-colors">
+                Lihat Kategori Lomba
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 MAIN CATEGORIES SELECTOR -->
+  <section id="section-categories" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8 scroll-mt-24">
+    <div class="text-center max-w-3xl mx-auto mb-10 space-y-2">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest text-[#FF6B00] bg-[#FF6B00]/10 border border-[#FF6B00]/30">
+        Sembilan Kategori Kompetisi Nordelia
+      </div>
+      <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight">
+        Pilih Kategori untuk Melihat <span class="bg-gradient-to-r from-white via-[#FF6B00] to-[#CC4400] bg-clip-text text-transparent">Cabang-Cabangnya</span>
+      </h2>
+      <p class="text-xs sm:text-sm text-stone-300">
+        Klik salah satu tombol kategori di bawah ini. Kategori dengan sub-cabang akan masuk ke halaman pemilihan cabang.
+      </p>
+    </div>
+
+    <!-- Category Buttons Grid - 9 Categories -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {% for cat in nordelia_categories %}
+        <button type="button"
+                data-category-select="{{ cat.id }}"
+                data-has-sub="{{ 'true' if cat.hasSubEvents else 'false' }}"
+                class="category-btn text-left p-5 rounded-2xl border transition-all duration-300 relative overflow-hidden group hover:-translate-y-1 hover:border-[#FF6B00]/50"
+                style="background: rgba(20, 20, 20, 0.85); border-color: rgba(255, 107, 0, 0.2);">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-black/60 text-white border border-white/15">
+              {% if cat.hasSubEvents %}{{ cat.subEvents|length }} Cabang{% else %}Direct{% endif %}
+            </span>
+            <div class="w-8 h-8 rounded-full flex items-center justify-center bg-black/60 text-[#FF6B00] group-hover:scale-110 group-hover:bg-[#FF6B00] group-hover:text-black transition-all">
+              <svg class="w-4 h-4"><use href="#i-chevron"></use></svg>
+            </div>
+          </div>
+          <h3 class="text-lg font-black text-white tracking-tight leading-snug group-hover:text-[#FF6B00] transition-colors">
+            {{ cat.name }}
+          </h3>
+          <p class="text-xs text-stone-300 mt-2 line-clamp-2 leading-relaxed">
+            {% if cat.description %}{{ cat.description }}{% else %}Klik untuk melihat cabang lomba{% endif %}
+          </p>
+          <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#FF6B00]">
+            <span><strong>{% if cat.hasSubEvents %}Pilih Cabang{% else %}Daftar Langsung{% endif %}</strong></span>
+            <span>&rarr;</span>
+          </div>
+        </button>
+      {% endfor %}
+    </div>
+
+  </section>
+</div>
+
+<!-- ========================================================================= -->
+<!-- DYNAMIC REGISTRATION FORM MODAL -->
+<!-- ========================================================================= -->
+<div id="modal-register" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+  <div class="relative w-full max-w-xl rounded-3xl p-6 sm:p-8 bg-[#141414] border border-[#FF6B00]/40 max-h-[92vh] overflow-y-auto shadow-2xl">
+    
+    <button type="button" id="btn-close-register-modal" class="absolute top-5 right-5 p-2 rounded-full bg-white/10 text-stone-300 hover:text-white" aria-label="Tutup">
+      <svg class="w-5 h-5"><use href="#i-x"></use></svg>
+    </button>
+
+    <div class="flex items-center gap-3 mb-4">
+      <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-gradient-to-tr from-[#CC4400] to-[#FF6B00] text-black font-black">
+        <svg class="w-5 h-5"><use href="#i-trophy"></use></svg>
+      </div>
+      <div>
+        <span id="form-badge-category" class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-white/10 text-[#FF6B00]">
+          Kategori
+        </span>
+        <h3 id="form-cabang-title" class="text-xl sm:text-2xl font-black text-white">Formulir Pendaftaran</h3>
+      </div>
+    </div>
+
+    <div id="form-rule-box" class="p-3 rounded-xl bg-black/50 border border-white/10 text-xs text-stone-300 mb-5">
+      <!-- Rule injected dynamically -->
+    </div>
+
+    <!-- Alert status -->
+    <div id="form-alert" class="hidden p-3 rounded-xl mb-4 text-xs font-bold"></div>
+
+    <form id="nordelia-reg-form" class="space-y-4">
+      <input type="hidden" name="category_id" id="input-category-id" value="" />
+      <input type="hidden" name="cabang_id" id="input-cabang-id" value="" />
+
+      <!-- Dynamic Form Fields will be inserted here -->
+      <div id="dynamic-form-fields" class="space-y-4"></div>
+
+      <div class="pt-2">
+        <button type="submit" id="btn-submit-registration"
+                class="w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-wider text-black bg-gradient-to-r from-[#CC4400] via-[#FF6B00] to-[#FF8533] hover:text-white hover:brightness-110 shadow-lg transition-all hover:scale-[1.01] flex items-center justify-center gap-2">
+          <span><strong>Kirim Pendaftaran</strong></span>
+        </button>
+      </div>
+
+      <p class="text-[11px] text-center text-stone-400">
+        Data pendaftaran akan diverifikasi dan diproses oleh panitia cabang lomba terkait.
+      </p>
+    </form>
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- MODAL PEMILIHAN JURUSAN IPA / IPS UNTUK OSN -->
+<!-- ========================================================================= -->
+<div id="modal-osn-jurusan" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+  <div class="relative w-full max-w-2xl rounded-3xl p-6 sm:p-8 bg-[#181311] border border-[#FFE5B4]/40 max-h-[92vh] overflow-y-auto shadow-2xl">
+    
+    <button type="button" id="btn-close-osn-modal" class="absolute top-5 right-5 p-2 rounded-full bg-white/10 text-stone-300 hover:text-white" aria-label="Tutup">
+      <svg class="w-5 h-5"><use href="#i-x"></use></svg>
+    </button>
+
+    <div class="flex items-center gap-3 mb-4">
+      <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-gradient-to-tr from-[#FFB7C5] to-[#FFE5B4] text-black font-black">
+        <svg class="w-5 h-5"><use href="#i-trophy"></use></svg>
+      </div>
+      <div>
+        <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-white/10 text-[#FFE5B4]">
+          Peminatan Kelas Peserta
+        </span>
+        <h3 class="text-xl sm:text-2xl font-black text-white">Pilih Peminatan untuk OSN</h3>
+      </div>
+    </div>
+
+    <p class="text-xs text-stone-300 mb-6 leading-relaxed">
+      Sesuai ketentuan, cabang OSN Fisika, Kimia, Biologi, Informatika, dan Astronomi khusus diperuntukkan bagi siswa kelas <strong>IPA</strong>. Siswa kelas <strong>IPS</strong> dapat memilih cabang <strong>Matematika</strong>, <strong>Kebumian</strong>, <strong>Geografi</strong>, dan <strong>Ekonomi</strong>. Silakan tentukan jenis kelas Anda:
+    </p>
+
+    <!-- 2 Pilihan Card: IPA vs IPS -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      
+      <!-- Card IPA -->
+      <a href="/nordelia/osn?jurusan=ipa"
+         class="group p-5 rounded-2xl border border-white/15 bg-black/40 hover:bg-black/70 hover:border-[#AEC6CF] transition-all duration-300 flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl">
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="w-10 h-10 rounded-xl flex items-center justify-center bg-[#AEC6CF]/20 text-[#AEC6CF] text-2xl font-black">
+              🔬
+            </span>
+            <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#AEC6CF]/20 text-[#AEC6CF] border border-[#AEC6CF]/30">
+              Akses Penuh • 9 Cabang
+            </span>
+          </div>
+          <h4 class="text-lg font-black text-white group-hover:text-[#AEC6CF] transition-colors">
+            Kelas IPA (MIPA)
+          </h4>
+          <p class="text-xs text-stone-300 leading-relaxed">
+            Siswa kelas IPA diperbolehkan mendaftar di <strong>seluruh 9 cabang OSN</strong> (Matematika, Fisika, Kimia, Biologi, Astronomi, Informatika, Kebumian, Geografi, Ekonomi).
+          </p>
+        </div>
+        <div class="mt-5 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#AEC6CF]">
+          <span>Pilih Kelas IPA</span>
+          <span class="text-base group-hover:translate-x-1 transition-transform">&rarr;</span>
+        </div>
+      </a>
+
+      <!-- Card IPS -->
+      <a href="/nordelia/osn?jurusan=ips"
+         class="group p-5 rounded-2xl border border-white/15 bg-black/40 hover:bg-black/70 hover:border-[#FFE5B4] transition-all duration-300 flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl">
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="w-10 h-10 rounded-xl flex items-center justify-center bg-[#FFE5B4]/20 text-[#FFE5B4] text-2xl font-black">
+              📚
+            </span>
+            <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FFE5B4]/20 text-[#FFE5B4] border border-[#FFE5B4]/30">
+              4 Cabang Pilihan
+            </span>
+          </div>
+          <h4 class="text-lg font-black text-white group-hover:text-[#FFE5B4] transition-colors">
+            Kelas IPS (Sosial)
+          </h4>
+          <p class="text-xs text-stone-300 leading-relaxed">
+            Siswa kelas IPS diperbolehkan mendaftar pada cabang <strong>Matematika</strong>, <strong>Kebumian</strong>, <strong>Geografi</strong>, dan <strong>Ekonomi</strong>.
+          </p>
+        </div>
+        <div class="mt-5 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#FFE5B4]">
+          <span>Pilih Kelas IPS</span>
+          <span class="text-base group-hover:translate-x-1 transition-transform">&rarr;</span>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="mt-6 pt-4 border-t border-white/10 text-center">
+      <button type="button" id="btn-cancel-osn-modal" class="text-xs text-stone-400 hover:text-white underline">
+        Batal / Kembali
+      </button>
+    </div>
+
+  </div>
+</div>
+
+{% include "partials/nordelia_success.html" %}
+{% include "partials/nordelia_jurusan_modal.html" %}
+
+<!-- DATA JSON SCRIPT FOR INTERACTION -->
+<script id="nordelia-data-cabang" type="application/json">{{ cabang_lomba | tojson | safe }}</script>
+<script id="nordelia-data-formats" type="application/json">{{ format_registrasi | tojson | safe }}</script>
+{% endblock %}

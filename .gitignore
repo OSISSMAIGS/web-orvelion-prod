@@ -4,20 +4,12 @@ __pycache__/
 *.py[cod]
 *.log
 .env
+*credentials*.json
+*.db
 .idea/
 .vscode/
 node_modules/
 .next/
 _extracted_src/
 *.pyc
-
-# Data pendaftar — jangan pernah masuk repo (berisi nama/kelas/WA).
-nordelia_registrations.json
-nordelia_antrian.json
-*.json.local
-
-# File sampah sistem operasi.
-.DS_Store
-Thumbs.db
-nordelia_credentials.json
-*credentials*.json
+*.backup

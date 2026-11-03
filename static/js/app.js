@@ -1,50 +1,15 @@
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-/* ============ manajemen timer per-halaman (anti-bocor saat soft-nav) ============ */
-
-const pageTimers = [];
-
-function addPageTimer(id) {
-  pageTimers.push(id);
-}
-
-function clearPageTimers() {
-  pageTimers.forEach((id) => clearInterval(id));
-  pageTimers.length = 0;
-}
-
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-function scrollTop(y) {
-  try {
-    window.scrollTo({ top: y, behavior: "instant" });
-  } catch (_e) {
-    window.scrollTo(0, y);
-  }
-}
-
-/* ============ init per komponen (aman dipanggil ulang tiap soft-nav) ============ */
-
 function initNav() {
   const header = $("#site-header");
   const toggle = $("#nav-toggle");
   const drawer = $("#nav-drawer");
   if (!header) return;
 
-  // window tidak ikut ke-swap -> listener cukup sekali seumur dokumen.
-  // Query #site-header dilakukan HIDUP-hidup agar tetap sahih setelah header
-  // diganti saat soft-nav. passive: agar tidak mengganggu thread gulir.
-  if (!initNav._scrollBound) {
-    window.addEventListener(
-      "scroll",
-      () => {
-        $("#site-header")?.classList.toggle("is-scrolled", window.scrollY > 20);
-      },
-      { passive: true }
-    );
-    initNav._scrollBound = true;
-  }
+  window.addEventListener("scroll", () => {
+    header.classList.toggle("is-scrolled", window.scrollY > 20);
+  });
 
   toggle?.addEventListener("click", () => {
     drawer?.classList.toggle("hidden");
@@ -89,28 +54,18 @@ function initCountdown() {
     root.querySelector("[data-seconds]").textContent = String(seconds).padStart(2, "0");
   };
   tick();
-  // Bersih-bersih mandiri: kalau halaman sudah dilepas (soft-nav pindah halaman),
-  // interval berhenti sendiri — tidak ada timer yatim yang tetap berdetak.
-  const timer = setInterval(() => {
-    if (!root.isConnected) {
-      clearInterval(timer);
-      return;
-    }
-    tick();
-  }, 1000);
-  addPageTimer(timer);
+  setInterval(tick, 1000);
 }
 
 function initEvents() {
   const grid = $("#event-grid");
-  const dataEl = $("#events-data");
-  if (!grid || !dataEl) return;
+  if (!grid) return;
 
   const cards = $$("[data-event-card]", grid);
   const empty = $("#event-empty");
   const search = $("#event-search");
   const modal = $("#event-modal");
-  const events = JSON.parse(dataEl.textContent);
+  const events = JSON.parse($("#events-data").textContent);
 
   const applyFilter = () => {
     const cat = $("[data-category].is-active")?.getAttribute("data-category") || "Semua";
@@ -143,15 +98,8 @@ function initEvents() {
     $("#modal-location").textContent = event.location;
     $("#modal-desc").textContent = event.description;
     $("#modal-highlight").textContent = event.highlight;
-    /* Tombol daftar hanya tampil di event yang memang membuka
-       pendaftaran (field "daftar_url" di content.py). */
-    const daftarLink = $("#modal-daftar");
-    if (event.daftar_url) {
-      daftarLink.href = event.daftar_url;
-      daftarLink.classList.remove("hidden");
-    } else {
-      daftarLink.classList.add("hidden");
-    }
+    $("#modal-success").classList.add("hidden");
+    $("#modal-actions").classList.remove("hidden");
     modal.classList.remove("hidden");
     modal.dataset.eventId = event.id;
   };
@@ -166,13 +114,17 @@ function initEvents() {
   $$("[data-close-modal]").forEach((btn) => {
     btn.addEventListener("click", () => modal.classList.add("hidden"));
   });
+
+  $("#modal-register")?.addEventListener("click", () => {
+    $("#modal-success").classList.remove("hidden");
+    $("#modal-actions").classList.add("hidden");
+  });
 }
 
 function initCabinets() {
   const spotlight = $("#cabinet-spotlight");
-  const dataEl = $("#cabinets-data");
-  if (!spotlight || !dataEl) return;
-  const cabinets = JSON.parse(dataEl.textContent);
+  if (!spotlight) return;
+  const cabinets = JSON.parse($("#cabinets-data").textContent);
 
   const render = (cab) => {
     $("#cab-image").src = `/static/images/${cab.image}`;
@@ -187,7 +139,7 @@ function initCabinets() {
     list.innerHTML = cab.achievements
       .map(
         (item) =>
-          `<div class="p-3 rounded-xl bg-[#1c1714]/80 border border-[rgba(253,140,90,0.15)] flex items-start gap-2.5 text-xs text-[#fdb18f]/85"><span class="w-1.5 h-1.5 rounded-full bg-[#FD8C5A] mt-1.5 shrink-0"></span><span>${item}</span></div>`
+          `<div class="relative"><div class="absolute -left-4 top-1.5 w-3 h-3 rounded-full bg-[#FD8C5A] border-2 border-[#161210]"></div><div class="p-3 rounded-xl bg-[#1c1714]/80 border border-[rgba(253,140,90,0.15)] text-xs text-[#fdb18f]/85">${item}</div></div>`
       )
       .join("");
     $$("[data-cabinet]").forEach((btn) => {
@@ -232,11 +184,7 @@ function initWaitingRoom() {
     status.textContent = "Siaga";
   };
 
-  const timer = setInterval(() => {
-    if (!root.isConnected) {
-      clearInterval(timer);
-      return;
-    }
+  setInterval(() => {
     left -= 1;
     if (left <= 0) {
       left = 3;
@@ -244,476 +192,591 @@ function initWaitingRoom() {
     }
     countdown.textContent = `${left}s`;
   }, 1000);
-  addPageTimer(timer);
 
   $("#try-access")?.addEventListener("click", () => {
     window.location.href = returnUrl;
   });
 }
 
-/* ============ formulir pendaftaran Nordelia (/daftar) ============ */
+function initNordelia() {
+  console.log("initNordelia called");
+  console.log("Current URL:", window.location.href);
+  console.log("Checking for nordelia-data-cabang element...");
 
-function initDaftar() {
-  const root = $("#daftar-root");
-  const dataEl = $("#daftar-data");
-  if (!root || !dataEl) return;
+  const cabangDataEl = document.getElementById("nordelia-data-cabang");
+  const formatDataEl = document.getElementById("nordelia-data-formats");
 
-  const kategori = JSON.parse(dataEl.textContent);
-  const katBtns = $$(".daftar-kat-btn", root);
-  const lombaSel = $("#daftar-lomba");
-  const subWrap = $("#daftar-sub-wrap");
-  const subSel = $("#daftar-sub");
-  const namaEl = $("#daftar-nama");
-  const kelasEl = $("#daftar-kelas");
-  const waEl = $("#daftar-wa");
-  const submitBtn = $("#daftar-submit");
+  console.log("cabangDataEl:", cabangDataEl);
+  console.log("formatDataEl:", formatDataEl);
 
-  const slug = (t) =>
-    t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-
-  // Rekonstruksi pilihan -> cabang (harus cocok dengan orvelion/nordelia.py).
-  const semuaCabang = [];
-  kategori.forEach((kat) => {
-    kat.lomba.forEach((lomba) => {
-      const subs = lomba.subs || null;
-      const fmt = lomba.cabang_fmt || "{}";
-      if (!subs) {
-        semuaCabang.push({ kat, lomba, sub: null, cabang: lomba.nama });
-      } else {
-        subs.forEach((sub) => {
-          const cabang = fmt.includes("{}") ? fmt.replace("{}", sub) : fmt;
-          semuaCabang.push({ kat, lomba, sub, cabang });
-        });
-      }
-    });
-  });
-
-  const state = { kat: null, lomba: null, sub: null };
-
-  // ---- Sisa kuota cabang berkuota (Olimpiade + AI, maks 20) ----
-  // Sumber: GET /api/nordelia/kuota -> Apps Script ?counts=1 (cache 60 dtk
-  // di server). Kalau gagal diambil, indikator cuma disembunyikan —
-  // kuota tetap ditegakkan di Apps Script saat pendaftaran masuk.
-  let kuotaCache = null;
-
-  const sheetDariPilihan = (p) => {
-    if (!p) return null;
-    const l = p.lomba;
-    if (!l.subs) return l.sheet || p.cabang;
-    if (l.sheet_map && l.sheet_map[p.sub]) return l.sheet_map[p.sub];
-    if (l.sheet_fmt) return l.sheet_fmt.includes("{}") ? l.sheet_fmt.replace("{}", p.sub) : l.sheet_fmt;
-    return p.sub;
-  };
-
-  const muatKuota = async () => {
-    if (kuotaCache) return kuotaCache;
-    try {
-      const res = await fetch("/api/nordelia/kuota");
-      const data = await res.json();
-      kuotaCache = data && data.ok ? data.kuota || {} : {};
-    } catch (_e) {
-      kuotaCache = {};
-    }
-    return kuotaCache;
-  };
-
-  const perbaruiKuota = async () => {
-    const el = $("#daftar-kuota");
-    if (!el) return;
-    const pilihan = semuaCabang.find(
-      (c) => c.kat === state.kat && c.lomba === state.lomba && (!c.lomba.subs || c.sub === state.sub)
-    );
-    if (!pilihan) {
-      el.classList.add("hidden");
-      delete el.dataset.penuh;
-      return;
-    }
-    const sheet = sheetDariPilihan(pilihan);
-    const kuota = await muatKuota();
-    const info = sheet ? kuota[sheet] : null;
-    if (!info) {
-      el.classList.add("hidden");
-      delete el.dataset.penuh;
-      return;
-    }
-    const sisa = Math.max(0, (info.maks || 0) - (info.terpakai || 0));
-    el.classList.remove("hidden");
-    if (sisa > 0) {
-      el.dataset.penuh = "";
-      el.classList.remove("text-rose-300");
-      el.classList.add("text-orvelion-peach/70");
-      el.textContent = `Sisa kuota ${sheet}: ${sisa} dari ${info.maks} tempat.`;
-    } else {
-      el.dataset.penuh = "1";
-      el.classList.add("text-rose-300");
-      el.classList.remove("text-orvelion-peach/70");
-      el.textContent = `Kuota ${sheet} sudah penuh (${info.maks}/${info.maks}). Pilih cabang lain ya.`;
-    }
-  };
-
-  const setErr = (key, pesan) => {
-    const el = $(`#daftar-${key}-error`);
-    if (!el) return;
-    el.textContent = pesan || "";
-    el.classList.toggle("hidden", !pesan);
-    const input = key === "cabang" ? null : $(`#daftar-${key}`);
-    if (input) {
-      input.classList.toggle("border-rose-400/70", !!pesan);
-      input.classList.toggle("border-orvelion-coral/25", !pesan);
-    }
-  };
-
-  const renderLomba = () => {
-    lombaSel.innerHTML = "";
-    const kosong = document.createElement("option");
-    kosong.value = "";
-    kosong.textContent = state.kat ? "— pilih lomba —" : "— pilih bidang dulu —";
-    kosong.disabled = kosong.selected = true;
-    lombaSel.appendChild(kosong);
-    if (!state.kat) return;
-    state.kat.lomba.forEach((lomba) => {
-      const opt = document.createElement("option");
-      opt.value = lomba.id;
-      opt.textContent = lomba.nama;
-      lombaSel.appendChild(opt);
-    });
-  };
-
-  const renderSub = () => {
-    const subs = state.lomba && state.lomba.subs ? state.lomba.subs : null;
-    subWrap.classList.toggle("hidden", !subs);
-    subSel.innerHTML = "";
-    if (!subs) return;
-    const label = subWrap.querySelector("label");
-    if (label) label.textContent = state.lomba.sub_label || "Cabang";
-    const kosong = document.createElement("option");
-    kosong.value = "";
-    kosong.textContent = "— pilih cabang —";
-    kosong.disabled = kosong.selected = true;
-    subSel.appendChild(kosong);
-    subs.forEach((sub) => {
-      const opt = document.createElement("option");
-      opt.value = sub;
-      opt.textContent = sub;
-      subSel.appendChild(opt);
-    });
-  };
-
-  const pilihKategori = (kat, lombaId, sub) => {
-    state.kat = kat;
-    state.lomba = null;
-    state.sub = null;
-    katBtns.forEach((b) => {
-      const aktif = b.getAttribute("data-kat") === (kat && kat.id);
-      b.classList.toggle("bg-gradient-to-r", aktif);
-      b.classList.toggle("from-orvelion-rust", aktif);
-      b.classList.toggle("to-orvelion-ember", aktif);
-      b.classList.toggle("text-white", aktif);
-      b.classList.toggle("border-transparent", aktif);
-      b.classList.toggle("shadow-md", aktif);
-      b.classList.toggle("bg-orvelion-card", !aktif);
-      b.classList.toggle("text-orvelion-peach/75", !aktif);
-      b.classList.toggle("border-orvelion-coral/20", !aktif);
-    });
-    renderLomba();
-    renderSub();
-    setErr("cabang", "");
-    if (lombaId && kat) {
-      const lomba = kat.lomba.find((l) => l.id === lombaId);
-      if (lomba) {
-        lombaSel.value = lombaId;
-        state.lomba = lomba;
-        renderSub();
-        if (sub && lomba.subs && lomba.subs.includes(sub)) {
-          subSel.value = sub;
-          state.sub = sub;
-        }
-      }
-    }
-    perbaruiKuota();
-  };
-
-  katBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const kat = kategori.find((k) => k.id === btn.getAttribute("data-kat"));
-      pilihKategori(kat);
-    });
-  });
-
-  lombaSel.addEventListener("change", () => {
-    state.lomba = state.kat
-      ? state.kat.lomba.find((l) => l.id === lombaSel.value) || null
-      : null;
-    state.sub = null;
-    renderSub();
-    setErr("cabang", "");
-    perbaruiKuota();
-  });
-
-  subSel.addEventListener("change", () => {
-    state.sub = subSel.value || null;
-    setErr("cabang", "");
-    perbaruiKuota();
-  });
-
-  [namaEl, kelasEl, waEl].forEach((el) =>
-    el.addEventListener("input", () => setErr(el.id.replace("daftar-", ""), ""))
-  );
-
-  const cekClient = () => {
-    const galat = {};
-    const nama = namaEl.value.trim();
-    const kelas = kelasEl.value.trim();
-    const wa = waEl.value.replace(/[\s\-.()]/g, "").replace(/^\+/, "");
-
-    const pilihan = semuaCabang.find(
-      (c) => c.kat === state.kat && c.lomba === state.lomba && (!c.lomba.subs || c.sub === state.sub)
-    );
-    if (!pilihan) galat.cabang = "Pilih bidang, lomba, dan cabangnya dulu ya.";
-    if ($("#daftar-kuota")?.dataset.penuh)
-      galat.cabang = "Kuota cabang ini sudah penuh. Pilih cabang lain ya.";
-    if (nama.length < 3 || nama.length > 60 || !/[A-Za-z\u00C0-\u024F]/.test(nama))
-      galat.nama = "Isi nama lengkap (3-60 karakter, huruf).";
-    if (!/^1[0-2]\s*[.,:\-]?\s*\S+(?:\s\S+){0,2}$/.test(kelas))
-      galat.kelas = "Format kelas seperti 10.1 CGC / 11.2 MAYOR.";
-    const waNorm = wa.startsWith("62") ? "0" + wa.slice(2) : wa;
-    if (!/^08\d{7,12}$/.test(waNorm))
-      galat.wa = "Nomor WhatsApp belum benar (cth: 081234567890).";
-    return galat;
-  };
-
-  const tampilkanSukses = (ringkasan, catatan) => {
-    root.innerHTML = `
-      <div class="py-10 text-center space-y-5">
-        <div class="w-16 h-16 mx-auto rounded-full bg-emerald-950/70 border border-emerald-500/40 flex items-center justify-center">
-          <svg class="w-8 h-8 text-emerald-300"><use href="#i-check"></use></svg>
-        </div>
-        <div class="space-y-1.5">
-          <h2 class="text-2xl font-black text-white">Pendaftaran Terkirim!</h2>
-          <p class="text-sm text-orvelion-peach/85">Data kamu sudah masuk rekap panitia. Tinggal tunggu dikonfirmasi lewat WhatsApp, ya.</p>
-        </div>
-        <div class="max-w-sm mx-auto p-4 rounded-2xl bg-black/40 border border-orvelion-coral/20 text-left text-xs space-y-2">
-          <div class="flex justify-between gap-4"><span class="text-orvelion-peach/60">Nama</span><b class="text-white">${ringkasan.nama}</b></div>
-          <div class="flex justify-between gap-4"><span class="text-orvelion-peach/60">Kelas</span><b class="text-white">${ringkasan.kelas}</b></div>
-          <div class="flex justify-between gap-4"><span class="text-orvelion-peach/60">Cabang</span><b class="text-white">${ringkasan.cabang}</b></div>
-          <div class="flex justify-between gap-4"><span class="text-orvelion-peach/60">Bidang</span><b class="text-white uppercase">${ringkasan.kategori}</b></div>
-        </div>
-        ${catatan ? `<p class="max-w-sm mx-auto text-[11px] text-orvelion-peach/60">${catatan}</p>` : ""}
-        <button id="daftar-ulang" type="button" class="px-6 py-3 rounded-full font-semibold text-xs text-orvelion-peach/80 bg-black/40 border border-orvelion-coral/25">Daftar Lomba Lagi</button>
-      </div>`;
-    $("#daftar-ulang")?.addEventListener("click", () => window.location.reload());
-    root.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  submitBtn?.addEventListener("click", async () => {
-    const galat = cekClient();
-    setErr("cabang", galat.cabang || "");
-    setErr("nama", galat.nama || "");
-    setErr("kelas", galat.kelas || "");
-    setErr("wa", galat.wa || "");
-    const globalEl = $("#daftar-global-error");
-    globalEl.classList.add("hidden");
-    if (Object.keys(galat).length) {
-      root.querySelector(".text-rose-300:not(.hidden)")?.scrollIntoView({ behavior: "smooth", block: "center" });
-      return;
-    }
-
-    const pilihan = semuaCabang.find(
-      (c) => c.kat === state.kat && c.lomba === state.lomba && (!c.lomba.subs || c.sub === state.sub)
-    );
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Mengirim...";
-    try {
-      const res = await fetch("/daftar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          cabang_id: slug(pilihan.cabang),
-          sub: pilihan.sub || "",
-          nama_lengkap: namaEl.value.trim(),
-          kelas: kelasEl.value.trim(),
-          whatsapp: waEl.value.trim(),
-        }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (res.ok && data.ok) {
-        tampilkanSukses(data.ringkasan || {}, data.catatan || "");
-        return;
-      }
-      const errors = (data && data.errors) || {};
-      setErr("cabang", errors.cabang_id || "");
-      setErr("nama", errors.nama_lengkap || "");
-      setErr("kelas", errors.kelas || "");
-      setErr("wa", errors.whatsapp || "");
-      if (errors._global || !Object.keys(errors).length) {
-        globalEl.textContent = errors._global || "Gagal mengirim. Coba lagi sebentar ya.";
-        globalEl.classList.remove("hidden");
-      }
-    } catch (_err) {
-      globalEl.textContent = "Koneksi ke server terputus. Cek internet kamu lalu coba lagi.";
-      globalEl.classList.remove("hidden");
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Kirim Pendaftaran";
-    }
-  });
-
-  // Preselect via ?cabang=<slug> (mis. tombol dari halaman /event).
-  const awal = root.getAttribute("data-preselect");
-  const awalCabang = awal ? semuaCabang.find((c) => slug(c.cabang) === awal) : null;
-  pilihKategori(
-    awalCabang ? awalCabang.kat : kategori[0],
-    awalCabang ? awalCabang.lomba.id : null,
-    awalCabang ? awalCabang.sub : null
-  );
-}
-
-/* ============ navigasi halus (soft-nav, tanpa reload penuh) ============
-   Pola PJAX: klik link internal -> fetch HTML -> tukar isi <main> (+ header
-   biar status nav ikut) -> pushState. CSS/JS/gambar tidak diunduh ulang.
-   Error apa pun -> jatuh ke navigasi biasa (selalu aman).
-   Pintu darurat per-link: tambahkan data-soft="off".                        */
-
-const SOFT = {
-  motionOK: !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-  LEAVE_MS: 110,
-  busy: false,
-  token: 0,
-};
-
-// Halaman yang SEDANG tampil. TIDAK bisa pakai location.pathname saat popstate —
-// saat event itu menyala, location sudah pindah ke tujuan, jadi pembanding
-// "halaman sama" harus path yang benar-benar sedang dirender, bukan address bar.
-let currentPath = location.pathname + location.search;
-
-function softNavCapable() {
-  return !!(window.history && window.history.pushState && window.fetch && window.DOMParser);
-}
-
-/* Link ini boleh lewat soft-nav? Kembalikan URL-nya, atau null. */
-function internalLink(a, e) {
-  if (!softNavCapable() || e.defaultPrevented || e.button !== 0) return null;
-  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return null;
-  if (a.target && a.target !== "_self") return null;
-  if (a.hasAttribute("download")) return null;
-  if (a.dataset.soft === "off") return null;
-  const href = a.getAttribute("href") || "";
-  if (!href || href.startsWith("#")) return null;
-  if (/^(mailto:|tel:|javascript:|data:)/i.test(href)) return null;
-  const url = new URL(a.href, location.href);
-  if (url.origin !== location.origin) return null;
-  return url;
-}
-
-async function navigate(rawUrl, { push = true, restoreY = null } = {}) {
-  const main = $("main");
-  if (!main || SOFT.busy) return;
-
-  const url = new URL(rawUrl, location.href);
-
-  // Halaman sama (path+query identik dengan yang sedang tampil) -> tidak perlu
-  // fetch, cukup gulir. Kasus hash (#footer) tidak sampai sini; browser urus.
-  if (url.pathname + url.search === currentPath) {
-    if (push && !url.hash) scrollTop(0);
+  if (!cabangDataEl || !formatDataEl) {
+    console.log("Nordelia data elements not found - not on Nordelia page");
     return;
   }
 
-  const token = ++SOFT.token;
-  SOFT.busy = true;
-  const ctrl = new AbortController();
-  const killer = setTimeout(() => ctrl.abort(), 8000);
+  console.log("=== NORDelia PAGE SCRIPT START ===");
 
+  let cabangList, formatList;
   try {
-    if (SOFT.motionOK) main.classList.add("soft-leave");
-    const [res] = await Promise.all([
-      fetch(url.href, {
-        headers: { "X-Soft-Nav": "1" },
-        signal: ctrl.signal,
-        redirect: "follow",
-      }),
-      sleep(SOFT.motionOK ? SOFT.LEAVE_MS : 0),
-    ]);
-    if (token !== SOFT.token) return;
-
-    const ctype = res.headers.get("content-type") || "";
-    if (!ctype.includes("text/html")) throw new Error("bukan html");
-    const html = await res.text();
-    const doc = new DOMParser().parseFromString(html, "text/html");
-    const freshMain = doc.querySelector("main");
-    if (!freshMain) throw new Error("struktur halaman tak dikenal");
-
-    // Papan kapasitas penuh? Server 302 ke /waiting-room — fetch otomatis
-    // mengikutinya, jadi res.url adalah URL final. Address bar tetap jujur.
-    const finalUrl = res.url || url.href;
-
-    // Simpan posisi gulir untuk tombol back, lalu catat riwayat baru.
-    if (push) {
-      history.replaceState({ ...history.state, sy: window.scrollY }, "");
-      history.pushState({ soft: true }, "", finalUrl);
-    }
-
-    document.title = doc.title || document.title;
-
-    // Tukar tiga wilayah yang berbeda antar halaman. Sprite ikon & <script>
-    // tidak disentuh — tetap hidup tanpa dieksekusi ulang.
-    const swapRegion = (sel) => {
-      const fresh = doc.querySelector(sel);
-      const cur = document.querySelector(sel);
-      if (fresh && cur) cur.replaceWith(fresh);
-    };
-    swapRegion("#site-header"); // status link aktif ikut halaman baru
-    swapRegion("main");
-    swapRegion("#footer");
-
-    const final = new URL(finalUrl, location.href);
-    currentPath = final.pathname + final.search;
-
-    initPage();
-
-    const nextMain = $("main");
-    nextMain.classList.add("soft-enter");
-    if (SOFT.motionOK) {
-      requestAnimationFrame(() =>
-        requestAnimationFrame(() => nextMain.classList.remove("soft-enter"))
-      );
-    } else {
-      nextMain.classList.remove("soft-enter");
-    }
-
-    scrollTop(restoreY ?? 0);
-
-    // Fokus ke konten utama untuk aksesibilitas (pembaca layar) tanpa menggulir.
-    nextMain.setAttribute("tabindex", "-1");
-    nextMain.focus({ preventScroll: true });
-  } catch (_err) {
-    // Jaringan gagal / timeout / struktur aneh -> navigasi biasa.
-    window.location.href = url.href;
-  } finally {
-    clearTimeout(killer);
-    SOFT.busy = false;
-    $("main")?.classList.remove("soft-leave");
+    cabangList = JSON.parse(cabangDataEl.textContent);
+    formatList = JSON.parse(formatDataEl.textContent);
+  } catch (e) {
+    console.error("Gagal parse JSON:", e);
+    return;
   }
+
+  console.log("Data loaded:", {
+    cabangCount: cabangList.length,
+    formatKeys: Object.keys(formatList),
+    sampleCabang: cabangList.slice(0, 3),
+  });
+
+  const cabangCards = Array.from(document.querySelectorAll("[data-cabang-card]"));
+  const emptyNotice = document.getElementById("cabang-empty");
+  const searchInput = document.getElementById("cabang-search");
+  const currentCategoryName = document.getElementById("current-category-name");
+
+  // Filter logic
+  let activeCategory = "semua";
+  function applyFilter() {
+    const q = (searchInput?.value || "").toLowerCase().trim();
+    let visibleCount = 0;
+
+    cabangCards.forEach(function (card) {
+      const matchCat = activeCategory === "semua" || card.dataset.category === activeCategory;
+      const haystack = (card.dataset.name + " " + card.dataset.pic + " " + card.dataset.tempat + " " + card.dataset.category).toLowerCase();
+      const matchQ = !q || haystack.includes(q);
+      const isVisible = matchCat && matchQ;
+
+      card.classList.toggle("hidden", !isVisible);
+      if (isVisible) visibleCount++;
+    });
+
+    if (emptyNotice) {
+      emptyNotice.classList.toggle("hidden", visibleCount > 0);
+    }
+  }
+
+  // Modal OSN Jurusan Elements & Handler
+  const modalOsn = document.getElementById("modal-osn-jurusan");
+  const closeOsnBtn = document.getElementById("btn-close-osn-modal");
+  const cancelOsnBtn = document.getElementById("btn-cancel-osn-modal");
+
+  function closeOsnModal() {
+    modalOsn?.classList.add("hidden");
+    document.body.classList.remove("overflow-hidden");
+  }
+
+  closeOsnBtn?.addEventListener("click", closeOsnModal);
+  cancelOsnBtn?.addEventListener("click", closeOsnModal);
+  modalOsn?.addEventListener("click", (e) => {
+    if (e.target === modalOsn) closeOsnModal();
+  });
+
+  // Category Buttons click handler
+  document.querySelectorAll("[data-category-select]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      const catId = btn.getAttribute("data-category-select");
+      const hasSub = btn.getAttribute("data-has-sub") === "true";
+
+      // Khusus OSN: Arahkan terlebih dahulu ke pemilihan jurusan IPA/IPS
+      if (catId === "osn" || catId === "olimpiade-9-cabang") {
+        if (modalOsn) {
+          modalOsn.classList.remove("hidden");
+          document.body.classList.add("overflow-hidden");
+          return;
+        }
+      }
+
+      if (hasSub) {
+        window.location.href = "/nordelia/" + catId;
+      } else {
+        // Cabang tanpa sub-events (Literasi Numerasi, Science, Bahasa Indonesia, AI) langsung mengarah ke formulir pendaftaran
+        openRegisterModal(catId);
+      }
+    });
+  });
+
+  // Filter pills handler
+  document.querySelectorAll(".cat-pill").forEach(function (pill) {
+    pill.addEventListener("click", function () {
+      const cat = pill.getAttribute("data-filter-cat");
+      activeCategory = cat;
+
+      document.querySelectorAll(".cat-pill").forEach(function (p) {
+        p.className = "cat-pill px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-stone-900/80 text-stone-300 hover:text-white border border-white/10";
+      });
+      pill.className = "cat-pill is-active px-4 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap bg-gradient-to-r from-[#FFB7C5] to-[#FFE5B4] text-black";
+
+      if (currentCategoryName) {
+        currentCategoryName.textContent = cat === "semua" ? "Semua Kategori" : cat.toUpperCase();
+      }
+
+      applyFilter();
+    });
+  });
+
+  searchInput?.addEventListener("input", applyFilter);
+
+  // MODAL REGISTER & DYNAMIC FIELDS
+  const modalReg = document.getElementById("modal-register");
+  const closeRegBtn = document.getElementById("btn-close-register-modal");
+  const formCabangTitle = document.getElementById("form-cabang-title");
+  const formBadgeCategory = document.getElementById("form-badge-category");
+  const formRuleBox = document.getElementById("form-rule-box");
+  const inputCabangId = document.getElementById("input-cabang-id");
+  const inputCategoryId = document.getElementById("input-category-id");
+  const dynamicFormFields = document.getElementById("dynamic-form-fields");
+  const formAlert = document.getElementById("form-alert");
+  const regForm = document.getElementById("nordelia-reg-form");
+
+  console.log("Modal elements:", {
+    modalReg: !!modalReg,
+    closeRegBtn: !!closeRegBtn,
+    formCabangTitle: !!formCabangTitle,
+    formBadgeCategory: !!formBadgeCategory,
+    formRuleBox: !!formRuleBox,
+    inputCabangId: !!inputCabangId,
+    dynamicFormFields: !!dynamicFormFields,
+    formAlert: !!formAlert,
+    regForm: !!regForm,
+  });
+
+  function openRegisterModal(cabangId) {
+    console.log("openRegisterModal dipanggil dengan cabangId:", cabangId);
+    let c = cabangList.find(item => item.id === cabangId);
+    if (!c) {
+      c = cabangList.find(item => 
+        ((cabangId === "ai" || cabangId === "olimpiade-ai") && (item.id.includes("ai") || item.name.toLowerCase().includes("artifisial"))) ||
+        item.name.toLowerCase().includes(cabangId.toLowerCase())
+      );
+    }
+    console.log("Cabang ditemukan:", c ? c.name : "tidak ditemukan");
+    if (!c) {
+      console.error("Cabang tidak ditemukan untuk ID:", cabangId);
+      return;
+    }
+
+    inputCabangId.value = c.id;
+    if (inputCategoryId) inputCategoryId.value = c.category || "akademik";
+    formCabangTitle.textContent = c.name;
+    formBadgeCategory.textContent = (c.category ? c.category.toUpperCase() : "LOMBA");
+    
+    const isOlimp = !!((c.is_olimpiade_or_ai || c.id === "olimpiade-ai" || c.id.includes("olimpiade") || (c.name && c.name.toLowerCase().includes("artifisial"))) && !c.id.includes("desain") && !c.id.includes("poster"));
+    const isLit = !!(c.is_literasi || (c.name && c.name.toLowerCase().startsWith("literasi")) || (c.id && c.id.startsWith("literasi")));
+    const regCount = (typeof c.registered_count === "number") ? c.registered_count : 0;
+    
+    let quotaDisplay = "";
+    if (isOlimp) {
+      const rem = (typeof c.remaining_quota === "number") ? c.remaining_quota : Math.max(0, 20 - regCount);
+      const isFull = rem <= 0 || !!c.is_full;
+      quotaDisplay = `<span class="${isFull ? 'text-rose-400' : 'text-amber-300'} font-bold">${isFull ? 'Kuota Penuh (20/20)' : 'Sisa ' + rem + ' dari 20 Kuota'}</span>`;
+    } else {
+      quotaDisplay = `<span class="text-emerald-400 font-bold">Kuota Terbuka</span>`;
+    }
+
+    let minMaxDisplay = "";
+    if (isOlimp) {
+      minMaxDisplay = `<span class="text-amber-300 font-bold">Maks. 20 Peserta</span>`;
+    }
+
+    formRuleBox.innerHTML = `
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-stone-400">Lokasi: ${c.tempat || '-'}</span>
+        ${minMaxDisplay}
+      </div>
+      <div class="flex items-center justify-between py-1 my-1 border-t border-b border-white/10 text-[11px]">
+        <span class="text-stone-300">Terdaftar: <strong class="text-white" id="modal-live-reg-count">${regCount} Orang</strong></span>
+        <span id="modal-live-quota-wrapper">${quotaDisplay}</span>
+      </div>
+      <p class="text-[11px] text-stone-300"><strong class="text-white">Ketentuan:</strong> ${c.note || '-'}</p>
+    `;
+
+    // Ambil live count & kuota langsung dari Google Sheet via API
+    fetch(`/api/nordelia/cabang-quota?cabang_id=${encodeURIComponent(c.id)}`)
+      .then((res) => res.json())
+      .then((live) => {
+        if (!live || typeof live.count !== "number") return;
+        const regEl = document.getElementById("modal-live-reg-count");
+        if (regEl) regEl.textContent = `${live.count} Orang`;
+        const qWrap = document.getElementById("modal-live-quota-wrapper");
+        if (qWrap) {
+          if (live.is_limited) {
+            const isFull = live.is_full;
+            const rem = live.remaining_quota != null ? live.remaining_quota : Math.max(0, 20 - live.count);
+            qWrap.innerHTML = `<span class="${isFull ? 'text-rose-400' : 'text-[#FF8533]'} font-bold">${isFull ? 'Kuota Penuh (20/20)' : 'Sisa ' + rem + ' dari 20 Kuota'}</span>`;
+          } else {
+            qWrap.innerHTML = `<span class="text-white font-bold">Kuota Terbuka</span>`;
+          }
+        }
+        if (live.is_full) {
+          const btnSubmit = document.getElementById("btn-submit-registration");
+          if (btnSubmit) {
+            btnSubmit.disabled = true;
+            btnSubmit.classList.add("opacity-50", "cursor-not-allowed");
+            btnSubmit.innerHTML = `<span><strong>Kuota Penuh (20/20)</strong></span>`;
+          }
+        }
+      })
+      .catch((err) => console.warn("Live sheet quota check:", err));
+
+    // Dynamic field generation based on format_type
+    const fmtKey = c.format_type || "olimpiade_akademik";
+    const fmt = formatList[fmtKey] || formatList["olimpiade_akademik"];
+
+    let html = "";
+    fmt.fields.forEach(field => {
+      if (field.type === "textarea") {
+        html += `
+          <div>
+            <label class="block text-xs font-bold text-stone-200 mb-1">${field.label} ${field.required ? '<span class="text-rose-400">*</span>' : ''}</label>
+            <textarea name="${field.name}" ${field.required ? 'required' : ''} placeholder="${field.placeholder}" rows="3"
+                      class="w-full px-3.5 py-2.5 rounded-xl bg-stone-900 border border-white/20 text-xs text-white placeholder-stone-500 focus:outline-none focus:border-[#FFE5B4]"></textarea>
+          </div>
+        `;
+      } else {
+        html += `
+          <div>
+            <label class="block text-xs font-bold text-stone-200 mb-1">${field.label} ${field.required ? '<span class="text-rose-400">*</span>' : ''}</label>
+            <input type="${field.type}" name="${field.name}" ${field.required ? 'required' : ''} placeholder="${field.placeholder}"
+                   class="w-full px-3.5 py-2.5 rounded-xl bg-stone-900 border border-white/20 text-xs text-white placeholder-stone-500 focus:outline-none focus:border-[#FFE5B4]" />
+          </div>
+        `;
+      }
+    });
+
+    dynamicFormFields.innerHTML = html;
+    formAlert.classList.add("hidden");
+    modalReg.classList.remove("hidden");
+    document.body.classList.add("overflow-hidden");
+    console.log("Modal pendaftaran berhasil dibuka");
+  }
+
+  function closeRegisterModal() {
+    modalReg.classList.add("hidden");
+    document.body.classList.remove("overflow-hidden");
+  }
+
+  // =========================================================================
+  // OSN PEMINATAN JURUSAN LOGIC (IPA vs IPS)
+  // =========================================================================
+  const OSN_IPA_ONLY_IDS = [
+    "olimpiade-fisika",
+    "olimpiade-kimia",
+    "olimpiade-biologi",
+    "olimpiade-astronomi",
+    "olimpiade-informatika"
+  ];
+  const OSN_IPS_ALLOWED_IDS = [
+    "olimpiade-matematika",
+    "olimpiade-kebumian",
+    "olimpiade-geografi",
+    "olimpiade-ekonomi"
+  ];
+  const OSN_ALL_IDS = [...OSN_IPA_ONLY_IDS, ...OSN_IPS_ALLOWED_IDS];
+
+  let currentJurusan = null; // 'ipa', 'ips', or null
+  try {
+    currentJurusan = sessionStorage.getItem("nordelia_jurusan") || null;
+  } catch (e) {}
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const paramJurusan = urlParams.get("jurusan");
+  if (paramJurusan && (paramJurusan === "ipa" || paramJurusan === "ips")) {
+    currentJurusan = paramJurusan;
+    try { sessionStorage.setItem("nordelia_jurusan", currentJurusan); } catch (e) {}
+  }
+
+  const badgeJurusan = document.getElementById("active-jurusan-badge");
+  const jurusanFilterBtns = document.querySelectorAll("[data-jurusan-filter]");
+
+  function updateJurusanUI() {
+    if (badgeJurusan) {
+      if (currentJurusan === "ipa") {
+        badgeJurusan.textContent = "🔬 Kelas IPA";
+        badgeJurusan.className = "px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#AEC6CF]/20 text-[#AEC6CF] border border-[#AEC6CF]/40";
+      } else if (currentJurusan === "ips") {
+        badgeJurusan.textContent = "📚 Kelas IPS";
+        badgeJurusan.className = "px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#FFE5B4]/20 text-[#FFE5B4] border border-[#FFE5B4]/40";
+      } else {
+        badgeJurusan.textContent = "Semua Kelas";
+        badgeJurusan.className = "px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/10 text-stone-300";
+      }
+    }
+
+    jurusanFilterBtns.forEach(btn => {
+      const val = btn.getAttribute("data-jurusan-filter");
+      if ((val === "all" && !currentJurusan) || val === currentJurusan) {
+        btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all bg-white/20 border-white/40 text-white shadow-sm";
+      } else {
+        btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold border transition-all bg-black/40 border-white/15 text-stone-300 hover:text-white";
+      }
+    });
+
+    // Dim IPA-only cards if user selected IPS
+    document.querySelectorAll("[data-cabang-card]").forEach(card => {
+      const isOsn = card.getAttribute("data-is-osn") === "true";
+      const osnType = card.getAttribute("data-osn-type");
+      if (currentJurusan === "ips" && isOsn && osnType === "ipa-only") {
+        card.classList.add("opacity-60", "border-amber-500/30");
+      } else {
+        card.classList.remove("opacity-60", "border-amber-500/30");
+      }
+    });
+  }
+
+  updateJurusanUI();
+
+  jurusanFilterBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const val = btn.getAttribute("data-jurusan-filter");
+      if (val === "all") {
+        currentJurusan = null;
+        try { sessionStorage.removeItem("nordelia_jurusan"); } catch (e) {}
+      } else {
+        currentJurusan = val;
+        try { sessionStorage.setItem("nordelia_jurusan", val); } catch (e) {}
+      }
+      updateJurusanUI();
+    });
+  });
+
+  // Modals elements
+  const modalIpsBlocked = document.getElementById("modal-ips-blocked");
+  const btnCloseIpsBlocked = document.getElementById("btn-close-ips-blocked");
+  const btnCloseIpsModalFooter = document.getElementById("btn-close-ips-modal-footer");
+  const btnSwitchToIpa = document.getElementById("btn-switch-to-ipa");
+  const btnShowIpsCabang = document.getElementById("btn-show-ips-cabang");
+  const ipsBlockedCabangName = document.getElementById("ips-blocked-cabang-name");
+  const ipsBlockedMessage = document.getElementById("ips-blocked-message");
+
+  const modalConfirmJurusan = document.getElementById("modal-confirm-jurusan");
+  const btnCloseConfirmJurusan = document.getElementById("btn-close-confirm-jurusan");
+  const btnCancelConfirmJurusan = document.getElementById("btn-cancel-confirm-jurusan");
+  const btnChooseIpa = document.getElementById("btn-choose-ipa");
+  const btnChooseIps = document.getElementById("btn-choose-ips");
+  const confirmJurusanCabangName = document.getElementById("confirm-jurusan-cabang-name");
+
+  let pendingCabangId = null;
+  let blockedCabangId = null;
+
+  function showIpsBlockedPopup(cabangId, cabangName) {
+    blockedCabangId = cabangId;
+    if (ipsBlockedCabangName) ipsBlockedCabangName.textContent = cabangName || "ini";
+    if (ipsBlockedMessage) {
+      ipsBlockedMessage.innerHTML = `Maaf, <strong>${cabangName || 'Olimpiade ini'}</strong> tidak tersedia untuk kelas IPS. Siswa kelas IPS hanya diperbolehkan mendaftar cabang Matematika, Kebumian, Geografi, dan Ekonomi.`;
+    }
+    modalIpsBlocked?.classList.remove("hidden");
+    document.body.classList.add("overflow-hidden");
+  }
+
+  function closeIpsBlockedPopup() {
+    modalIpsBlocked?.classList.add("hidden");
+    document.body.classList.remove("overflow-hidden");
+  }
+
+  btnCloseIpsBlocked?.addEventListener("click", closeIpsBlockedPopup);
+  btnCloseIpsModalFooter?.addEventListener("click", closeIpsBlockedPopup);
+  modalIpsBlocked?.addEventListener("click", (e) => {
+    if (e.target === modalIpsBlocked) closeIpsBlockedPopup();
+  });
+
+  btnSwitchToIpa?.addEventListener("click", () => {
+    currentJurusan = "ipa";
+    try { sessionStorage.setItem("nordelia_jurusan", "ipa"); } catch (e) {}
+    updateJurusanUI();
+    closeIpsBlockedPopup();
+    if (blockedCabangId) {
+      openRegisterModal(blockedCabangId);
+      blockedCabangId = null;
+    }
+  });
+
+  btnShowIpsCabang?.addEventListener("click", () => {
+    closeIpsBlockedPopup();
+    currentJurusan = "ips";
+    try { sessionStorage.setItem("nordelia_jurusan", "ips"); } catch (e) {}
+    updateJurusanUI();
+
+    const grid = document.getElementById("cabang-grid");
+    if (grid) {
+      grid.scrollIntoView({ behavior: "smooth", block: "start" });
+      OSN_IPS_ALLOWED_IDS.forEach(id => {
+        const card = document.querySelector(`[data-cabang-id="${id}"]`);
+        if (card) {
+          card.classList.add("ring-2", "ring-[#FFE5B4]", "scale-[1.02]");
+          setTimeout(() => {
+            card.classList.remove("ring-2", "ring-[#FFE5B4]", "scale-[1.02]");
+          }, 2500);
+        }
+      });
+    } else {
+      window.location.href = "/nordelia/osn?jurusan=ips";
+    }
+  });
+
+  function showConfirmJurusanModal(cabangId, cabangName) {
+    pendingCabangId = cabangId;
+    if (confirmJurusanCabangName) confirmJurusanCabangName.textContent = cabangName || "OSN";
+    modalConfirmJurusan?.classList.remove("hidden");
+    document.body.classList.add("overflow-hidden");
+  }
+
+  function closeConfirmJurusanModal() {
+    modalConfirmJurusan?.classList.add("hidden");
+    document.body.classList.remove("overflow-hidden");
+    pendingCabangId = null;
+  }
+
+  btnCloseConfirmJurusan?.addEventListener("click", closeConfirmJurusanModal);
+  btnCancelConfirmJurusan?.addEventListener("click", closeConfirmJurusanModal);
+  modalConfirmJurusan?.addEventListener("click", (e) => {
+    if (e.target === modalConfirmJurusan) closeConfirmJurusanModal();
+  });
+
+  btnChooseIpa?.addEventListener("click", () => {
+    currentJurusan = "ipa";
+    try { sessionStorage.setItem("nordelia_jurusan", "ipa"); } catch (e) {}
+    updateJurusanUI();
+    const targetId = pendingCabangId;
+    closeConfirmJurusanModal();
+    if (targetId) {
+      openRegisterModal(targetId);
+    }
+  });
+
+  btnChooseIps?.addEventListener("click", () => {
+    currentJurusan = "ips";
+    try { sessionStorage.setItem("nordelia_jurusan", "ips"); } catch (e) {}
+    updateJurusanUI();
+    const targetId = pendingCabangId;
+    closeConfirmJurusanModal();
+
+    if (targetId && OSN_IPA_ONLY_IDS.includes(targetId)) {
+      const cObj = cabangList.find(x => x.id === targetId);
+      showIpsBlockedPopup(targetId, cObj ? cObj.name : "Olimpiade");
+    } else if (targetId) {
+      openRegisterModal(targetId);
+    }
+  });
+
+  // Listeners for blocked buttons on subpages (e.g. /nordelia/osn)
+  document.querySelectorAll("[data-blocked-jurusan-btn]").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const subId = btn.getAttribute("data-blocked-jurusan-btn");
+      const subName = btn.getAttribute("data-blocked-sub-name") || "Olimpiade";
+      showIpsBlockedPopup(subId, subName);
+    });
+  });
+
+  const registerButtons = document.querySelectorAll("[data-register-cabang]");
+  console.log("Tombol daftar ditemukan:", registerButtons.length);
+
+  if (registerButtons.length === 0) {
+    console.warn("Tidak ada tombol daftar yang ditemukan dengan attribute data-register-cabang");
+  } else {
+    console.log("Detail tombol daftar:", Array.from(registerButtons).map(btn => ({
+      cabangId: btn.getAttribute("data-register-cabang"),
+      text: btn.textContent.trim(),
+    })));
+  }
+
+  registerButtons.forEach((btn, index) => {
+    console.log(`Event listener dipasang pada tombol ${index + 1} dengan cabangId:`, btn.getAttribute("data-register-cabang"));
+    btn.addEventListener("click", (e) => {
+      console.log("=== CLICK EVENT TRIGGERED ===");
+      e.preventDefault();
+      e.stopPropagation();
+      const cabangId = btn.getAttribute("data-register-cabang");
+      console.log("Tombol daftar diklik untuk cabang:", cabangId);
+      
+      const cObj = cabangList.find(x => x.id === cabangId) || {};
+      const cabangName = cObj.name || "Cabang Lomba";
+
+      // Khusus cabang OSN: Validasi Peminatan IPA/IPS
+      const isOsnBranch = OSN_ALL_IDS.includes(cabangId);
+      if (isOsnBranch) {
+        if (currentJurusan === "ips") {
+          if (OSN_IPA_ONLY_IDS.includes(cabangId)) {
+            showIpsBlockedPopup(cabangId, cabangName);
+            return;
+          }
+        } else if (!currentJurusan) {
+          showConfirmJurusanModal(cabangId, cabangName);
+          return;
+        }
+      }
+
+      openRegisterModal(cabangId);
+    });
+  });
+
+  closeRegBtn?.addEventListener("click", closeRegisterModal);
+  modalReg?.addEventListener("click", (e) => {
+    if (e.target === modalReg) closeRegisterModal();
+  });
+
+  // Handle Form Submission
+  regForm?.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const btnSubmit = document.getElementById("btn-submit-registration");
+    const originalText = btnSubmit.innerHTML;
+
+    btnSubmit.disabled = true;
+    btnSubmit.innerHTML = `
+      <svg class="w-4 h-4 animate-spin text-black" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25"></circle><path fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+      <span>Memproses Pendaftaran...</span>
+    `;
+
+    try {
+      const formData = new FormData(regForm);
+      const payload = {};
+      formData.forEach((val, key) => { payload[key] = val; });
+
+      const res = await fetch("/api/nordelia/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        closeRegisterModal();
+        regForm.reset();
+        if (typeof window.showNordeliaRegisteredPopup === "function") {
+          window.showNordeliaRegisteredPopup({
+            participantName: data.participant_name || payload.nama_lengkap || payload.nama_tim || payload.nama,
+            cabangName: data.cabang_name,
+            groupLink: data.group_link,
+            groupLabel: data.group_label,
+          });
+        } else {
+          window.location.reload();
+        }
+
+      } else {
+        formAlert.className = "p-3 rounded-xl mb-4 text-xs font-bold bg-rose-950/80 text-rose-300 border border-rose-500/40";
+        formAlert.textContent = data.error || "Gagal memproses pendaftaran. Silakan coba lagi.";
+        formAlert.classList.remove("hidden");
+      }
+    } catch (err) {
+      formAlert.className = "p-3 rounded-xl mb-4 text-xs font-bold bg-rose-950/80 text-rose-300 border border-rose-500/40";
+      formAlert.textContent = "Terjadi kesalahan jaringan: " + err.message;
+      formAlert.classList.remove("hidden");
+    } finally {
+      btnSubmit.disabled = false;
+      btnSubmit.innerHTML = originalText;
+    }
+  });
+
+  console.log("=== NORDelia PAGE SCRIPT END ===");
 }
 
-/* Intersepsi klik (delegasi dokumen — tetap sahih setelah swap isi) */
-document.addEventListener("click", (e) => {
-  const a = e.target.closest("a[href]");
-  if (!a) return;
-  const url = internalLink(a, e);
-  if (!url) return;
-  e.preventDefault();
-  navigate(url.href);
-});
+console.log("app.js loaded");
 
-window.addEventListener("popstate", (e) => {
-  const sy = e.state && typeof e.state.sy === "number" ? e.state.sy : null;
-  navigate(location.href, { push: false, restoreY: sy });
-});
-
-/* ============ bootstrap ============ */
-
-function initPage() {
-  clearPageTimers();
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOMContentLoaded fired in app.js");
   initNav();
   initTabs();
   initScrollTop();
@@ -721,7 +784,5 @@ function initPage() {
   initEvents();
   initCabinets();
   initWaitingRoom();
-  initDaftar();
-}
-
-document.addEventListener("DOMContentLoaded", initPage);
+  initNordelia();
+});

@@ -5,24 +5,24 @@
 <section class="relative pt-6 pb-14 border-b border-orvelion-coral/15">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="space-y-4 max-w-3xl">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orvelion-card border border-orvelion-coral/30 text-xs font-semibold text-orvelion-amber">Jejak Kabinet OSIS SMA IGS</div>
-      <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight">Before Us: <span class="text-gradient-orvelion">Menghargai Jejak, Mengobarkan Langkah</span></h1>
-      <p class="text-sm sm:text-base text-orvelion-peach/85">Kenali tiga generasi pemimpin sebelum Orvelion: <strong class="text-white">Ardraxis</strong>, <strong class="text-white">Crecenden</strong>, dan <strong class="text-white">Asteration</strong>.</p>
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orvelion-card border border-orvelion-coral/30 text-xs font-semibold text-orvelion-amber">Hall of Legacy • Jejak Kabinet OSIS SMA IGS</div>
+      <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight">Before Us
+      <p class="text-sm sm:text-base text-white/85">Kenali empat generasi pemimpin sebelum Orvelion: <strong class="text-white">Credence</strong>, <strong class="text-white">Asteration</strong>, <strong class="text-white">Valiance</strong>, dan <strong class="text-white">Ardraxis</strong>.</p>
     </div>
   </div>
 </section>
 
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6">
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
     {% for cab in cabinets %}
       <button type="button" data-cabinet="{{ cab.id }}" class="{% if loop.first %}is-selected{% endif %} text-left p-4 sm:p-5 rounded-2xl border border-orvelion-coral/20 glass-card flex items-center gap-4">
         <div class="w-14 h-14 rounded-xl bg-black/60 border border-orvelion-coral/30 p-1.5 shrink-0 overflow-hidden">
-          <img src="{{ url_for('static', filename='images/' + cab.image) }}" alt="{{ cab.name }}" loading="lazy" decoding="async" class="w-full h-full object-contain" />
+          <img src="{{ url_for('static', filename='images/' + cab.image) }}" alt="{{ cab.name }}" class="w-full h-full object-contain" />
         </div>
         <div class="truncate">
           <span class="text-[11px] font-mono text-orvelion-amber block">Periode {{ cab.period }}</span>
           <h3 class="text-base font-black text-white truncate">{{ cab.name }}</h3>
-          <span class="text-xs text-orvelion-peach/70 block truncate">{{ cab.symbol }}</span>
+          <span class="text-xs text-white/70 block truncate">{{ cab.symbol }}</span>
         </div>
       </button>
     {% endfor %}
@@ -30,41 +30,44 @@
 </section>
 
 <section id="cabinet-spotlight" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
-  <div class="relative rounded-2xl p-6 sm:p-10 bg-[#161210] border border-orvelion-coral/20 overflow-hidden">
+  <div class="relative rounded-2xl p-6 sm:p-10 bg-[#141414] border border-orvelion-coral/25 overflow-hidden shadow-2xl">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
       <div class="lg:col-span-5 flex flex-col items-center text-center">
-        <div class="w-56 h-56 sm:w-64 sm:h-64 rounded-2xl bg-[#120e0c] border border-white/10 p-5 flex items-center justify-center">
-          <img id="cab-image" src="{{ url_for('static', filename='images/' + cabinets[0].image) }}" alt="{{ cabinets[0].name }}" loading="lazy" decoding="async" class="w-full h-full object-contain" />
+        <div class="w-56 h-56 sm:w-64 sm:h-64 rounded-2xl bg-[#0a0a0a] border border-white/10 p-5 flex items-center justify-center">
+          <img id="cab-image" src="{{ url_for('static', filename='images/' + cabinets[0].image) }}" alt="{{ cabinets[0].name }}" class="w-full h-full object-contain" />
         </div>
         <div class="mt-5 space-y-1">
           <span id="cab-period" class="text-xs font-mono font-bold tracking-widest uppercase text-orvelion-amber">Emblem Resmi • {{ cabinets[0].period }}</span>
-          <p id="cab-symbol" class="text-sm font-semibold text-orvelion-peach">{{ cabinets[0].symbol }}</p>
+          <p id="cab-symbol" class="text-sm font-semibold text-white/90">{{ cabinets[0].symbol }}</p>
         </div>
       </div>
       <div class="lg:col-span-7 space-y-6">
         <div class="space-y-2">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orvelion-rust/40 text-orvelion-amber text-xs font-semibold border border-orvelion-coral/30">Profil Kabinet</div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orvelion-rust/30 text-orvelion-coral text-xs font-semibold border border-orvelion-coral/30">Profil Kabinet Bersejarah</div>
           <h2 id="cab-name" class="text-3xl sm:text-4xl font-black text-white">{{ cabinets[0].name }}</h2>
           <p id="cab-tagline" class="text-base font-semibold text-gradient-orvelion italic">{{ cabinets[0].tagline }}</p>
         </div>
-        <div class="p-5 rounded-2xl bg-black/40 border border-orvelion-coral/20">
-          <div class="text-xs font-bold uppercase tracking-wider text-orvelion-amber mb-2">Makna Filosofi Lambang</div>
-          <p id="cab-philosophy" class="text-xs sm:text-sm text-orvelion-peach/90 leading-relaxed">{{ cabinets[0].philosophy }}</p>
+        <div class="p-5 rounded-2xl bg-black/60 border border-orvelion-coral/20">
+          <div class="text-xs font-bold uppercase tracking-wider text-orvelion-coral mb-2">Makna Filosofi Lambang</div>
+          <p id="cab-philosophy" class="text-xs sm:text-sm text-white/90 leading-relaxed">{{ cabinets[0].philosophy }}</p>
         </div>
-        <div class="space-y-3">
-          <h4 class="text-xs font-bold uppercase tracking-wider text-orvelion-amber">Karya & Tonggak Prestasi Utama</h4>
-          <div id="cab-achievements" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <div class="space-y-4">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-orvelion-coral">Karya & Tonggak Prestasi Utama</h4>
+          <div id="cab-achievements" class="relative pl-6 space-y-4">
+            <div class="absolute left-2 top-2 bottom-2 w-0.5 bg-gradient-to-b from-orvelion-coral/60 via-orvelion-rust/40 to-transparent"></div>
             {% for ach in cabinets[0].achievements %}
-              <div class="p-3 rounded-xl bg-orvelion-card/80 border border-orvelion-coral/15 flex items-start gap-2.5 text-xs text-orvelion-peach/85">
-                <span class="w-1.5 h-1.5 rounded-full bg-orvelion-coral mt-1.5 shrink-0"></span>
-                <span>{{ ach }}</span>
+              <div class="relative">
+                <div class="absolute -left-4 top-1.5 w-3 h-3 rounded-full bg-orvelion-coral border-2 border-[#141414]"></div>
+                <div class="p-3 rounded-xl bg-orvelion-card/90 border border-orvelion-coral/20 text-xs text-white/90">
+                  {{ ach }}
+                </div>
               </div>
             {% endfor %}
           </div>
         </div>
         <div class="p-4 rounded-2xl bg-gradient-to-r from-orvelion-rust/30 to-transparent border-l-4 border-orvelion-coral text-xs sm:text-sm">
-          <strong class="text-white block mb-0.5">Warisan untuk Orvelion:</strong>
-          <span id="cab-legacy">{{ cabinets[0].keyLegacy }}</span>
+          <strong class="text-white block mb-0.5">Warisan</strong>
+          <span id="cab-legacy" class="text-white/90">{{ cabinets[0].keyLegacy }}</span>
         </div>
       </div>
     </div>
@@ -74,9 +77,9 @@
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24">
   <div class="text-center max-w-2xl mx-auto mb-14">
     <span class="text-xs font-bold tracking-widest uppercase text-orvelion-coral">Estafet Kepemimpinan</span>
-    <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-2">Garis Waktu Regenerasi OSIS SMA IGS</h2>
+    <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-2">Time Line Regenerasi OSIS SMA IGS</h2>
   </div>
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
     {% for step in timeline %}
       <div class="glass-card rounded-2xl p-5 flex flex-col justify-between {% if step.current %}border-2 border-orvelion-coral bg-gradient-to-b from-orvelion-card to-orvelion-surface{% endif %}">
         <div>
@@ -85,23 +88,14 @@
             <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-black/40">{{ step.gen }}</span>
           </div>
           <div class="w-20 h-20 mx-auto my-3 {% if step.current %}rounded-full overflow-hidden border border-orvelion-coral{% endif %}">
-            <img src="{{ url_for('static', filename='images/' + step.image) }}" alt="{{ step.name }}" loading="lazy" decoding="async" class="w-full h-full {% if step.current %}object-cover{% else %}object-contain{% endif %}" />
+            <img src="{{ url_for('static', filename='images/' + step.image) }}" alt="{{ step.name }}" class="w-full h-full object-contain" />
           </div>
           <h4 class="text-center font-bold text-base {% if step.current %}text-gradient-orvelion{% else %}text-white{% endif %}">{{ step.name }}</h4>
-          <p class="text-center text-xs text-orvelion-peach/70 mt-1">{{ step.caption }}</p>
+          <p class="text-center text-xs text-white/70 mt-1">{{ step.caption }}</p>
         </div>
-        <div class="mt-4 pt-3 border-t border-orvelion-coral/15 text-[11px] text-center text-orvelion-peach/80">{{ step.legacy }}</div>
+        <div class="mt-4 pt-3 border-t border-orvelion-coral/15 text-[11px] text-center text-white/80">{{ step.legacy }}</div>
       </div>
     {% endfor %}
-  </div>
-</section>
-
-<section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 mb-24">
-  <div class="p-8 rounded-3xl bg-black/60 border border-dashed border-orvelion-coral/30 text-center space-y-4">
-    <svg class="w-8 h-8 text-orvelion-coral mx-auto opacity-70"><use href="#i-quote"></use></svg>
-    <blockquote class="text-base sm:text-lg italic font-medium max-w-2xl mx-auto leading-relaxed">“Kami berdiri di atas jejak para pendahulu. Terima kasih sudah membuka jalan dan menunjukkan caranya.”</blockquote>
-    <p class="text-xs font-mono tracking-widest uppercase text-orvelion-peach/70">— Salam hangat, Kabinet Orvelion untuk para demisioner OSIS SMA IGS</p>
-    <a href="/" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider text-white bg-orvelion-card border border-orvelion-coral/40">Kembali ke Beranda</a>
   </div>
 </section>
 {% endblock %}
