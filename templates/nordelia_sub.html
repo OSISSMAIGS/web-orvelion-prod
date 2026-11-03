@@ -1,60 +1,75 @@
 {% extends "base.html" %}
 {% block title %}{{ category.name }} | Nordelia 2026 | {{ site.name }}{% endblock %}
 {% block content %}
-<!-- Ambient Mesh Gradient (Nordelia Theme: Sky Blue, Flame Tangerine & Magic Pink) -->
-<div class="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-35">
-  <div class="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full blur-[130px]" style="background: radial-gradient(circle, #0284C7 0%, rgba(2,132,199,0) 70%);"></div>
-  <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full blur-[150px]" style="background: radial-gradient(circle, #FF7A00 0%, rgba(255,122,0,0) 70%);"></div>
-  <div class="absolute -top-32 -right-32 w-[600px] h-[600px] rounded-full blur-[130px]" style="background: radial-gradient(circle, #38BDF8 0%, rgba(56,189,248,0) 70%);"></div>
-  <div class="absolute bottom-10 right-1/4 w-[500px] h-[500px] rounded-full blur-[140px]" style="background: radial-gradient(circle, #FB7185 0%, rgba(251,113,133,0) 70%);"></div>
+<!-- Subtle Luxury Atmospheric Background (Restrained & Deep) -->
+<div class="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-20">
+  <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[900px] h-[500px] rounded-full blur-[160px]" style="background: radial-gradient(circle, #38BDF8 0%, rgba(56,189,248,0) 70%);"></div>
+  <div class="absolute top-1/2 right-0 w-[600px] h-[600px] rounded-full blur-[180px]" style="background: radial-gradient(circle, #F5D061 0%, rgba(245,208,97,0) 70%);"></div>
 </div>
 
 <div class="relative z-10">
   <!-- HEADER -->
-  <section class="relative pt-6 pb-10 border-b border-white/10">
+  <section class="relative pt-6 pb-8 border-b border-white/10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center gap-3 mb-4">
-        <a href="/nordelia" class="inline-flex items-center gap-2 text-xs font-bold text-[#BAE6FD] hover:text-white transition-colors">
-          <svg class="w-4 h-4"><use href="#i-chevron"></use></svg>
-          &larr; Kembali ke Beranda Nordelia
+      
+      <!-- Clean Breadcrumb -->
+      <div class="flex items-center gap-2 mb-4 text-xs">
+        <a href="/nordelia" class="inline-flex items-center gap-1.5 text-stone-400 hover:text-[#FDE68A] transition-colors font-semibold">
+          <svg class="w-3.5 h-3.5"><use href="#i-chevron"></use></svg>
+          <span>Beranda Nordelia</span>
         </a>
+        <span class="text-stone-600">/</span>
+        <span class="text-stone-200 font-bold">{{ category.name }}</span>
       </div>
       
-      <div class="space-y-3">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#0284C7]/20 text-[#BAE6FD] border border-[#38BDF8]/40">
-          <svg class="w-3.5 h-3.5 text-[#38BDF8]"><use href="#i-trophy"></use></svg>
-          Kategori Nordelia 2026
+      <div class="space-y-4">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-white/[0.04] text-[#FDE68A] border border-[#F5D061]/25">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#F5D061]"></span>
+          Kategori Kompetisi Nordelia 2026
         </div>
-        <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight">
-          {{ category.name }}
-        </h1>
-        <p class="text-sm text-stone-300 max-w-2xl">
-          {% if category.description %}{{ category.description }}{% else %}Pilih cabang lomba di bawah ini dan isi formulir pendaftaran.{% endif %}
-        </p>
+
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-5">
+          <div>
+            <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight">
+              {{ category.name }}
+            </h1>
+            <p class="text-xs sm:text-sm text-stone-400 max-w-2xl mt-1.5 leading-relaxed">
+              {% if category.description %}{{ category.description }}{% else %}Pilih cabang lomba di bawah ini dan lengkapi formulir pendaftaran resmi.{% endif %}
+            </p>
+          </div>
+
+          <!-- Quick Interactive Search Bar for Branches -->
+          <div class="relative w-full md:w-72 shrink-0">
+            <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400"><use href="#i-search"></use></svg>
+            <input id="sub-branch-search" type="text" placeholder="Cari cabang lomba..."
+                   class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-xs text-white placeholder-stone-500 focus:outline-none focus:border-[#F5D061]/50 transition-colors shadow-inner" />
+          </div>
+        </div>
       </div>
+
     </div>
   </section>
 
   <!-- PILIHAN JURUSAN KELAS UNTUK OSN (IPA / IPS) -->
   {% if category.id in ('osn', 'olimpiade-9-cabang') %}
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-2">
-    <div class="p-5 sm:p-6 rounded-3xl bg-[#0F172A]/90 border border-[#38BDF8]/25 shadow-xl">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+    <div class="p-5 sm:p-6 rounded-3xl bg-[#0D1527]/80 border border-white/10 backdrop-blur-xl shadow-xl space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#38BDF8]/20 text-[#BAE6FD] border border-[#38BDF8]/30">
+          <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white/[0.04] text-[#FDE68A] border border-[#F5D061]/25">
             Peminatan Kelas Peserta
           </span>
-          <h2 class="text-xl sm:text-2xl font-black text-white mt-1">
-            Pilih Jenis Kelas Anda (IPA / IPS)
+          <h2 class="text-lg sm:text-xl font-black text-white mt-1">
+            Ketentuan Peminatan OSN (IPA vs IPS)
           </h2>
-          <p class="text-xs text-stone-300 mt-1 max-w-2xl">
-            Siswa kelas <strong>IPA</strong> dapat memilih seluruh 9 cabang OSN, sedangkan siswa kelas <strong>IPS</strong> diperbolehkan memilih cabang <strong>Matematika</strong>, <strong>Kebumian</strong>, <strong>Geografi</strong>, dan <strong>Ekonomi</strong>.
+          <p class="text-xs text-stone-400 mt-0.5 max-w-2xl">
+            Siswa kelas <strong>IPA</strong> dapat mendaftar di 9 cabang, sedangkan siswa kelas <strong>IPS</strong> berhak memilih <strong>Matematika</strong>, <strong>Kebumian</strong>, <strong>Geografi</strong>, dan <strong>Ekonomi</strong>.
           </p>
         </div>
         {% if selected_jurusan %}
           <div class="shrink-0">
             <a href="/nordelia/osn" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-semibold text-stone-300 hover:text-white border border-white/10 transition-colors">
-              <span>Tampilkan Semua</span>
+              <span>Tampilkan Semua Cabang</span>
               <svg class="w-3.5 h-3.5"><use href="#i-refresh"></use></svg>
             </a>
           </div>
@@ -65,23 +80,23 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <!-- Card 1: Kelas IPA -->
         <a href="/nordelia/osn?jurusan=ipa"
-           class="p-4 sm:p-5 rounded-2xl border transition-all duration-300 flex items-start gap-4 {% if selected_jurusan == 'ipa' %}bg-[#38BDF8]/15 border-[#38BDF8] ring-2 ring-[#38BDF8]/30 shadow-lg{% else %}bg-black/40 border-white/10 hover:border-[#38BDF8]/60 hover:bg-black/60{% endif %}">
-          <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0 bg-[#38BDF8]/20 text-[#38BDF8]">
+           class="p-4 sm:p-5 rounded-2xl border transition-all duration-300 flex items-start gap-4 {% if selected_jurusan == 'ipa' %}bg-sky-950/40 border-sky-400/60 ring-1 ring-sky-400/30 shadow-lg{% else %}bg-white/[0.02] border-white/10 hover:border-sky-400/40 hover:bg-white/[0.04]{% endif %}">
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 bg-sky-500/10 text-sky-400 border border-sky-500/20 text-lg">
             🔬
           </div>
           <div class="flex-1">
             <div class="flex items-center justify-between gap-2">
-              <h3 class="font-black text-base sm:text-lg text-white">Kelas IPA (MIPA)</h3>
+              <h3 class="font-bold text-base text-white">Kelas IPA (MIPA)</h3>
               {% if selected_jurusan == 'ipa' %}
-                <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#38BDF8] text-black">
+                <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-sky-400 text-black">
                   ✓ Aktif
                 </span>
               {% endif %}
             </div>
-            <p class="text-xs text-stone-300 mt-1">
-              Boleh memilih <strong>seluruh 9 cabang OSN</strong> (Matematika, Fisika, Kimia, Biologi, Astronomi, Informatika, Kebumian, Geografi, Ekonomi).
+            <p class="text-xs text-stone-400 mt-1 leading-relaxed">
+              Dapat memilih <strong>seluruh 9 cabang OSN</strong> (Matematika, Fisika, Kimia, Biologi, Astronomi, Informatika, Kebumian, Geografi, Ekonomi).
             </p>
-            <div class="mt-3 text-xs font-bold text-[#38BDF8] flex items-center gap-1">
+            <div class="mt-2.5 text-xs font-bold text-sky-400 flex items-center gap-1">
               <span>{% if selected_jurusan == 'ipa' %}Peminatan Terpilih{% else %}Pilih Kelas IPA &rarr;{% endif %}</span>
             </div>
           </div>
@@ -89,23 +104,23 @@
 
         <!-- Card 2: Kelas IPS -->
         <a href="/nordelia/osn?jurusan=ips"
-           class="p-4 sm:p-5 rounded-2xl border transition-all duration-300 flex items-start gap-4 {% if selected_jurusan == 'ips' %}bg-[#FBBF24]/15 border-[#FBBF24] ring-2 ring-[#FBBF24]/30 shadow-lg{% else %}bg-black/40 border-white/10 hover:border-[#FBBF24]/60 hover:bg-black/60{% endif %}">
-          <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0 bg-[#FBBF24]/20 text-[#FBBF24]">
+           class="p-4 sm:p-5 rounded-2xl border transition-all duration-300 flex items-start gap-4 {% if selected_jurusan == 'ips' %}bg-amber-950/30 border-[#F5D061]/60 ring-1 ring-[#F5D061]/30 shadow-lg{% else %}bg-white/[0.02] border-white/10 hover:border-[#F5D061]/40 hover:bg-white/[0.04]{% endif %}">
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 bg-[#F5D061]/10 text-[#FDE68A] border border-[#F5D061]/20 text-lg">
             📚
           </div>
           <div class="flex-1">
             <div class="flex items-center justify-between gap-2">
-              <h3 class="font-black text-base sm:text-lg text-white">Kelas IPS (Sosial)</h3>
+              <h3 class="font-bold text-base text-white">Kelas IPS (Sosial)</h3>
               {% if selected_jurusan == 'ips' %}
-                <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#FBBF24] text-black">
+                <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#F5D061] text-black">
                   ✓ Aktif
                 </span>
               {% endif %}
             </div>
-            <p class="text-xs text-stone-300 mt-1">
-              Dapat memilih cabang <strong>Matematika</strong>, <strong>Kebumian</strong>, <strong>Geografi</strong>, dan <strong>Ekonomi</strong>. Cabang sains lainnya (Fisika, Kimia, Biologi, Astronomi, Informatika) khusus siswa IPA.
+            <p class="text-xs text-stone-400 mt-1 leading-relaxed">
+              Dapat memilih cabang <strong>Matematika</strong>, <strong>Kebumian</strong>, <strong>Geografi</strong>, dan <strong>Ekonomi</strong>. Cabang sains lainnya khusus IPA.
             </p>
-            <div class="mt-3 text-xs font-bold text-[#FBBF24] flex items-center gap-1">
+            <div class="mt-2.5 text-xs font-bold text-[#FDE68A] flex items-center gap-1">
               <span>{% if selected_jurusan == 'ips' %}Peminatan Terpilih{% else %}Pilih Kelas IPS &rarr;{% endif %}</span>
             </div>
           </div>
@@ -115,106 +130,126 @@
   </section>
   {% endif %}
 
-  <!-- SUB-EVENTS GRID (CATATAN: FORMAT DITIADAKAN DARI KARTU SESUAI INSTRUKSI) -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+  <!-- SUB-EVENTS GRID -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div id="sub-branches-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
       {% for sub in category.subEvents %}
-        <article class="group rounded-2xl p-5 border backdrop-blur-md flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-                 style="background: rgba(15, 23, 42, 0.82); border-color: rgba(56, 189, 248, 0.22);">
+        <article class="sub-branch-card group rounded-2xl p-5 border backdrop-blur-md flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(0,0,0,0.6)] relative overflow-hidden"
+                 data-branch-name="{{ sub.name | lower }}"
+                 style="background: linear-gradient(145deg, rgba(13, 20, 36, 0.9) 0%, rgba(18, 27, 48, 0.8) 100%); border-color: rgba(255, 255, 255, 0.08);">
           
+          <!-- Subtle Top Accent Light on Hover -->
+          <div class="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-[#F5D061]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
           <div class="space-y-3.5">
             <div class="flex items-center justify-between gap-2">
-              <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md bg-[#FBBF24]/15 text-[#FBBF24] border border-[#FBBF24]/30">
+              <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white/[0.05] text-[#FDE68A] border border-[#F5D061]/25">
                 Cabang Lomba
               </span>
-              {% if sub.is_olimpiade_or_ai %}
+              {% if sub.is_external_gform %}
+                <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-400/10 text-[#FDE68A] border border-[#F5D061]/30 flex items-center gap-1">
+                  <svg class="w-3 h-3 text-[#F5D061]"><use href="#i-external"></use></svg>
+                  Google Form
+                </span>
+              {% elif sub.is_olimpiade_or_ai %}
                 {% if sub.is_full %}
-                  <span class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40">
+                  <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-rose-950/40 text-rose-300 border border-rose-500/30">
                     Kuota Penuh
                   </span>
                 {% else %}
-                  <span class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40">
+                  <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-white/[0.04] text-[#FDE68A] border border-white/10">
                     Sisa {{ sub.remaining_quota if sub.remaining_quota is not none else (20 - (sub.registered_count or 0)) }} Kuota
                   </span>
                 {% endif %}
               {% else %}
-                <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-950/60 text-emerald-300 border border-emerald-500/30">
+                <span class="text-[10px] font-medium px-2.5 py-0.5 rounded-full bg-white/[0.04] text-stone-300 border border-white/10">
                   Kuota Terbuka
                 </span>
               {% endif %}
             </div>
 
-            <h4 class="text-base sm:text-lg font-black text-white group-hover:text-[#FBBF24] transition-colors leading-snug">
-              {{ sub.name }}
-            </h4>
-
-            <!-- Information list (Hanya Olimpiade & Literasi yang ada min/max) -->
-            <div class="space-y-1.5 text-xs text-stone-300 pt-2 border-t border-white/10">
+            <div>
+              <h4 class="text-base sm:text-lg font-bold text-white group-hover:text-[#FDE68A] transition-colors leading-snug">
+                {{ sub.name }}
+              </h4>
               {% if sub.tempat and sub.tempat != '-' %}
-                <div class="flex items-start justify-between gap-2">
-                  <span class="text-stone-400">Tempat Lomba:</span>
-                  <span class="font-bold text-right text-stone-200">{{ sub.tempat }}</span>
-                </div>
-              {% endif %}
-              {% if sub.is_olimpiade_or_ai %}
-                <div class="flex items-start justify-between gap-2">
-                  <span class="text-stone-400">Batas Kuota:</span>
-                  <span class="font-bold text-amber-300">Maks. 20 Peserta</span>
-                </div>
+                <p class="text-xs text-stone-400 mt-1 flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 text-stone-500"><use href="#i-location"></use></svg>
+                  <span>Lokasi: <strong class="text-stone-300">{{ sub.tempat }}</strong></span>
+                </p>
               {% endif %}
             </div>
 
-            <!-- Informasi Pendaftar & Sisa Kuota (DI SELURUH LOMBA) -->
-            <div class="p-3 rounded-xl bg-black/60 border border-white/10 space-y-1.5">
-              <div class="flex items-center justify-between text-xs">
-                <span class="text-stone-400 flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                  Terdaftar Saat Ini:
-                </span>
-                <span class="font-black text-white bg-white/10 px-2 py-0.5 rounded-md">
-                  {{ sub.registered_count }} Orang
+            <!-- Progress Bar Kuota / Box Pendaftaran -->
+            {% if sub.is_external_gform %}
+              <div class="p-2.5 rounded-xl bg-black/40 border border-white/10 flex items-center justify-between text-xs">
+                <span class="text-stone-400">Pendaftaran:</span>
+                <span class="font-bold text-[#FDE68A] flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 text-[#F5D061]"><use href="#i-external"></use></svg>
+                  Google Form Resmi
                 </span>
               </div>
-              <div class="flex items-center justify-between text-xs pt-1 border-t border-white/10">
-                <span class="text-stone-400">Sisa Kuota:</span>
-                {% if sub.is_olimpiade_or_ai %}
-                  <span class="font-black {% if sub.is_full %}text-rose-400{% else %}text-amber-300{% endif %}">
-                    {% if sub.is_full %}Kuota Penuh (20/20){% else %}Sisa {{ sub.remaining_quota if sub.remaining_quota is not none else (20 - (sub.registered_count or 0)) }} dari 20 Kuota{% endif %}
-                  </span>
-                {% else %}
-                  <span class="font-bold text-emerald-400">Kuota Terbuka</span>
-                {% endif %}
+            {% elif sub.is_olimpiade_or_ai %}
+              <div class="p-3 rounded-xl bg-black/40 border border-white/10 space-y-1.5">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="text-stone-400">Pendaftar Kuota:</span>
+                  <span class="font-bold text-white">{{ sub.registered_count or 0 }} / 20</span>
+                </div>
+                <div class="w-full bg-white/5 rounded-full h-1.5 overflow-hidden border border-white/5">
+                  <div class="h-full bg-gradient-to-r from-sky-400 to-[#F5D061] rounded-full transition-all duration-500" 
+                       style="width: {{ [(((sub.registered_count or 0) / 20) * 100), 100]|min }}%;"></div>
+                </div>
               </div>
-            </div>
+            {% else %}
+              <div class="p-2.5 rounded-xl bg-black/40 border border-white/10 flex items-center justify-between text-xs">
+                <span class="text-stone-400">Peserta Terdaftar:</span>
+                <span class="font-bold text-white">{{ sub.registered_count or 0 }} Orang</span>
+              </div>
+            {% endif %}
           </div>
 
           <div class="pt-4 mt-4 border-t border-white/10">
-            {% if sub.is_disabled_jurusan %}
+            {% if sub.is_external_gform %}
+              <a href="{{ sub.gform_url }}"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 class="w-full py-2.5 rounded-xl text-xs font-black uppercase tracking-wider text-[#0B1120] bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-sm transition-all hover:scale-[1.01] flex items-center justify-center gap-1.5 group/btn">
+                <svg class="w-3.5 h-3.5 shrink-0"><use href="#i-external"></use></svg>
+                <span>Daftar via Google Form</span>
+                <span class="text-sm font-bold group-hover/btn:translate-x-0.5 transition-transform">&rarr;</span>
+              </a>
+            {% elif sub.is_disabled_jurusan %}
               <button type="button"
                       data-blocked-jurusan-btn="{{ sub.id }}"
                       data-blocked-sub-name="{{ sub.name }}"
-                      class="w-full py-2.5 rounded-xl text-xs font-bold text-amber-300/80 bg-stone-900/90 border border-amber-500/40 hover:border-amber-400 hover:text-amber-200 transition-colors flex items-center justify-center gap-1.5"
+                      class="w-full py-2.5 rounded-xl text-xs font-semibold text-stone-300 bg-stone-900 border border-white/10 hover:border-amber-400/50 hover:text-amber-200 transition-colors flex items-center justify-center gap-1.5"
                       title="Klik untuk melihat ketentuan peminatan">
                 <svg class="w-3.5 h-3.5 text-amber-400"><use href="#i-x"></use></svg>
-                <span>Khusus Siswa IPA (Klik Info)</span>
+                <span>Khusus Siswa IPA (Lihat Info)</span>
               </button>
             {% elif sub.is_full %}
               <button type="button" disabled
-                      class="w-full py-2.5 rounded-xl text-xs font-black uppercase tracking-wider text-stone-400 bg-stone-800 cursor-not-allowed flex items-center justify-center gap-1.5">
+                      class="w-full py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider text-stone-500 bg-stone-900 border border-white/5 cursor-not-allowed flex items-center justify-center gap-1.5">
                 <span>Kuota Penuh (20/20)</span>
               </button>
             {% else %}
               <button type="button"
                       data-register-sub="{{ sub.id }}"
                       data-sub-name="{{ sub.name }}"
-                      class="w-full py-2.5 rounded-xl text-xs font-black uppercase tracking-wider text-black bg-gradient-to-r from-[#FB7185] via-[#FBBF24] to-[#38BDF8] hover:brightness-110 shadow-md transition-transform hover:scale-[1.02] flex items-center justify-center gap-1.5">
-                <span><strong>Daftar Lomba</strong></span>
-                <svg class="w-3.5 h-3.5 text-black"><use href="#i-chevron"></use></svg>
+                      class="w-full py-2.5 rounded-xl text-xs font-black uppercase tracking-wider text-[#0B1120] bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-sm transition-all hover:scale-[1.01] flex items-center justify-center gap-1.5">
+                <span>Daftar Lomba</span>
+                <span class="text-sm font-bold">&rarr;</span>
               </button>
             {% endif %}
           </div>
         </article>
       {% endfor %}
+    </div>
+
+    <!-- Empty search message -->
+    <div id="sub-empty-search" class="hidden py-16 text-center text-stone-400 space-y-2">
+      <p class="text-base font-bold text-white">Cabang lomba tidak ditemukan</p>
+      <p class="text-xs">Coba gunakan kata kunci pencarian yang lain.</p>
     </div>
   </section>
 </div>
@@ -223,14 +258,14 @@
 <!-- REGISTRATION FORM MODAL (FORMAT SHEET 2 SESUAI CABANG) -->
 <!-- ========================================================================= -->
 <div id="modal-register" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-  <div class="relative w-full max-w-xl rounded-3xl p-6 sm:p-8 bg-[#0F172A] border border-[#38BDF8]/40 max-h-[92vh] overflow-y-auto shadow-2xl">
+  <div class="relative w-full max-w-xl rounded-3xl p-6 sm:p-8 bg-[#0F172A] border border-[#F5D061]/35 shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_35px_rgba(245,208,97,0.15)] max-h-[92vh] overflow-y-auto shadow-2xl">
     
     <button type="button" id="btn-close-register-modal" class="absolute top-5 right-5 p-2 rounded-full bg-white/10 text-stone-300 hover:text-white" aria-label="Tutup">
       <svg class="w-5 h-5"><use href="#i-x"></use></svg>
     </button>
 
     <div class="flex items-center gap-3 mb-4">
-      <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-gradient-to-tr from-[#FB7185] to-[#FBBF24] text-black font-black">
+      <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-gradient-to-tr from-[#38BDF8] via-[#FDE68A] to-[#F5D061] text-[#0B1120] font-black">
         <svg class="w-5 h-5"><use href="#i-trophy"></use></svg>
       </div>
       <div>
@@ -262,7 +297,7 @@
 
       <div class="pt-2">
         <button type="submit" id="btn-submit-registration"
-                class="w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-wider text-black bg-gradient-to-r from-[#FB7185] via-[#FBBF24] to-[#38BDF8] hover:brightness-110 shadow-lg transition-transform hover:scale-[1.01] flex items-center justify-center gap-2">
+                class="w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-wider bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] text-[#0B1120] hover:brightness-110 shadow-lg transition-transform hover:scale-[1.01] flex items-center justify-center gap-2">
           <svg class="w-4 h-4 text-stone-900"><use href="#i-check"></use></svg>
           <span><strong>Kirim Pendaftaran</strong></span>
         </button>

@@ -130,6 +130,34 @@
       ]
     },
     {
+      "id": "riset-inovasi",
+      "name": "RISET & INOVASI",
+      "hasSubEvents": true,
+      "description": "Olimpiade Penelitian Siswa (OPSI) & Festival Inovasi Kewirausahaan (FIKSI). Pendaftaran resmi via Google Form.",
+      "subEvents": [
+        {
+          "id": "opsi",
+          "name": "OPSI (Olimpiade Penelitian Siswa)",
+          "is_external_gform": true,
+          "gform_url": "https://forms.google.com/",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas"
+          ]
+        },
+        {
+          "id": "fiksi",
+          "name": "FIKSI (Festival Inovasi & Kewirausahaan)",
+          "is_external_gform": true,
+          "gform_url": "https://forms.google.com/",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas"
+          ]
+        }
+      ]
+    },
+    {
       "id": "lomba-debat-indonesia",
       "name": "LOMBA DEBAT INDONESIA",
       "hasSubEvents": true,
@@ -232,14 +260,6 @@
           ]
         },
         {
-          "id": "cosplay-jepang",
-          "name": "COSPLAY (JEPANG)",
-          "registrationFormat": [
-            "Nama Lengkap",
-            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
-          ]
-        },
-        {
           "id": "story-telling-korea",
           "name": "STORY TELLING KOREA",
           "registrationFormat": [
@@ -247,6 +267,18 @@
             "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
           ]
         }
+      ]
+    },
+    {
+      "id": "cosplay",
+      "name": "COSPLAY",
+      "hasSubEvents": false,
+      "description": "Kompetisi kreasi kostum, tata rias, dan aksi panggung karakter anime, manga, komik, atau game.",
+      "registrationFormat": [
+        "Nama Lengkap",
+        "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)",
+        "Nama Karakter",
+        "Asal Serial / Game"
       ]
     },
     {
@@ -272,6 +304,16 @@
           ]
         },
         {
+          "id": "jurnalistik",
+          "name": "JURNALISTIK",
+          "is_external_gform": true,
+          "gform_url": "https://forms.google.com/",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas"
+          ]
+        },
+        {
           "id": "menulis-cerpen",
           "name": "MENULIS CERITA PENDEK",
           "registrationFormat": [
@@ -288,8 +330,29 @@
           ]
         },
         {
+          "id": "cipta-lagu",
+          "name": "CIPTA LAGU",
+          "is_external_gform": true,
+          "gform_url": "https://forms.google.com/",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas"
+          ]
+        },
+        {
           "id": "desain-poster",
           "name": "DESAIN POSTER",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas",
+            "Link Portofolio"
+          ]
+        },
+        {
+          "id": "fotografi",
+          "name": "FOTOGRAFI",
+          "is_external_gform": true,
+          "gform_url": "https://forms.google.com/",
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas",
@@ -335,6 +398,17 @@
         {
           "id": "komik-digital",
           "name": "KOMIK DIGITAL",
+          "registrationFormat": [
+            "Nama Lengkap",
+            "Kelas",
+            "Link Portofolio"
+          ]
+        },
+        {
+          "id": "film-pendek",
+          "name": "FILM PENDEK",
+          "is_external_gform": true,
+          "gform_url": "https://forms.google.com/",
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas",

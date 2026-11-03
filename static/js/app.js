@@ -348,8 +348,14 @@ function initNordelia() {
     if (!c) {
       c = cabangList.find(item => 
         ((cabangId === "ai" || cabangId === "olimpiade-ai") && (item.id.includes("ai") || item.name.toLowerCase().includes("artifisial"))) ||
+        ((cabangId === "cosplay" || cabangId === "cosplay-jepang") && (item.id.includes("cosplay") || item.name.toLowerCase().includes("cosplay"))) ||
         item.name.toLowerCase().includes(cabangId.toLowerCase())
       );
+    }
+
+    if (c && c.is_external_gform && c.gform_url) {
+      window.open(c.gform_url, "_blank");
+      return;
     }
     console.log("Cabang ditemukan:", c ? c.name : "tidak ditemukan");
     if (!c) {

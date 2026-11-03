@@ -127,6 +127,8 @@ def build_decorated_cabang_list():
             c_copy["quota_text"] = "Kuota Terbuka"
             c_copy["quota_badge"] = "Kuota Terbuka"
             
+        c_copy["is_external_gform"] = c.get("is_external_gform", False)
+        c_copy["gform_url"] = c.get("gform_url", "")
         c_copy["is_literasi"] = c["name"].lower().startswith("literasi") or cid.startswith("literasi")
         decorated.append(c_copy)
     return decorated
@@ -191,6 +193,8 @@ def nordelia_category(category_id: str):
                         "peserta_max": cb["peserta_max"],
                         "is_olimpiade_or_ai": cb["is_olimpiade_or_ai"],
                         "registrationFormat": ["Nama Lengkap", "Kelas"],
+                "is_external_gform": cabang_info.get("is_external_gform", False) if cabang_info else False,
+                "gform_url": cabang_info.get("gform_url", "") if cabang_info else "",
                     }
                     for cb in CABANG_LOMBA
                     if cb["category"] == category_id
@@ -281,6 +285,8 @@ def nordelia_category(category_id: str):
             sub["quota_text"] = (f"Sisa {rem} dari 20 Kuota" if rem > 0 else "Kuota Penuh (20/20)") if is_olimp else "Kuota Terbuka"
             sub["quota_badge"] = (f"Sisa {rem} Kuota" if rem > 0 else "Kuota Penuh") if is_olimp else "Kuota Terbuka"
             sub["format_type"] = cb.get("format_type", "olimpiade_akademik") if cb else "olimpiade_akademik"
+            sub["is_external_gform"] = cb.get("is_external_gform", False) if cb else sub.get("is_external_gform", False)
+            sub["gform_url"] = cb.get("gform_url", "") if cb else sub.get("gform_url", "")
             
             # Pengecekan Peminatan IPA/IPS untuk OSN
             sub["is_ipa_only"] = sub_id in OSN_IPA_ONLY_IDS
