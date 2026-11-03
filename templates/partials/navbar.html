@@ -1,0 +1,55 @@
+<header id="site-header" class="fixed top-0 left-0 right-0 z-50 py-5">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3.5 group" data-close-nav>
+        <div class="relative w-11 h-11 rounded-full overflow-hidden border-2 border-orvelion-coral shadow-md">
+          <img src="{{ url_for('static', filename='images/orvelion.jpg') }}" alt="Logo Orvelion" class="w-full h-full object-cover" />
+        </div>
+        <div class="flex flex-col">
+          <span class="font-extrabold text-lg sm:text-xl tracking-wider text-gradient-orvelion">ORVELION</span>
+          <span class="text-[11px] font-medium tracking-widest text-orvelion-peach/80 uppercase">OSIS SMA IGS 26-27</span>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-1.5 bg-black/40 border border-orvelion-coral/20 rounded-full px-4 py-1.5 backdrop-blur-md">
+        {% for link in nav_links %}
+          <a href="{{ link.href }}"
+             class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all
+                    {% if active_page == link.id %}bg-gradient-to-r from-orvelion-rust to-orvelion-ember text-white shadow-md{% else %}text-orvelion-lilac/80 hover:text-white hover:bg-white/5{% endif %}">
+            {% if link.id == 'home' %}<svg class="w-4 h-4"><use href="#i-flame"></use></svg>
+            {% elif link.id == 'event' %}<svg class="w-4 h-4"><use href="#i-calendar"></use></svg>
+            {% elif link.id == 'before-us' %}<svg class="w-4 h-4"><use href="#i-history"></use></svg>
+            {% else %}<svg class="w-4 h-4"><use href="#i-message"></use></svg>{% endif %}
+            <span>{{ link.name }}</span>
+          </a>
+        {% endfor %}
+      </nav>
+
+      <div class="hidden md:flex items-center">
+        <a href="/event" class="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white bg-gradient-to-r from-orvelion-coral to-orvelion-ember rounded-full hover:brightness-110 shadow-md">
+          Agenda 26-27
+        </a>
+      </div>
+
+      <button id="nav-toggle" type="button" class="md:hidden inline-flex items-center justify-center p-2.5 rounded-xl text-orvelion-peach bg-orvelion-surface/80 border border-orvelion-coral/30" aria-label="Menu">
+        <svg class="w-6 h-6"><use href="#i-menu"></use></svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="nav-drawer" class="hidden md:hidden glass-nav border-t border-orvelion-coral/20 px-4 pt-3 pb-6 mt-3 space-y-2">
+    <div class="flex flex-col gap-1.5">
+      {% for link in nav_links %}
+        <a href="{{ link.href }}" data-close-nav
+           class="flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium
+                  {% if active_page == link.id %}bg-gradient-to-r from-orvelion-rust/80 to-orvelion-ember/80 text-white border border-orvelion-coral/40{% else %}text-orvelion-lilac hover:bg-white/5{% endif %}">
+          <span>{{ link.name }}</span>
+          <svg class="w-4 h-4 text-orvelion-peach/50"><use href="#i-chevron"></use></svg>
+        </a>
+      {% endfor %}
+    </div>
+    <a href="/event" data-close-nav class="block w-full text-center py-3 text-sm font-semibold uppercase text-white bg-gradient-to-r from-orvelion-coral to-orvelion-ember rounded-xl">
+      Lihat Agenda Event Orvelion
+    </a>
+  </div>
+</header>
