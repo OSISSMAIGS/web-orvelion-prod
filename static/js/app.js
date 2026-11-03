@@ -306,7 +306,7 @@ function initNordelia() {
       document.querySelectorAll(".cat-pill").forEach(function (p) {
         p.className = "cat-pill px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap bg-stone-900/80 text-stone-300 hover:text-white border border-white/10";
       });
-      pill.className = "cat-pill is-active px-4 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap bg-gradient-to-r from-[#FFB7C5] to-[#FFE5B4] text-black";
+      pill.className = "cat-pill is-active px-4 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] text-[#0B1120] font-black";
 
       if (currentCategoryName) {
         currentCategoryName.textContent = cat === "semua" ? "Semua Kategori" : cat.toUpperCase();
@@ -404,7 +404,7 @@ function initNordelia() {
           if (live.is_limited) {
             const isFull = live.is_full;
             const rem = live.remaining_quota != null ? live.remaining_quota : Math.max(0, 20 - live.count);
-            qWrap.innerHTML = `<span class="${isFull ? 'text-rose-400' : 'text-[#FF8533]'} font-bold">${isFull ? 'Kuota Penuh (20/20)' : 'Sisa ' + rem + ' dari 20 Kuota'}</span>`;
+            qWrap.innerHTML = `<span class="${isFull ? 'text-rose-400' : 'text-[#FF7A00]'} font-bold">${isFull ? 'Kuota Penuh (20/20)' : 'Sisa ' + rem + ' dari 20 Kuota'}</span>`;
           } else {
             qWrap.innerHTML = `<span class="text-white font-bold">Kuota Terbuka</span>`;
           }
@@ -431,7 +431,7 @@ function initNordelia() {
           <div>
             <label class="block text-xs font-bold text-stone-200 mb-1">${field.label} ${field.required ? '<span class="text-rose-400">*</span>' : ''}</label>
             <textarea name="${field.name}" ${field.required ? 'required' : ''} placeholder="${field.placeholder}" rows="3"
-                      class="w-full px-3.5 py-2.5 rounded-xl bg-stone-900 border border-white/20 text-xs text-white placeholder-stone-500 focus:outline-none focus:border-[#FFE5B4]"></textarea>
+                      class="w-full px-3.5 py-2.5 rounded-xl bg-stone-900 border border-white/20 text-xs text-white placeholder-stone-500 focus:outline-none focus:border-[#38BDF8]"></textarea>
           </div>
         `;
       } else {
@@ -439,7 +439,7 @@ function initNordelia() {
           <div>
             <label class="block text-xs font-bold text-stone-200 mb-1">${field.label} ${field.required ? '<span class="text-rose-400">*</span>' : ''}</label>
             <input type="${field.type}" name="${field.name}" ${field.required ? 'required' : ''} placeholder="${field.placeholder}"
-                   class="w-full px-3.5 py-2.5 rounded-xl bg-stone-900 border border-white/20 text-xs text-white placeholder-stone-500 focus:outline-none focus:border-[#FFE5B4]" />
+                   class="w-full px-3.5 py-2.5 rounded-xl bg-stone-900 border border-white/20 text-xs text-white placeholder-stone-500 focus:outline-none focus:border-[#38BDF8]" />
           </div>
         `;
       }
@@ -494,10 +494,10 @@ function initNordelia() {
     if (badgeJurusan) {
       if (currentJurusan === "ipa") {
         badgeJurusan.textContent = "🔬 Kelas IPA";
-        badgeJurusan.className = "px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#AEC6CF]/20 text-[#AEC6CF] border border-[#AEC6CF]/40";
+        badgeJurusan.className = "px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#38BDF8]/20 text-[#38BDF8] border border-[#38BDF8]/40";
       } else if (currentJurusan === "ips") {
         badgeJurusan.textContent = "📚 Kelas IPS";
-        badgeJurusan.className = "px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#FFE5B4]/20 text-[#FFE5B4] border border-[#FFE5B4]/40";
+        badgeJurusan.className = "px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#FBBF24]/20 text-[#FBBF24] border border-[#FBBF24]/40";
       } else {
         badgeJurusan.textContent = "Semua Kelas";
         badgeJurusan.className = "px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/10 text-stone-300";
@@ -604,9 +604,9 @@ function initNordelia() {
       OSN_IPS_ALLOWED_IDS.forEach(id => {
         const card = document.querySelector(`[data-cabang-id="${id}"]`);
         if (card) {
-          card.classList.add("ring-2", "ring-[#FFE5B4]", "scale-[1.02]");
+          card.classList.add("ring-2", "ring-[#38BDF8]", "scale-[1.02]");
           setTimeout(() => {
-            card.classList.remove("ring-2", "ring-[#FFE5B4]", "scale-[1.02]");
+            card.classList.remove("ring-2", "ring-[#38BDF8]", "scale-[1.02]");
           }, 2500);
         }
       });

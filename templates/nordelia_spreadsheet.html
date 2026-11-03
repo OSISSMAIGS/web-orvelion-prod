@@ -5,23 +5,23 @@
 
   <!-- Header Banner -->
   <div class="rounded-3xl p-6 sm:p-8 border backdrop-blur-xl relative overflow-hidden"
-       style="background: linear-gradient(135deg, rgba(204,68,0,0.18) 0%, rgba(255,107,0,0.12) 50%, rgba(18,18,18,0.9) 100%); border-color: rgba(255, 107, 0, 0.35);">
+       style="background: linear-gradient(135deg, rgba(2,132,199,0.2) 0%, rgba(56,189,248,0.12) 50%, rgba(15,23,42,0.92) 100%); border-color: rgba(245, 208, 97, 0.35); box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 40px rgba(245,208,97,0.12);">
     
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
       <div class="space-y-3 max-w-2xl">
         <div class="flex items-center gap-2">
-          <a href="/nordelia" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#FF6B00] hover:underline">
+          <a href="/nordelia" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#38BDF8] hover:underline">
             &larr; Kembali ke Beranda Nordelia
           </a>
           <span class="text-white/40">•</span>
-          <span class="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[#FF8533]">
-            <span class="w-2 h-2 rounded-full bg-[#FF6B00] animate-ping"></span>
+          <span class="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[#BAE6FD]">
+            <span class="w-2 h-2 rounded-full bg-[#38BDF8] animate-ping"></span>
             Real-Time Google Sheets
           </span>
         </div>
         
         <h1 class="text-3xl sm:text-4xl font-black text-white">
-          Spreadsheet Pendaftaran <span class="bg-gradient-to-r from-white via-[#FF6B00] to-[#CC4400] bg-clip-text text-transparent">Nordelia 2026</span>
+          Spreadsheet Pendaftaran <span class="bg-gradient-to-r from-[#BAE6FD] via-[#38BDF8] to-[#FF7A00] bg-clip-text text-transparent">Nordelia 2026</span>
         </h1>
         <p class="text-xs sm:text-sm text-stone-200">
           Data pendaftaran lomba diklasifikasikan dan diambil secara real-time langsung dari Google Spreadsheet resmi panitia.
@@ -35,18 +35,18 @@
         </div>
         <div class="space-y-2">
           <a href="{{ spreadsheet_url }}" target="_blank" rel="noopener noreferrer"
-             class="px-5 py-3 rounded-2xl font-black text-xs uppercase tracking-wider text-black bg-gradient-to-r from-[#CC4400] via-[#FF6B00] to-[#FF8533] hover:text-white hover:brightness-110 shadow-lg flex items-center gap-2 transition-all hover:scale-105">
+             class="px-5 py-3 rounded-2xl font-black text-xs uppercase tracking-wider text-black bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] text-[#0B1120] hover:brightness-110 hover:brightness-110 shadow-lg flex items-center gap-2 transition-all hover:scale-105">
             <svg class="w-4 h-4 text-black"><use href="#i-external"></use></svg>
             <span>Buka Google Spreadsheet</span>
           </a>
           <div class="flex items-center gap-2">
             <a href="/nordelia/spreadsheet?sync=1{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_cabang %}&cabang={{ selected_cabang }}{% endif %}"
-               class="flex-1 px-3 py-2 rounded-xl font-bold text-xs text-white bg-black/70 border border-white/20 hover:border-[#FF6B00]/60 flex items-center justify-center gap-1.5 transition-colors">
-              <svg class="w-3.5 h-3.5 text-[#FF6B00]"><use href="#i-sparkles"></use></svg>
+               class="flex-1 px-3 py-2 rounded-xl font-bold text-xs text-white bg-black/70 border border-white/20 hover:border-[#38BDF8]/60 flex items-center justify-center gap-1.5 transition-colors">
+              <svg class="w-3.5 h-3.5 text-[#38BDF8]"><use href="#i-sparkles"></use></svg>
               <span>Refresh Sheet</span>
             </a>
             <a href="/api/nordelia/export.csv?category={{ selected_category }}"
-               class="flex-1 px-3 py-2 rounded-xl font-bold text-xs text-white bg-black/70 border border-white/20 hover:border-[#FF6B00]/60 flex items-center justify-center gap-1.5 transition-colors">
+               class="flex-1 px-3 py-2 rounded-xl font-bold text-xs text-white bg-black/70 border border-white/20 hover:border-[#38BDF8]/60 flex items-center justify-center gap-1.5 transition-colors">
               <svg class="w-3.5 h-3.5 text-white"><use href="#i-download"></use></svg>
               <span>Ekspor CSV</span>
             </a>
@@ -61,20 +61,20 @@
         <div class="text-xl sm:text-2xl font-black text-white">{{ summary.counts.total }}</div>
         <div class="text-[10px] uppercase tracking-wider text-stone-400 font-sans">Total Peserta</div>
       </div>
-      <div class="p-3 rounded-2xl bg-[#CC4400]/15 border border-[#CC4400]/40">
-        <div class="text-xl sm:text-2xl font-black text-[#CC4400]">{{ summary.counts.akademik }}</div>
+      <div class="p-3 rounded-2xl bg-[#0284C7]/20 border border-[#38BDF8]/40">
+        <div class="text-xl sm:text-2xl font-black text-[#38BDF8]">{{ summary.counts.akademik }}</div>
         <div class="text-[10px] uppercase tracking-wider text-stone-300 font-sans">Akademik</div>
       </div>
-      <div class="p-3 rounded-2xl bg-[#FF6B00]/15 border border-[#FF6B00]/40">
-        <div class="text-xl sm:text-2xl font-black text-[#FF6B00]">{{ summary.counts.bahasa }}</div>
+      <div class="p-3 rounded-2xl bg-[#FBBF24]/15 border border-[#FBBF24]/40">
+        <div class="text-xl sm:text-2xl font-black text-[#38BDF8]">{{ summary.counts.bahasa }}</div>
         <div class="text-[10px] uppercase tracking-wider text-stone-300 font-sans">Bahasa</div>
       </div>
       <div class="p-3 rounded-2xl bg-white/10 border border-white/30">
         <div class="text-xl sm:text-2xl font-black text-white">{{ summary.counts.seni }}</div>
         <div class="text-[10px] uppercase tracking-wider text-stone-300 font-sans">Seni</div>
       </div>
-      <div class="p-3 rounded-2xl bg-[#FF8533]/15 border border-[#FF8533]/40">
-        <div class="text-xl sm:text-2xl font-black text-[#FF8533]">{{ summary.counts.olahraga }}</div>
+      <div class="p-3 rounded-2xl bg-[#FF7A00]/15 border border-[#FF7A00]/40">
+        <div class="text-xl sm:text-2xl font-black text-[#FF7A00]">{{ summary.counts.olahraga }}</div>
         <div class="text-[10px] uppercase tracking-wider text-stone-300 font-sans">Olahraga</div>
       </div>
     </div>
@@ -82,18 +82,18 @@
 
   <!-- CLASSIFICATION TABS & CONTROLS -->
   <div class="space-y-3">
-    <div class="p-4 rounded-2xl bg-[#141414] border border-white/10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+    <div class="p-4 rounded-2xl bg-[#0F172A] border border-white/10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
       <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
         <a href="/nordelia/spreadsheet?category=semua"
-           class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'semua' and not selected_cabang %}bg-gradient-to-r from-[#CC4400] via-[#FF6B00] to-[#FF8533] text-black{% else %}bg-black text-stone-300 hover:text-white border border-white/10{% endif %}">
+           class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'semua' and not selected_cabang %}bg-gradient-to-r from-[#0284C7] via-[#38BDF8] to-[#FF7A00] text-black{% else %}bg-black text-stone-300 hover:text-white border border-white/10{% endif %}">
           Master Pendaftaran (Semua)
         </a>
         <a href="/nordelia/spreadsheet?category=akademik"
-           class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'akademik' and not selected_cabang %}bg-[#CC4400] text-white{% else %}bg-black text-[#CC4400] hover:text-white border border-[#CC4400]/40{% endif %}">
+           class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'akademik' and not selected_cabang %}bg-[#0284C7] text-white{% else %}bg-black text-[#38BDF8] hover:text-white border border-[#38BDF8]/40{% endif %}">
           Akademik
         </a>
         <a href="/nordelia/spreadsheet?category=bahasa"
-           class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'bahasa' and not selected_cabang %}bg-[#FF6B00] text-black{% else %}bg-black text-[#FF6B00] hover:text-white border border-[#FF6B00]/40{% endif %}">
+           class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'bahasa' and not selected_cabang %}bg-[#FBBF24] text-black{% else %}bg-black text-[#38BDF8] hover:text-white border border-[#FBBF24]/40{% endif %}">
           Bahasa
         </a>
         <a href="/nordelia/spreadsheet?category=seni"
@@ -101,7 +101,7 @@
           Seni
         </a>
         <a href="/nordelia/spreadsheet?category=olahraga"
-           class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'olahraga' and not selected_cabang %}bg-[#FF8533] text-black{% else %}bg-black text-[#FF8533] hover:text-white border border-[#FF8533]/40{% endif %}">
+           class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'olahraga' and not selected_cabang %}bg-[#FF7A00] text-black{% else %}bg-black text-[#FF7A00] hover:text-white border border-[#FF7A00]/40{% endif %}">
           Olahraga
         </a>
         <a href="/nordelia/spreadsheet?category=format"
@@ -113,17 +113,17 @@
       <div class="relative min-w-[240px]">
         <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400"><use href="#i-search"></use></svg>
         <input id="table-search" type="text" placeholder="Filter nama peserta, kelas, atau lomba..."
-               class="w-full pl-9 pr-4 py-2 text-xs rounded-xl bg-black border border-white/20 text-white placeholder-stone-500 focus:outline-none focus:border-[#FF6B00]" />
+               class="w-full pl-9 pr-4 py-2 text-xs rounded-xl bg-black border border-white/20 text-white placeholder-stone-500 focus:outline-none focus:border-[#38BDF8]" />
       </div>
     </div>
 
     <!-- Quick Select Sheet per Cabang Lomba -->
-    <div class="p-3.5 rounded-2xl bg-[#141414] border border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
+    <div class="p-3.5 rounded-2xl bg-[#0F172A] border border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
       <div class="flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-[#FF6B00] animate-pulse"></span>
-        <span class="font-bold text-[#FF6B00]">Pilih Sheet Lomba:</span>
+        <span class="w-2 h-2 rounded-full bg-[#FBBF24] animate-pulse"></span>
+        <span class="font-bold text-[#38BDF8]">Pilih Sheet Lomba:</span>
         <select onchange="window.location.href=this.value"
-                class="px-3 py-1.5 rounded-xl bg-black border border-white/20 text-xs text-white focus:outline-none focus:border-[#FF6B00] max-w-xs sm:max-w-md">
+                class="px-3 py-1.5 rounded-xl bg-black border border-white/20 text-xs text-white focus:outline-none focus:border-[#38BDF8] max-w-xs sm:max-w-md">
           <option value="/nordelia/spreadsheet?category=semua">-- Master Pendaftaran (Semua Lomba) --</option>
           {% for cb in cabang_lomba %}
             <option value="/nordelia/spreadsheet?cabang={{ cb.id }}" {% if selected_cabang == cb.id %}selected{% endif %}>
@@ -147,17 +147,17 @@
   <!-- CONTENT VIEW -->
   {% if selected_category == 'format' %}
     <!-- SHEET 2 FORMAT VIEW -->
-    <div class="rounded-3xl p-6 bg-[#141414] border border-[#FF6B00]/30 space-y-6">
+    <div class="rounded-3xl p-6 bg-[#0F172A] border border-[#38BDF8]/30 space-y-6">
       <div class="space-y-1">
-        <h3 class="text-xl font-black text-[#FF6B00]">Sheet 2: Format Resmi Pendaftaran Lomba</h3>
+        <h3 class="text-xl font-black text-[#38BDF8]">Sheet 2: Format Resmi Pendaftaran Lomba</h3>
         <p class="text-xs text-stone-300">Struktur pengisian formulir sesuai ketetapan koordinator lomba Nordelia 2026.</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         {% for fmt in sheet2_formats %}
           <div class="p-5 rounded-2xl bg-black/70 border border-white/10 space-y-3">
-            <h4 class="text-xs font-black uppercase text-[#FF6B00] tracking-wider">{{ fmt.kategori_lomba }}</h4>
-            <div class="p-3 rounded-xl bg-black font-mono text-xs text-stone-200 space-y-1 border-l-2 border-[#FF6B00]">
+            <h4 class="text-xs font-black uppercase text-[#38BDF8] tracking-wider">{{ fmt.kategori_lomba }}</h4>
+            <div class="p-3 rounded-xl bg-black font-mono text-xs text-stone-200 space-y-1 border-l-2 border-[#38BDF8]">
               {% for line in fmt.format_isi %}
                 <div>{{ line }}</div>
               {% endfor %}
@@ -170,7 +170,7 @@
 
   {% else %}
     <!-- LIVE SPREADSHEET TABLE -->
-    <div class="rounded-3xl border border-white/10 bg-[#141414] overflow-hidden shadow-2xl">
+    <div class="rounded-3xl border border-white/10 bg-[#0F172A] overflow-hidden shadow-2xl">
       <div class="overflow-x-auto max-h-[600px]">
         <table class="w-full text-left text-xs text-stone-200">
           <thead class="text-[11px] uppercase tracking-wider text-white bg-black border-b border-white/10 sticky top-0 backdrop-blur-md">
@@ -194,10 +194,10 @@
                   <td class="py-3 px-4 text-stone-400 whitespace-nowrap">{{ r.created_at }}</td>
                   <td class="py-3 px-4">
                     <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase
-                                 {% if r.category_id == 'akademik' %}bg-[#CC4400]/20 text-[#CC4400] border border-[#CC4400]/30
-                                 {% elif r.category_id == 'bahasa' %}bg-[#FF6B00]/20 text-[#FF6B00] border border-[#FF6B00]/30
+                                 {% if r.category_id == 'akademik' %}bg-[#0284C7]/20 text-[#38BDF8] border border-[#38BDF8]/30
+                                 {% elif r.category_id == 'bahasa' %}bg-[#FBBF24]/20 text-[#FBBF24] border border-[#FBBF24]/30
                                  {% elif r.category_id == 'seni' %}bg-white/15 text-white border border-white/30
-                                 {% else %}bg-[#FF8533]/20 text-[#FF8533] border border-[#FF8533]/30{% endif %}">
+                                 {% else %}bg-[#FF7A00]/20 text-[#FF7A00] border border-[#FF7A00]/30{% endif %}">
                       {{ r.category_id }}
                     </span>
                   </td>
@@ -232,7 +232,7 @@
 
       <div class="p-4 border-t border-white/10 bg-black/60 flex items-center justify-between text-xs text-stone-400">
         <span>Menampilkan {{ registrations|length }} entri pendaftaran dari Google Sheet.</span>
-        <a href="/nordelia#section-cabang" class="text-[#FF6B00] font-bold hover:underline">
+        <a href="/nordelia#section-cabang" class="text-[#38BDF8] font-bold hover:underline">
           + Tambah Pendaftaran Baru
         </a>
       </div>

@@ -1,16 +1,16 @@
 <div id="modal-registered" class="hidden fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md"
      data-group-link="{{ group_link or '' }}"
      data-group-label="{{ group_label or 'Masuk Grup WhatsApp' }}">
-  <div class="relative w-full max-w-md rounded-3xl p-6 sm:p-8 bg-[#141414] border border-[#FF6B00]/40 shadow-2xl text-center">
+  <div class="relative w-full max-w-md rounded-3xl p-6 sm:p-8 bg-[#0F172A] border border-[#F5D061]/40 shadow-[0_25px_60px_rgba(0,0,0,0.8),0_0_35px_rgba(245,208,97,0.18)] shadow-2xl text-center">
     <button type="button" id="btn-close-registered" class="absolute top-4 right-4 p-2 rounded-full bg-white/10 text-stone-300 hover:text-white" aria-label="Tutup">
       <svg class="w-5 h-5"><use href="#i-x"></use></svg>
     </button>
 
-    <div class="mx-auto w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-tr from-[#CC4400] via-[#FF6B00] to-[#FF8533] text-black mb-4">
+    <div class="mx-auto w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-tr from-[#38BDF8] via-[#FDE68A] to-[#F5D061] text-[#0B1120] text-black mb-4">
       <svg class="w-8 h-8"><use href="#i-check"></use></svg>
     </div>
 
-    <p class="text-[10px] font-black uppercase tracking-[0.2em] text-[#FF6B00] mb-2">Nordelia 2026</p>
+    <p class="text-[10px] font-black uppercase tracking-[0.2em] text-[#FDE68A] mb-2">Nordelia 2026</p>
     <h3 class="text-2xl sm:text-3xl font-black text-white leading-tight">
       Kamu sudah terdaftar
     </h3>
@@ -24,10 +24,10 @@
         Gabung grup resmi agar info teknis, jadwal, dan pengumuman lomba tidak terlewat.
       </p>
       <a id="btn-join-group" href="#" target="_blank" rel="noopener noreferrer"
-         class="hidden w-full py-3 rounded-xl font-black text-xs uppercase tracking-wider text-black bg-gradient-to-r from-[#CC4400] via-[#FF6B00] to-[#FF8533] hover:text-white hover:brightness-110 text-center shadow-lg">
+         class="hidden w-full py-3 rounded-xl font-black text-xs uppercase tracking-wider text-black bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] text-[#0B1120] font-black hover:text-white hover:brightness-110 text-center shadow-lg">
         Masuk Grup
       </a>
-      <div id="group-link-empty" class="hidden text-[11px] text-[#FF8533] bg-black/60 border border-[#FF6B00]/30 rounded-xl px-3 py-2">
+      <div id="group-link-empty" class="hidden text-[11px] text-[#FF7A00] bg-black/60 border border-[#38BDF8]/30 rounded-xl px-3 py-2">
         Link grup belum diisi panitia. Isi <span class="font-mono text-white">NORDELIA_GROUP_LINK</span> di file <span class="font-mono text-white">.env</span>.
       </div>
     </div>

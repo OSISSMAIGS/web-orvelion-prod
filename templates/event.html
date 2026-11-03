@@ -17,43 +17,84 @@
 </section>
 
 <!-- NORDELIA 2026 MAIN SECTION -->
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6">
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative">
+  <!-- Soft Glow Orbs Behind Section -->
+  <div class="absolute -top-10 left-10 w-72 h-72 rounded-full blur-[100px] bg-[#38BDF8]/15 pointer-events-none"></div>
+  <div class="absolute -bottom-10 right-10 w-80 h-80 rounded-full blur-[110px] bg-[#F5D061]/15 pointer-events-none"></div>
+
   <div class="relative rounded-3xl p-8 sm:p-12 border overflow-hidden backdrop-blur-xl"
-       style="background: linear-gradient(135deg, rgba(204,68,0,0.2) 0%, rgba(255,107,0,0.12) 50%, rgba(18,18,18,0.9) 100%); border-color: rgba(255, 107, 0, 0.35);">
+       style="background: radial-gradient(circle at 10% 20%, rgba(56,189,248,0.18) 0%, transparent 40%), radial-gradient(circle at 90% 10%, rgba(245,208,97,0.22) 0%, transparent 45%), linear-gradient(135deg, rgba(11,17,32,0.96) 0%, rgba(18,28,52,0.92) 50%, rgba(15,23,42,0.98) 100%); border-color: rgba(245, 208, 97, 0.35); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 50px rgba(245, 208, 97, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.15);">
     
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-      <div class="lg:col-span-7 space-y-4">
-        <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-black/60 text-[#FF6B00] border border-[#FF6B00]/40">
-          Festival Bulan Bahasa 2026
+    <!-- Top Decorative Line -->
+    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#F5D061] to-transparent opacity-75"></div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+      <div class="lg:col-span-7 space-y-5">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#F5D061]/15 text-[#FDE68A] border border-[#F5D061]/40 shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-[#F5D061] animate-ping"></span>
+          <svg class="w-3.5 h-3.5 text-[#F5D061]"><use href="#i-sparkles"></use></svg>
+          Festival Bulan Bahasa & Prestasi SMA IGS 2026
         </div>
-        <h2 class="text-3xl sm:text-4xl font-black text-white">NORDELIA 2026: Festival Kompetisi IGS</h2>
-        <p class="text-sm text-stone-200 max-w-xl">
-          Festival kompetisi akademik dan non-akademik terbesar SMA IGS mencakup Literasi, Olimpiade, Bahasa, Seni, dan Olahraga.
+
+        <div class="space-y-1">
+          <h2 class="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
+            <span class="bg-gradient-to-r from-white via-[#FDE68A] to-[#F5D061] bg-clip-text text-transparent">NORDELIA 2026</span>
+          </h2>
+          <p class="text-base sm:text-lg font-bold text-stone-200">
+            Festival Kompetisi & Panggung Bakat Siswa IGS
+          </p>
+        </div>
+
+        <p class="text-sm text-stone-300 max-w-xl leading-relaxed">
+          Festival akbar tahunan mencakup 43 cabang kompetisi Olahraga, Akademik (OSN & AI), Seni Budaya, dan Bahasa bagi seluruh siswa SMA Ignatius Global School.
         </p>
-        <div class="space-y-2 pt-2 text-sm text-stone-300">
-          <div class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-[#FF6B00]"><use href="#i-calendar"></use></svg>
-            <span class="text-white">13 - 14 Oktober 2026</span>
+
+        <div class="space-y-2.5 pt-2 text-sm text-stone-300">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg flex items-center justify-center bg-[#F5D061]/15 border border-[#F5D061]/30">
+              <svg class="w-4 h-4 text-[#F5D061]"><use href="#i-calendar"></use></svg>
+            </div>
+            <span class="text-white font-medium">13 - 14 Oktober 2026</span>
           </div>
-          <div class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-[#FF6B00]"><use href="#i-clock"></use></svg>
-            <span class="text-white">08:00 - 17:00 WIB</span>
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg flex items-center justify-center bg-[#F5D061]/15 border border-[#F5D061]/30">
+              <svg class="w-4 h-4 text-[#F5D061]"><use href="#i-clock"></use></svg>
+            </div>
+            <span class="text-white font-medium">08:00 - 17:00 WIB</span>
           </div>
-          <div class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-[#FF6B00]"><use href="#i-location"></use></svg>
-            <span class="text-white">SMA Ignatius Global School</span>
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg flex items-center justify-center bg-[#F5D061]/15 border border-[#F5D061]/30">
+              <svg class="w-4 h-4 text-[#F5D061]"><use href="#i-location"></use></svg>
+            </div>
+            <span class="text-white font-medium">SMA Ignatius Global School</span>
           </div>
         </div>
-        <a href="/nordelia" class="mt-4 inline-block px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-wider text-black bg-gradient-to-r from-[#CC4400] via-[#FF6B00] to-[#FF8533] hover:text-white hover:brightness-110 shadow-lg transition-transform hover:scale-105">
-          <strong>Daftar Lomba Sekarang</strong> &rarr;
-        </a>
+
+        <div class="pt-2">
+          <a href="/nordelia" class="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-wider text-[#0B1120] bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-[0_12px_30px_rgba(245,208,97,0.35)] transition-all hover:scale-105 group">
+            <span>Daftar Lomba Sekarang</span>
+            <span class="text-base group-hover:translate-x-1 transition-transform">&rarr;</span>
+          </a>
+        </div>
       </div>
       
       <div class="lg:col-span-5 flex items-center justify-center">
-        <div class="w-full max-w-sm p-4 rounded-3xl border backdrop-blur-xl text-center"
-             style="background: rgba(18, 18, 18, 0.85); border-color: rgba(255, 107, 0, 0.3);">
-          <img src="{{ url_for('static', filename='images/gumball.svg') }}" alt="Gumball Mascot" class="w-full h-64 object-contain filter drop-shadow-md" />
-          <p class="text-xs text-stone-300 mt-3 font-semibold">Semangat Sang Pemenang!</p>
+        <div class="w-full max-w-md p-3.5 sm:p-4 rounded-3xl border backdrop-blur-xl group transition-all duration-300 hover:border-[#F5D061]/60 overflow-hidden"
+             style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.95) 0%, rgba(24, 34, 62, 0.88) 100%); border-color: rgba(245, 208, 97, 0.35); box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 35px rgba(245, 208, 97, 0.15);">
+          
+          <div class="relative w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black/40">
+            <img src="{{ url_for('static', filename='images/nordelia_banner.jpg') }}" 
+                 alt="Official Banner Nordelia 2026" 
+                 class="w-full h-auto object-cover filter drop-shadow-md transition-transform duration-500 group-hover:scale-105" />
+            <div class="absolute top-2.5 left-2.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#0B1120]/80 backdrop-blur-md text-[#FDE68A] border border-[#F5D061]/40 shadow-lg">
+              Official Event Banner
+            </div>
+          </div>
+
+          <div class="pt-3 pb-1 text-center space-y-1">
+            <p class="text-xs text-[#FDE68A] font-black tracking-wide">Semangat Sang Pemenang!</p>
+            <p class="text-[11px] text-stone-300">Panggung Prestasi & Kreativitas Siswa SMA IGS</p>
+          </div>
         </div>
       </div>
     </div>
