@@ -1,7 +1,7 @@
 import json
 import os
 import time
-from flask import Blueprint, Response, jsonify, redirect, render_template, request, url_for
+from flask import Blueprint, Response, jsonify, redirect, render_template, request, session, url_for
 
 from orvelion.content import (
     CABINETS,
@@ -128,8 +128,12 @@ def build_decorated_cabang_list():
             c_copy["quota_text"] = "Kuota Terbuka"
             c_copy["quota_badge"] = "Kuota Terbuka"
             
+        c_copy["is_team"] = c.get("is_team", False)
         c_copy["is_external_gform"] = c.get("is_external_gform", False)
         c_copy["gform_url"] = c.get("gform_url", "")
+        c_copy["group_link"] = c.get("group_link", "")
+        c_copy["group_label"] = c.get("group_label", "Masuk Grup LINE")
+        c_copy["juknis_url"] = c.get("juknis_url", "")
         c_copy["is_literasi"] = c["name"].lower().startswith("literasi") or cid.startswith("literasi")
         c_copy["ketentuan"] = c.get("ketentuan")
         decorated.append(c_copy)
@@ -143,7 +147,7 @@ def nordelia():
     all_regs = storage.get_all_registrations()
     spreadsheet_url = get_config(
         "NORDELIA_SPREADSHEET_URL",
-        "https://docs.google.com/spreadsheets/d/" + get_config("NORDELIA_SPREADSHEET_ID", "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms") + "/edit",
+        "https://docs.google.com/spreadsheets/d/" + get_config("NORDELIA_SPREADSHEET_ID", "1I5PF4GTdkiMUcfQ-YBskctP6X_WnSruRGACEUnAwG-c") + "/edit",
     )
     nordelia_json = load_nordelia_events()
     return render_template(
@@ -258,6 +262,14 @@ def nordelia_category(category_id: str):
                 "quota_text": (f"Sisa {rem} dari 20 Kuota" if rem > 0 else "Kuota Penuh (20/20)") if is_olimp else "Kuota Terbuka",
                 "quota_badge": (f"Sisa {rem} Kuota" if rem > 0 else "Kuota Penuh") if is_olimp else "Kuota Terbuka",
                 "registrationFormat": ["Nama Lengkap", "Kelas"],
+                "is_team": cabang_info.get("is_team", False) if cabang_info else False,
+                "is_external_gform": cabang_info.get("is_external_gform", False) if cabang_info else False,
+                "gform_url": cabang_info.get("gform_url", "") if cabang_info else "",
+                "group_link": cabang_info.get("group_link", "") if cabang_info else "",
+                "group_label": cabang_info.get("group_label", "Masuk Grup LINE") if cabang_info else "Masuk Grup LINE",
+                "juknis_url": cabang_info.get("juknis_url", "") if cabang_info else "",
+                "ketentuan": cabang_info.get("ketentuan") if cabang_info else None,
+                "note": cabang_info.get("note", "-") if cabang_info else "-",
             }
         ]
     else:
@@ -291,10 +303,14 @@ def nordelia_category(category_id: str):
             sub["quota_text"] = (f"Sisa {rem} dari 20 Kuota" if rem > 0 else "Kuota Penuh (20/20)") if is_olimp else "Kuota Terbuka"
             sub["quota_badge"] = (f"Sisa {rem} Kuota" if rem > 0 else "Kuota Penuh") if is_olimp else "Kuota Terbuka"
             sub["format_type"] = cb.get("format_type", "olimpiade_akademik") if cb else "olimpiade_akademik"
+            sub["is_team"] = cb.get("is_team", False) if cb else False
             sub["is_external_gform"] = cb.get("is_external_gform", False) if cb else sub.get("is_external_gform", False)
             sub["gform_url"] = cb.get("gform_url", "") if cb else sub.get("gform_url", "")
-            sub["ketentuan"] = cb.get("ketentuan") if cb else None
-            sub["note"] = cb.get("note", "-") if cb else "-"
+            sub["group_link"] = cb.get("group_link", "") if cb else sub.get("group_link", "")
+            sub["group_label"] = cb.get("group_label", "Masuk Grup LINE") if cb else sub.get("group_label", "Masuk Grup LINE")
+            sub["juknis_url"] = cb.get("juknis_url", "") if cb else sub.get("juknis_url", "")
+            sub["ketentuan"] = cb.get("ketentuan") if cb else sub.get("ketentuan")
+            sub["note"] = cb.get("note", "-") if cb else sub.get("note", "-")
             
             # Pengecekan Peminatan IPA/IPS untuk OSN
             sub["is_ipa_only"] = sub_id in OSN_IPA_ONLY_IDS
@@ -322,8 +338,36 @@ def nordelia_category(category_id: str):
     )
 
 
-@bp.get("/nordelia/spreadsheet")
+SPREADSHEET_AUTH_PASSWORD = os.environ.get("SPREADSHEET_PASSWORD") or "DataOSIS123"
+
+
+@bp.route("/nordelia/spreadsheet", methods=["GET", "POST"])
 def nordelia_spreadsheet():
+    # 1. Tangani verifikasi password saat submit form
+    if request.method == "POST":
+        input_password = request.form.get("password", "").strip()
+        if input_password == SPREADSHEET_AUTH_PASSWORD:
+            session["nordelia_spreadsheet_authed"] = True
+            return redirect(url_for("pages.nordelia_spreadsheet"))
+        return render_template(
+            "nordelia_spreadsheet_login.html",
+            **_ctx(
+                active_page="nordelia",
+                error="Password salah! Silakan masukkan password otorisasi OSIS yang valid.",
+            )
+        ), 401
+
+    # 2. Cek apakah session sudah terautentikasi
+    if not session.get("nordelia_spreadsheet_authed"):
+        return render_template(
+            "nordelia_spreadsheet_login.html",
+            **_ctx(
+                active_page="nordelia",
+                error=None,
+            )
+        )
+
+    # 3. Jika sudah lolos password, tampilkan spreadsheet viewer
     selected_cat = request.args.get("category", "semua")
     selected_cabang = request.args.get("cabang", "")
     force_sync = request.args.get("sync") == "1"
@@ -341,7 +385,7 @@ def nordelia_spreadsheet():
     summary = storage.get_summary_stats()
     spreadsheet_url = get_config(
         "NORDELIA_SPREADSHEET_URL",
-        "https://docs.google.com/spreadsheets/d/" + get_config("NORDELIA_SPREADSHEET_ID", "1B4IyGD4mfPZkkQLjYfwNyGzOVw2EvMcDD_YlMTQ3lec") + "/edit",
+        "https://docs.google.com/spreadsheets/d/" + get_config("NORDELIA_SPREADSHEET_ID", "1I5PF4GTdkiMUcfQ-YBskctP6X_WnSruRGACEUnAwG-c") + "/edit",
     )
     return render_template(
         "nordelia_spreadsheet.html",
@@ -359,6 +403,36 @@ def nordelia_spreadsheet():
             spreadsheet_id=get_config("NORDELIA_SPREADSHEET_ID"),
         ),
     )
+
+
+@bp.get("/nordelia/spreadsheet/logout")
+def nordelia_spreadsheet_logout():
+    session.pop("nordelia_spreadsheet_authed", None)
+    return redirect(url_for("pages.nordelia_spreadsheet"))
+
+
+@bp.post("/api/nordelia/registrations/delete")
+def api_nordelia_delete_registration():
+    if not session.get("nordelia_spreadsheet_authed"):
+        return jsonify({"success": False, "error": "Akses ditolak. Silakan login terlebih dahulu."}), 403
+
+    data = request.get_json(silent=True) or request.form
+    reg_id = data.get("id")
+    if not reg_id:
+        return jsonify({"success": False, "error": "ID pendaftar tidak disertakan."}), 400
+
+    try:
+        reg_id_int = int(reg_id)
+    except (ValueError, TypeError):
+        return jsonify({"success": False, "error": "Format ID tidak valid."}), 400
+
+    ok = storage.delete_registration(reg_id_int)
+    if ok:
+        return jsonify({"success": True, "message": f"Data pendaftar #{reg_id_int} berhasil dihapus."})
+    else:
+        return jsonify({"success": False, "error": f"Data pendaftar #{reg_id_int} tidak ditemukan atau gagal dihapus."}), 404
+
+
 
 
 # =========================================================================
@@ -422,15 +496,30 @@ def api_nordelia_register():
             if not data.get("nama_lengkap"):
                 data["nama_lengkap"] = combined
 
+        # Gabungkan nama anggota jika format debat (NSDC / LDBI)
+        sp1 = str(data.get("speaker_1") or data.get("pembicara_1", "")).strip()
+        sp2 = str(data.get("speaker_2") or data.get("pembicara_2", "")).strip()
+        sp3 = str(data.get("speaker_3") or data.get("pembicara_3", "")).strip()
+        if sp1 or sp2 or sp3:
+            tim_label = str(data.get("nama_tim", "")).strip()
+            speakers = [s for s in [sp1, sp2, sp3] if s]
+            sp_str = ", ".join(speakers)
+            combined = f"{tim_label} ({sp_str})" if tim_label else sp_str
+            if not data.get("nama_lengkap"):
+                data["nama_lengkap"] = combined
+
+        if not data.get("whatsapp") and data.get("kontak"):
+            data["whatsapp"] = data.get("kontak")
+
         # Validasi nama peserta / tim
-        nama = data.get("nama_lengkap") or data.get("nama_tim") or data.get("nama", "").strip()
+        nama = str(data.get("nama_lengkap") or data.get("nama_tim") or data.get("nama") or "").strip()
         if not nama:
             return jsonify({
                 "success": False,
                 "error": "Nama lengkap peserta atau nama tim wajib diisi.",
             }), 400
 
-        kelas = data.get("kelas", "").strip()
+        kelas = str(data.get("kelas") or "").strip()
         if not kelas:
             return jsonify({
                 "success": False,
@@ -482,11 +571,14 @@ def api_nordelia_cabang_quota():
     if request.args.get("refresh") == "1":
         storage.invalidate_cache()
     count = storage.get_cabang_count(cabang_id)
+    cb_info = get_cabang_by_id(cabang_id)
+    is_team = bool(cb_info.get("is_team", False)) if cb_info else False
     is_limited = cabang_id in OLIMPIADE_9_DAN_AI_IDS
     rem = max(0, 20 - count) if is_limited else None
     return jsonify({
         "cabang_id": cabang_id,
         "count": count,
+        "is_team": is_team,
         "is_limited": is_limited,
         "max_quota": 20 if is_limited else None,
         "remaining_quota": rem,
@@ -536,6 +628,8 @@ def api_nordelia_stats():
 
 @bp.get("/api/nordelia/export.csv")
 def api_nordelia_export_csv():
+    if not session.get("nordelia_spreadsheet_authed"):
+        return jsonify({"error": "Unauthorized. Password panitia OSIS diperlukan."}), 401
     cat = request.args.get("category")
     csv_content = export_registrations_csv(cat)
     filename = f"pendaftaran_nordelia_{cat or 'semua'}_{int(time.time())}.csv" if "time" in globals() else f"pendaftaran_nordelia_{cat or 'semua'}.csv"
@@ -544,6 +638,24 @@ def api_nordelia_export_csv():
         mimetype="text/csv; charset=utf-8",
         headers={
             "Content-Disposition": f"attachment; filename={filename}",
+            "Cache-Control": "no-cache",
+        },
+    )
+
+
+@bp.get("/api/nordelia/format-pendaftaran.csv")
+def api_nordelia_format_pendaftaran_csv():
+    csv_path = os.path.join(os.path.dirname(__file__), "..", "nordelia_format_pendaftaran.csv")
+    if os.path.exists(csv_path):
+        with open(csv_path, "r", encoding="utf-8") as f:
+            content = f.read()
+    else:
+        content = "Format Pendaftaran Nordelia 2026\n"
+    return Response(
+        content,
+        mimetype="text/csv; charset=utf-8",
+        headers={
+            "Content-Disposition": "attachment; filename=format_pendaftaran_nordelia_2026.csv",
             "Cache-Control": "no-cache",
         },
     )

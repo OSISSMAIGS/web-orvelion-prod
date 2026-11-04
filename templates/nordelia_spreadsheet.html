@@ -24,7 +24,7 @@
           Spreadsheet Pendaftaran <span class="bg-gradient-to-r from-[#BAE6FD] via-[#38BDF8] to-[#FF7A00] bg-clip-text text-transparent">Nordelia 2026</span>
         </h1>
         <p class="text-xs sm:text-sm text-stone-200">
-          Data pendaftaran lomba diklasifikasikan dan diambil secara real-time langsung dari Google Spreadsheet resmi panitia.
+          Data pendaftaran peserta tersimpan dan terhubung secara real-time langsung ke database sistem resmi panitia OSIS.
         </p>
       </div>
 
@@ -34,21 +34,26 @@
           <img src="{{ url_for('static', filename='images/gumball.svg') }}" alt="Gumball" class="w-full h-full object-contain filter drop-shadow-md" />
         </div>
         <div class="space-y-2">
-          <a href="{{ spreadsheet_url }}" target="_blank" rel="noopener noreferrer"
-             class="px-5 py-3 rounded-2xl font-black text-xs uppercase tracking-wider text-black bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] text-[#0B1120] hover:brightness-110 hover:brightness-110 shadow-lg flex items-center gap-2 transition-all hover:scale-105">
-            <svg class="w-4 h-4 text-black"><use href="#i-external"></use></svg>
-            <span>Buka Google Spreadsheet</span>
+          <a href="/api/nordelia/export.csv?category={{ selected_category }}"
+             class="px-5 py-3 rounded-2xl font-black text-xs uppercase tracking-wider text-[#0B1120] bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-lg flex items-center justify-center gap-2 transition-all hover:scale-105">
+            <svg class="w-4 h-4 text-black"><use href="#i-download"></use></svg>
+            <span>Unduh Rekap Peserta (CSV)</span>
           </a>
           <div class="flex items-center gap-2">
             <a href="/nordelia/spreadsheet?sync=1{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_cabang %}&cabang={{ selected_cabang }}{% endif %}"
                class="flex-1 px-3 py-2 rounded-xl font-bold text-xs text-white bg-black/70 border border-white/20 hover:border-[#38BDF8]/60 flex items-center justify-center gap-1.5 transition-colors">
-              <svg class="w-3.5 h-3.5 text-[#38BDF8]"><use href="#i-sparkles"></use></svg>
-              <span>Refresh Sheet</span>
+              <svg class="w-3.5 h-3.5 text-[#38BDF8]"><use href="#i-refresh"></use></svg>
+              <span>Refresh Data</span>
             </a>
-            <a href="/api/nordelia/export.csv?category={{ selected_category }}"
-               class="flex-1 px-3 py-2 rounded-xl font-bold text-xs text-white bg-black/70 border border-white/20 hover:border-[#38BDF8]/60 flex items-center justify-center gap-1.5 transition-colors">
-              <svg class="w-3.5 h-3.5 text-white"><use href="#i-download"></use></svg>
-              <span>Ekspor CSV</span>
+            <a href="/api/nordelia/format-pendaftaran.csv"
+               class="flex-1 px-3 py-2 rounded-xl font-bold text-xs text-[#FDE68A] bg-black/70 border border-[#F5D061]/30 hover:border-[#F5D061] flex items-center justify-center gap-1.5 transition-colors" title="Download Format Pendaftaran CSV Resmi">
+              <svg class="w-3.5 h-3.5 text-[#F5D061]"><use href="#i-download"></use></svg>
+              <span>Format CSV</span>
+            </a>
+            <a href="/nordelia/spreadsheet/logout" title="Kunci Akses / Logout Data OSIS"
+               class="px-3 py-2 rounded-xl font-bold text-xs text-rose-300 bg-rose-950/60 border border-rose-500/30 hover:bg-rose-900/80 flex items-center justify-center gap-1.5 transition-colors">
+              <svg class="w-3.5 h-3.5 text-rose-400"><use href="#i-shield"></use></svg>
+              <span>Kunci</span>
             </a>
           </div>
         </div>
@@ -56,7 +61,7 @@
     </div>
 
     <!-- Category Stat Counters -->
-    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mt-6 pt-6 border-t border-white/10 text-center font-mono">
+    <div class="grid grid-cols-2 sm:grid-cols-6 gap-3 mt-6 pt-6 border-t border-white/10 text-center font-mono">
       <div class="p-3 rounded-2xl bg-black/60 border border-white/10">
         <div class="text-xl sm:text-2xl font-black text-white">{{ summary.counts.total }}</div>
         <div class="text-[10px] uppercase tracking-wider text-stone-400 font-sans">Total Peserta</div>
@@ -66,12 +71,16 @@
         <div class="text-[10px] uppercase tracking-wider text-stone-300 font-sans">Akademik</div>
       </div>
       <div class="p-3 rounded-2xl bg-[#FBBF24]/15 border border-[#FBBF24]/40">
-        <div class="text-xl sm:text-2xl font-black text-[#38BDF8]">{{ summary.counts.bahasa }}</div>
+        <div class="text-xl sm:text-2xl font-black text-[#FBBF24]">{{ summary.counts.bahasa }}</div>
         <div class="text-[10px] uppercase tracking-wider text-stone-300 font-sans">Bahasa</div>
       </div>
       <div class="p-3 rounded-2xl bg-white/10 border border-white/30">
         <div class="text-xl sm:text-2xl font-black text-white">{{ summary.counts.seni }}</div>
         <div class="text-[10px] uppercase tracking-wider text-stone-300 font-sans">Seni</div>
+      </div>
+      <div class="p-3 rounded-2xl bg-purple-500/15 border border-purple-400/40">
+        <div class="text-xl sm:text-2xl font-black text-purple-300">{{ summary.counts.cosplay or 0 }}</div>
+        <div class="text-[10px] uppercase tracking-wider text-stone-300 font-sans">Cosplay</div>
       </div>
       <div class="p-3 rounded-2xl bg-[#FF7A00]/15 border border-[#FF7A00]/40">
         <div class="text-xl sm:text-2xl font-black text-[#FF7A00]">{{ summary.counts.olahraga }}</div>
@@ -100,13 +109,17 @@
            class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'seni' and not selected_cabang %}bg-white text-black{% else %}bg-black text-white hover:text-white border border-white/30{% endif %}">
           Seni
         </a>
+        <a href="/nordelia/spreadsheet?category=cosplay"
+           class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'cosplay' and not selected_cabang %}bg-purple-600 text-white{% else %}bg-black text-purple-300 hover:text-white border border-purple-500/40{% endif %}">
+          Cosplay
+        </a>
         <a href="/nordelia/spreadsheet?category=olahraga"
            class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'olahraga' and not selected_cabang %}bg-[#FF7A00] text-black{% else %}bg-black text-[#FF7A00] hover:text-white border border-[#FF7A00]/40{% endif %}">
           Olahraga
         </a>
         <a href="/nordelia/spreadsheet?category=format"
            class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap {% if selected_category == 'format' %}bg-white text-black{% else %}bg-black text-stone-300 hover:text-white border border-white/10{% endif %}">
-          Sheet 2: Format Pendaftaran
+          Format Pendaftaran (CSV)
         </a>
       </div>
 
@@ -148,9 +161,16 @@
   {% if selected_category == 'format' %}
     <!-- SHEET 2 FORMAT VIEW -->
     <div class="rounded-3xl p-6 bg-[#0F172A] border border-[#38BDF8]/30 space-y-6">
-      <div class="space-y-1">
-        <h3 class="text-xl font-black text-[#38BDF8]">Sheet 2: Format Resmi Pendaftaran Lomba</h3>
-        <p class="text-xs text-stone-300">Struktur pengisian formulir sesuai ketetapan koordinator lomba Nordelia 2026.</p>
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="space-y-1">
+          <h3 class="text-xl font-black text-[#FDE68A]">Format Resmi Pendaftaran Lomba (CSV)</h3>
+          <p class="text-xs text-stone-300">Struktur pengisian formulir sesuai standar koordinator panitia Nordelia 2026.</p>
+        </div>
+        <a href="/api/nordelia/format-pendaftaran.csv"
+           class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider text-black bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-md">
+          <svg class="w-4 h-4"><use href="#i-download"></use></svg>
+          <span>Unduh Format Pendaftaran (CSV)</span>
+        </a>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -184,6 +204,7 @@
               <th class="py-3.5 px-4 font-black">WhatsApp</th>
               <th class="py-3.5 px-4 font-black">Detail / Format Khusus</th>
               <th class="py-3.5 px-4 font-black">Sumber Data</th>
+              <th class="py-3.5 px-4 font-black text-center">Aksi</th>
             </tr>
           </thead>
           <tbody id="spreadsheet-full-tbody" class="divide-y divide-white/5 font-mono">
@@ -205,23 +226,41 @@
                   <td class="py-3 px-4 font-sans text-stone-100 font-semibold">{{ r.participant_name }}</td>
                   <td class="py-3 px-4 whitespace-nowrap">{{ r.kelas }}</td>
                   <td class="py-3 px-4 whitespace-nowrap">{{ r.whatsapp }}</td>
-                  <td class="py-3 px-4 font-sans text-[11px] text-stone-300 max-w-xs truncate">
+                  <td class="py-3 px-4 font-sans text-[11px] text-stone-300 max-w-sm">
+                    {% if r.details and r.details.get('jenis_lomba_atletik') %}
+                      <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-500/30 font-bold mb-1">
+                        <span>🏃 Nomor:</span>
+                        <strong class="text-white">{{ r.details.get('jenis_lomba_atletik') }}</strong>
+                      </div>
+                    {% endif %}
                     {% if r.details %}
-                      {{ r.details | tojson }}
+                      <div class="truncate text-stone-400" title="{{ r.details | tojson }}">{{ r.details | tojson }}</div>
                     {% else %}
                       -
                     {% endif %}
                   </td>
                   <td class="py-3 px-4 whitespace-nowrap font-sans">
                     <span class="inline-flex items-center gap-1 text-[11px] text-emerald-400 font-bold">
-                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Google Sheet Live
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Real-Time Database
                     </span>
+                  </td>
+                  <td class="py-3 px-4 text-center whitespace-nowrap font-sans">
+                    <button type="button"
+                            class="btn-delete-row px-2.5 py-1 rounded-lg text-xs font-bold text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 hover:border-rose-500/60 transition-all inline-flex items-center gap-1.5 shadow-sm hover:scale-105"
+                            data-id="{{ r.id }}"
+                            data-name="{{ r.participant_name }}"
+                            data-cabang="{{ r.cabang_name }}">
+                      <svg class="w-3.5 h-3.5 text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                      <span>Hapus</span>
+                    </button>
                   </td>
                 </tr>
               {% endfor %}
             {% else %}
               <tr>
-                <td colspan="9" class="py-16 text-center text-stone-400 font-sans">
+                <td colspan="10" class="py-16 text-center text-stone-400 font-sans">
                   Belum ada data pendaftaran di kategori ini.
                 </td>
               </tr>
@@ -231,7 +270,7 @@
       </div>
 
       <div class="p-4 border-t border-white/10 bg-black/60 flex items-center justify-between text-xs text-stone-400">
-        <span>Menampilkan {{ registrations|length }} entri pendaftaran dari Google Sheet.</span>
+        <span>Menampilkan {{ registrations|length }} entri pendaftaran real-time.</span>
         <a href="/nordelia#section-cabang" class="text-[#38BDF8] font-bold hover:underline">
           + Tambah Pendaftaran Baru
         </a>
@@ -239,6 +278,41 @@
     </div>
   {% endif %}
 
+</div>
+
+
+<!-- MODAL KONFIRMASI HAPUS PESERTA -->
+<div id="modal-delete-confirm" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+  <div class="relative w-full max-w-md rounded-3xl p-6 bg-[#0F172A] border border-rose-500/40 shadow-[0_25px_60px_rgba(0,0,0,0.8),0_0_30px_rgba(244,63,94,0.2)] text-center space-y-4">
+    <div class="w-14 h-14 rounded-2xl mx-auto flex items-center justify-center bg-rose-500/15 border border-rose-500/30 text-rose-400">
+      <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+      </svg>
+    </div>
+    
+    <div class="space-y-1">
+      <h3 class="text-lg font-black text-white">Konfirmasi Hapus Data Peserta</h3>
+      <p class="text-xs text-stone-300">
+        Apakah Anda yakin ingin menghapus data pendaftaran berikut? Tindakan ini <span class="text-rose-400 font-bold">tidak dapat dibatalkan</span>.
+      </p>
+    </div>
+
+    <div class="p-4 rounded-2xl bg-black/60 border border-white/10 text-left space-y-1.5 text-xs font-mono">
+      <div class="text-stone-400">ID: <strong class="text-white" id="del-modal-id">#</strong></div>
+      <div class="text-stone-400">Peserta / Tim: <strong class="text-amber-300" id="del-modal-name">-</strong></div>
+      <div class="text-stone-400">Cabang Lomba: <strong class="text-sky-300" id="del-modal-cabang">-</strong></div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3 pt-2">
+      <button type="button" id="btn-cancel-delete" class="py-2.5 px-4 rounded-xl text-xs font-bold text-stone-300 bg-white/10 hover:bg-white/20 transition-all">
+        Batal
+      </button>
+      <button type="button" id="btn-confirm-delete" class="py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-500 shadow-lg shadow-rose-600/30 transition-all flex items-center justify-center gap-1.5">
+        <span id="btn-delete-spinner" class="hidden w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+        <span id="btn-delete-text">Ya, Hapus Data</span>
+      </button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -252,6 +326,79 @@ document.addEventListener("DOMContentLoaded", function () {
       const text = row.textContent.toLowerCase();
       row.classList.toggle("hidden", q && !text.includes(q));
     });
+  });
+
+  // LOGIKA HAPUS DATA DENGAN KONFIRMASI
+  const modalDel = document.getElementById("modal-delete-confirm");
+  const btnCancelDel = document.getElementById("btn-cancel-delete");
+  const btnConfirmDel = document.getElementById("btn-confirm-delete");
+  const delModalId = document.getElementById("del-modal-id");
+  const delModalName = document.getElementById("del-modal-name");
+  const delModalCabang = document.getElementById("del-modal-cabang");
+  const btnDelText = document.getElementById("btn-delete-text");
+  const btnDelSpinner = document.getElementById("btn-delete-spinner");
+
+  let activeRow = null;
+  let activeId = null;
+
+  document.querySelectorAll(".btn-delete-row").forEach(btn => {
+    btn.addEventListener("click", function () {
+      activeId = this.getAttribute("data-id");
+      const name = this.getAttribute("data-name");
+      const cabang = this.getAttribute("data-cabang");
+      activeRow = this.closest("tr");
+
+      delModalId.textContent = "#" + activeId;
+      delModalName.textContent = name;
+      delModalCabang.textContent = cabang;
+
+      modalDel.classList.remove("hidden");
+    });
+  });
+
+  btnCancelDel?.addEventListener("click", function () {
+    modalDel.classList.add("hidden");
+    activeId = null;
+    activeRow = null;
+  });
+
+  btnConfirmDel?.addEventListener("click", async function () {
+    if (!activeId) return;
+
+    btnConfirmDel.disabled = true;
+    btnDelSpinner.classList.remove("hidden");
+    btnDelText.textContent = "Menghapus...";
+
+    try {
+      const res = await fetch("/api/nordelia/registrations/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: activeId })
+      });
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        modalDel.classList.add("hidden");
+        if (activeRow) {
+          activeRow.style.transition = "all 0.4s ease";
+          activeRow.style.opacity = "0";
+          activeRow.style.transform = "translateX(20px)";
+          setTimeout(() => {
+            activeRow.remove();
+          }, 400);
+        }
+      } else {
+        alert(data.error || "Gagal menghapus data.");
+      }
+    } catch (err) {
+      alert("Terjadi kendala jaringan saat menghapus data: " + err.message);
+    } finally {
+      btnConfirmDel.disabled = false;
+      btnDelSpinner.classList.add("hidden");
+      btnDelText.textContent = "Ya, Hapus Data";
+      activeId = null;
+      activeRow = null;
+    }
   });
 });
 </script>

@@ -399,13 +399,17 @@ function initNordelia() {
       minMaxDisplay = `<span class="text-amber-300 font-bold">Maks. 20 Peserta</span>`;
     }
 
+    const isTeam = !!(c.is_team || c.isTeam);
+    const unitText = isTeam ? "Tim" : "Orang";
+    const labelText = isTeam ? "Tim Terdaftar:" : "Terdaftar:";
+
     formRuleBox.innerHTML = `
       <div class="flex items-center justify-between mb-1">
         <span class="text-stone-400">Lokasi: ${c.tempat || '-'}</span>
         ${minMaxDisplay}
       </div>
       <div class="flex items-center justify-between py-1 my-1 border-t border-b border-white/10 text-[11px]">
-        <span class="text-stone-300">Terdaftar: <strong class="text-white" id="modal-live-reg-count">${regCount} Orang</strong></span>
+        <span class="text-stone-300">${labelText} <strong class="text-white" id="modal-live-reg-count">${regCount} ${unitText}</strong></span>
         <span id="modal-live-quota-wrapper">${quotaDisplay}</span>
       </div>
       <p class="text-[11px] text-stone-300"><strong class="text-white">Ketentuan:</strong> ${c.note || '-'}</p>
@@ -417,7 +421,9 @@ function initNordelia() {
       .then((live) => {
         if (!live || typeof live.count !== "number") return;
         const regEl = document.getElementById("modal-live-reg-count");
-        if (regEl) regEl.textContent = `${live.count} Orang`;
+        const liveIsTeam = (typeof live.is_team !== "undefined") ? !!live.is_team : isTeam;
+        const liveUnit = liveIsTeam ? "Tim" : "Orang";
+        if (regEl) regEl.textContent = `${live.count} ${liveUnit}`;
         const qWrap = document.getElementById("modal-live-quota-wrapper");
         if (qWrap) {
           if (live.is_limited) {
@@ -445,7 +451,19 @@ function initNordelia() {
 
     let html = "";
     fmt.fields.forEach(field => {
-      if (field.type === "textarea") {
+      if (field.type === "select") {
+        const opts = (field.options || []).map(o => `<option value="${o}" class="bg-stone-900 text-white">${o}</option>`).join("");
+        html += `
+          <div>
+            <label class="block text-xs font-bold text-stone-200 mb-1">${field.label} ${field.required ? '<span class="text-rose-400">*</span>' : ''}</label>
+            <select name="${field.name}" ${field.required ? 'required' : ''}
+                    class="w-full px-3.5 py-2.5 rounded-xl bg-stone-900 border border-white/20 text-xs text-white focus:outline-none focus:border-[#38BDF8]">
+              <option value="" disabled selected class="text-stone-500">${field.placeholder || '-- Pilih --'}</option>
+              ${opts}
+            </select>
+          </div>
+        `;
+      } else if (field.type === "textarea") {
         html += `
           <div>
             <label class="block text-xs font-bold text-stone-200 mb-1">${field.label} ${field.required ? '<span class="text-rose-400">*</span>' : ''}</label>

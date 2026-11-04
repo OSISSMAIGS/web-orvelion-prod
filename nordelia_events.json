@@ -52,7 +52,8 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
-          ]
+          ],
+          "group_link": "https://line.me/ti/g/xa5d6nD-2K"
         },
         {
           "id": "olimpiade-fisika",
@@ -60,7 +61,8 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
-          ]
+          ],
+          "group_link": "https://line.me/ti/g/vf7f4gVmgC"
         },
         {
           "id": "olimpiade-kimia",
@@ -68,7 +70,8 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
-          ]
+          ],
+          "group_link": "https://line.me/ti/g/-MHK59SUdX"
         },
         {
           "id": "olimpiade-biologi",
@@ -76,7 +79,8 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
-          ]
+          ],
+          "group_link": "https://line.me/ti/g/Lq_pdmvce8"
         },
         {
           "id": "olimpiade-astronomi",
@@ -84,7 +88,8 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
-          ]
+          ],
+          "group_link": "https://line.me/ti/g/HULA5NXBJb"
         },
         {
           "id": "olimpiade-geografi",
@@ -92,7 +97,9 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
-          ]
+          ],
+          "group_link": "https://line.me/R/ti/g/hVm93rmqsg",
+          "pic": "Ms. Desy"
         },
         {
           "id": "olimpiade-informatika",
@@ -100,7 +107,9 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
-          ]
+          ],
+          "group_link": "https://line.me/R/ti/g/bCDDgAgzmz",
+          "pic": "Sir Sepri"
         },
         {
           "id": "olimpiade-ekonomi",
@@ -108,7 +117,9 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
-          ]
+          ],
+          "group_link": "https://line.me/R/ti/g/efHVj-Mc8A",
+          "pic": "Ms. Prisca, Natalia"
         },
         {
           "id": "olimpiade-kebumian",
@@ -116,7 +127,8 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
-          ]
+          ],
+          "group_link": "https://line.me/ti/g/j2hfeWDyVt"
         }
       ]
     },
@@ -139,21 +151,27 @@
           "id": "opsi",
           "name": "OPSI (Olimpiade Penelitian Siswa)",
           "is_external_gform": true,
-          "gform_url": "https://forms.google.com/",
+          "gform_url": "https://forms.gle/3ddQd5myu8mZSxSF6",
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas"
-          ]
+          ],
+          "group_link": "https://line.me/R/ti/g/nJFGvpBBCE",
+          "pic": "Ms. Nisak dan Marla",
+          "juknis_url": "https://drive.google.com/drive/folders/1Mx_iljhr44fKL8N9xVx8pwwMWftKRhed?usp=sharing"
         },
         {
           "id": "fiksi",
           "name": "FIKSI (Festival Inovasi & Kewirausahaan)",
           "is_external_gform": true,
-          "gform_url": "https://forms.google.com/",
+          "gform_url": "https://forms.gle/gw5Tp6qejtkshQ599",
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas"
-          ]
+          ],
+          "group_link": "https://line.me/R/ti/g/e3UfBDmz9v",
+          "pic": "Ms. Priti, Vina, Sir Ifaldi",
+          "juknis_url": "https://drive.google.com/drive/folders/1Mx_iljhr44fKL8N9xVx8pwwMWftKRhed?usp=sharing"
         }
       ]
     },
@@ -167,16 +185,24 @@
           "id": "debat-bahasa-indonesia",
           "name": "DEBAT BAHASA INDONESIA (LDBI)",
           "registrationFormat": [
-            "Nama Lengkap",
-            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+            "Nama Tim",
+            "Asal Kelas Tim",
+            "Pembicara 1 (Nama & Kelas)",
+            "Pembicara 2 (Nama & Kelas)",
+            "Pembicara 3 (Nama & Kelas)",
+            "No. WhatsApp / Kontak"
           ]
         },
         {
           "id": "debat-bahasa-inggris",
           "name": "DEBAT BAHASA INGGRIS (NSDC)",
           "registrationFormat": [
-            "Nama Lengkap",
-            "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
+            "Nama Tim / Team Name",
+            "Asal Kelas Tim",
+            "1st Speaker (Nama & Kelas)",
+            "2nd Speaker (Nama & Kelas)",
+            "3rd Speaker (Nama & Kelas)",
+            "No. WhatsApp / Kontak"
           ]
         }
       ]
@@ -265,7 +291,8 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
-          ]
+          ],
+          "group_link": "https://line.me/ti/g/tcFLBqfME2"
         }
       ]
     },
@@ -293,7 +320,8 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas"
-          ]
+          ],
+          "group_link": "https://line.me/ti/g/rv4NHtgGQs"
         },
         {
           "id": "cipta-puisi",
@@ -301,7 +329,8 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas"
-          ]
+          ],
+          "group_link": "https://line.me/ti/g/yAuEw6Zz65"
         },
         {
           "id": "jurnalistik",
@@ -311,7 +340,8 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas"
-          ]
+          ],
+          "group_link": "https://line.me/ti/g/rPVWg2xsuB"
         },
         {
           "id": "menulis-cerpen",
@@ -319,7 +349,8 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas"
-          ]
+          ],
+          "group_link": "https://line.me/ti/g/Y45atM5JVv"
         },
         {
           "id": "monolog",
@@ -327,17 +358,19 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas"
-          ]
+          ],
+          "group_link": "https://line.me/ti/g/vvXXSwa5Mt"
         },
         {
           "id": "cipta-lagu",
           "name": "CIPTA LAGU",
           "is_external_gform": true,
-          "gform_url": "https://forms.google.com/",
+          "gform_url": "https://forms.gle/MGVWmKZ5uZ5sqeGc8",
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas"
-          ]
+          ],
+          "group_link": "https://line.me/ti/g/nE-VFvcF3x"
         },
         {
           "id": "desain-poster",
@@ -346,7 +379,10 @@
             "Nama Lengkap",
             "Kelas",
             "Link Portofolio"
-          ]
+          ],
+          "is_external_gform": true,
+          "gform_url": "https://forms.gle/MGVWmKZ5uZ5sqeGc8",
+          "group_link": "https://line.me/ti/g/g-U6bYGFEs"
         },
         {
           "id": "fotografi",
@@ -357,7 +393,8 @@
             "Nama Lengkap",
             "Kelas",
             "Link Portofolio"
-          ]
+          ],
+          "group_link": "https://line.me/ti/g/g-U6bYGFEs"
         },
         {
           "id": "solo-gitar",
@@ -365,7 +402,10 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas"
-          ]
+          ],
+          "is_external_gform": true,
+          "gform_url": "https://forms.gle/MGVWmKZ5uZ5sqeGc8",
+          "group_link": "https://line.me/ti/g/ZXQuZzQG8A"
         },
         {
           "id": "vokal-putri",
@@ -375,7 +415,10 @@
             "Kelas",
             "Link Lagu Penyisihan",
             "Link Lagu Final"
-          ]
+          ],
+          "is_external_gform": true,
+          "gform_url": "https://forms.gle/MGVWmKZ5uZ5sqeGc8",
+          "group_link": "https://line.me/ti/g/82ZajrAe_e"
         },
         {
           "id": "vokal-putra",
@@ -385,7 +428,10 @@
             "Kelas",
             "Link Lagu Penyisihan",
             "Link Lagu Final"
-          ]
+          ],
+          "is_external_gform": true,
+          "gform_url": "https://forms.gle/MGVWmKZ5uZ5sqeGc8",
+          "group_link": "https://line.me/ti/g/82ZajrAe_e"
         },
         {
           "id": "kriya",
@@ -393,7 +439,10 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas"
-          ]
+          ],
+          "is_external_gform": true,
+          "gform_url": "https://forms.gle/MGVWmKZ5uZ5sqeGc8",
+          "group_link": "https://line.me/ti/g/TkPrU9CGf4"
         },
         {
           "id": "komik-digital",
@@ -402,7 +451,10 @@
             "Nama Lengkap",
             "Kelas",
             "Link Portofolio"
-          ]
+          ],
+          "is_external_gform": true,
+          "gform_url": "https://forms.gle/MGVWmKZ5uZ5sqeGc8",
+          "group_link": "https://line.me/ti/g/J4f9wa-v4f"
         },
         {
           "id": "film-pendek",
@@ -413,7 +465,8 @@
             "Nama Lengkap",
             "Kelas",
             "Link Portofolio"
-          ]
+          ],
+          "group_link": "https://line.me/ti/g/Y45atM5JVv"
         },
         {
           "id": "tari-kreasi",
@@ -423,7 +476,8 @@
             "Kelas",
             "Nama Peserta 1",
             "Nama Peserta 2"
-          ]
+          ],
+          "group_link": "https://line.me/ti/g/mCh8SGDs6N"
         }
       ]
     },
@@ -439,15 +493,18 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas"
-          ]
+          ],
+          "group_link": "https://line.me/ti/g/FGEFfKk4gY"
         },
         {
           "id": "atletik",
           "name": "ATLETIK",
           "registrationFormat": [
             "Nama Lengkap",
-            "Kelas"
-          ]
+            "Kelas",
+            "Jenis Lomba (Lari 60 meter / Tolak Peluru / Lompat Jauh)"
+          ],
+          "group_link": "https://line.me/ti/g/pMyrkYrbUH"
         },
         {
           "id": "basket",
@@ -455,7 +512,8 @@
           "registrationFormat": [
             "Nama Anggota 1-2-3-Cadangan",
             "Kelas"
-          ]
+          ],
+          "group_link": "https://line.me/ti/g/dbudjYkhBP"
         },
         {
           "id": "futsal",
@@ -463,15 +521,17 @@
           "registrationFormat": [
             "Nama Anggota 1-2-3-4-5-Cadangan",
             "Kelas"
-          ]
+          ],
+          "group_link": "https://line.me/ti/g/ZA3_64qsVv"
         },
         {
           "id": "voli",
           "name": "VOLI",
           "registrationFormat": [
-            "Nama Anggota 1-2-3-4-5-Cadangan",
+            "Nama Anggota 1-2-3-4-5-6-Cadangan (opsional)",
             "Kelas"
-          ]
+          ],
+          "group_link": "https://line.me/ti/g/5MjD_KK9bd"
         },
         {
           "id": "catur",
@@ -479,7 +539,8 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas"
-          ]
+          ],
+          "group_link": "https://line.me/ti/g/rcke9_bpcU"
         }
       ]
     }

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Akses Terproteksi | Spreadsheet Nordelia 2026{% endblock %}
+{% block content %}
+<div class="min-h-[80vh] flex items-center justify-center px-4 py-12 relative">
+  <!-- Subtle Atmospheric background glow -->
+  <div class="absolute w-96 h-96 rounded-full blur-[140px] pointer-events-none -z-10 bg-[#38BDF8]/15 top-1/4 left-1/3"></div>
+  <div class="absolute w-96 h-96 rounded-full blur-[140px] pointer-events-none -z-10 bg-[#F5D061]/15 bottom-1/4 right-1/3"></div>
+
+  <div class="w-full max-w-md rounded-3xl p-6 sm:p-8 border backdrop-blur-xl relative overflow-hidden shadow-2xl"
+       style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.95) 0%, rgba(24, 34, 62, 0.9) 100%); border-color: rgba(245, 208, 97, 0.35); box-shadow: 0 25px 60px rgba(0,0,0,0.7), 0 0 45px rgba(245,208,97,0.12);">
+
+    <!-- Top subtle gold shimmer bar -->
+    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#F5D061] to-transparent"></div>
+
+    <div class="text-center space-y-3 mb-6">
+      <div class="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center bg-gradient-to-tr from-[#38BDF8] via-[#FDE68A] to-[#F5D061] text-[#0B1120] shadow-lg">
+        <svg class="w-7 h-7"><use href="#i-shield"></use></svg>
+      </div>
+
+      <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#F5D061]/15 text-[#FDE68A] border border-[#F5D061]/35">
+        Area Khusus Panitia OSIS
+      </div>
+
+      <h1 class="text-2xl font-black text-white tracking-tight">
+        Akses Data Spreadsheet
+      </h1>
+      <p class="text-xs text-stone-300 leading-relaxed max-w-xs mx-auto">
+        Halaman ini memuat data rekapitulasi pendaftar Nordelia 2026. Masukkan password otorisasi untuk melanjutkan.
+      </p>
+    </div>
+
+    {% if error %}
+      <div class="p-3.5 rounded-xl bg-rose-950/80 border border-rose-500/50 text-rose-300 text-xs font-semibold flex items-center gap-2 mb-4 animate-shake">
+        <svg class="w-4 h-4 shrink-0 text-rose-400"><use href="#i-x"></use></svg>
+        <span>{{ error }}</span>
+      </div>
+    {% endif %}
+
+    <form method="POST" action="/nordelia/spreadsheet" class="space-y-4">
+      <div>
+        <label for="input-password" class="block text-xs font-bold text-stone-300 mb-1.5 uppercase tracking-wider">
+          Password Otorisasi OSIS
+        </label>
+        <div class="relative">
+          <input type="password" id="input-password" name="password" required autofocus
+                 placeholder="Masukkan password..."
+                 class="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/15 text-white placeholder-stone-500 text-sm focus:outline-none focus:border-[#F5D061] focus:ring-1 focus:ring-[#F5D061] transition-all" />
+          <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-200 text-xs font-bold px-1" title="Lihat/Sembunyikan">
+            <span id="pw-toggle-text">LIHAT</span>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit"
+              class="w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-wider text-[#0B1120] bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-lg shadow-[rgba(245,208,97,0.25)] transition-all hover:scale-[1.01] flex items-center justify-center gap-2">
+        <span>Buka Akses Data</span>
+        <span class="text-sm font-bold">&rarr;</span>
+      </button>
+
+      <div class="pt-2 text-center">
+        <a href="/nordelia" class="text-xs text-stone-400 hover:text-stone-200 transition-colors inline-flex items-center gap-1">
+          <span>&larr;</span>
+          <span>Kembali ke Beranda Nordelia</span>
+        </a>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<script>
+function togglePasswordVisibility() {
+  const inp = document.getElementById("input-password");
+  const txt = document.getElementById("pw-toggle-text");
+  if (!inp || !txt) return;
+  if (inp.type === "password") {
+    inp.type = "text";
+    txt.textContent = "SEMBUNYIKAN";
+  } else {
+    inp.type = "password";
+    txt.textContent = "LIHAT";
+  }
+}
+</script>
+{% endblock %}

@@ -242,6 +242,7 @@ class NordeliaStorage:
                     "akademik": sum(1 for r in items if r.get("category_id") == "akademik"),
                     "bahasa": sum(1 for r in items if r.get("category_id") == "bahasa"),
                     "seni": sum(1 for r in items if r.get("category_id") == "seni"),
+                    "cosplay": sum(1 for r in items if r.get("category_id") == "cosplay"),
                     "olahraga": sum(1 for r in items if r.get("category_id") == "olahraga"),
                 },
                 "latest": items[:5],
@@ -408,6 +409,34 @@ class NordeliaStorage:
         except Exception as e:
             print(f"[JSON] Gagal simpan json: {e}")
 
+    def delete_registration(self, reg_id: int) -> bool:
+        deleted = False
+        try:
+            conn = sqlite3.connect(self.db_path)
+            c = conn.cursor()
+            c.execute("DELETE FROM registrations WHERE id = ?", (reg_id,))
+            conn.commit()
+            if c.rowcount > 0:
+                deleted = True
+            conn.close()
+        except Exception as e:
+            print(f"[DB] Gagal delete sqlite: {e}")
+
+        if os.path.exists(self.json_path):
+            try:
+                with open(self.json_path, "r", encoding="utf-8") as f:
+                    items = json.load(f)
+                new_items = [i for i in items if str(i.get("id")) != str(reg_id)]
+                if len(new_items) != len(items):
+                    deleted = True
+                    with open(self.json_path, "w", encoding="utf-8") as f:
+                        json.dump(new_items, f, indent=2, ensure_ascii=False)
+            except Exception as e:
+                print(f"[JSON] Gagal delete json: {e}")
+
+        self.invalidate_cache()
+        return deleted
+
     def _get_local_registrations(self, category_id: Optional[str] = None) -> List[Dict[str, Any]]:
         results = []
         try:
@@ -474,6 +503,7 @@ class NordeliaStorage:
             "akademik": sum(1 for r in all_regs if r.get("category_id") == "akademik"),
             "bahasa": sum(1 for r in all_regs if r.get("category_id") == "bahasa"),
             "seni": sum(1 for r in all_regs if r.get("category_id") == "seni"),
+            "cosplay": sum(1 for r in all_regs if r.get("category_id") == "cosplay"),
             "olahraga": sum(1 for r in all_regs if r.get("category_id") == "olahraga"),
         }
         return {
@@ -487,32 +517,20 @@ class NordeliaStorage:
     # =========================================================================
 
     def get_counts_by_cabang(self, force_refresh: bool = False) -> Dict[str, int]:
-        """Mengembalikan jumlah pendaftar per cabang langsung dari Google Spreadsheet."""
-        sheet_data = self.fetch_from_google_sheet(force_refresh=force_refresh)
-        if sheet_data and "counts" in sheet_data:
-            return sheet_data["counts"]
+        """Mengembalikan jumlah pendaftar per cabang secara real-time langsung dari database lokal."""
         return self._get_local_counts_by_cabang()
 
     def get_cabang_count(self, cabang_id: str, force_refresh: bool = False) -> int:
-        """Mengambil total pendaftar spesifik untuk 1 cabang lomba langsung dari Google Spreadsheet."""
+        """Mengambil total pendaftar spesifik untuk 1 cabang lomba secara real-time."""
         counts = self.get_counts_by_cabang(force_refresh=force_refresh)
         return counts.get(cabang_id, 0)
 
     def get_summary_stats(self, force_refresh: bool = False) -> Dict[str, Any]:
-        """Statistik ringkasan pendaftaran langsung dari Google Spreadsheet."""
-        sheet_data = self.fetch_from_google_sheet(force_refresh=force_refresh)
-        if sheet_data and "summary" in sheet_data and sheet_data["summary"]:
-            return sheet_data["summary"]
+        """Statistik ringkasan pendaftaran secara real-time langsung dari database."""
         return self._get_local_summary_stats()
 
     def get_all_registrations(self, category_id: Optional[str] = None, force_refresh: bool = False) -> List[Dict[str, Any]]:
-        """Mengambil seluruh data pendaftar dari Google Spreadsheet."""
-        sheet_data = self.fetch_from_google_sheet(force_refresh=force_refresh)
-        if sheet_data and sheet_data.get("registrations") is not None:
-            regs = sheet_data["registrations"]
-            if category_id and category_id.lower() != "semua":
-                return [r for r in regs if r.get("category_id", "").lower() == category_id.lower()]
-            return regs
+        """Mengambil seluruh data pendaftar secara real-time langsung dari database."""
         return self._get_local_registrations(category_id)
 
 
