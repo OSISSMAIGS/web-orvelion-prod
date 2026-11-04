@@ -17,6 +17,7 @@ from orvelion.content import (
     TIMELINE,
 )
 from orvelion.nordelia_data import (
+    KETENTUAN_DETAIL,
     CABANG_LOMBA,
     CATEGORIES,
     FORMAT_REGISTRASI,
@@ -130,6 +131,7 @@ def build_decorated_cabang_list():
         c_copy["is_external_gform"] = c.get("is_external_gform", False)
         c_copy["gform_url"] = c.get("gform_url", "")
         c_copy["is_literasi"] = c["name"].lower().startswith("literasi") or cid.startswith("literasi")
+        c_copy["ketentuan"] = c.get("ketentuan")
         decorated.append(c_copy)
     return decorated
 
@@ -193,8 +195,10 @@ def nordelia_category(category_id: str):
                         "peserta_max": cb["peserta_max"],
                         "is_olimpiade_or_ai": cb["is_olimpiade_or_ai"],
                         "registrationFormat": ["Nama Lengkap", "Kelas"],
-                "is_external_gform": cabang_info.get("is_external_gform", False) if cabang_info else False,
-                "gform_url": cabang_info.get("gform_url", "") if cabang_info else "",
+                        "is_external_gform": cb.get("is_external_gform", False),
+                        "gform_url": cb.get("gform_url", ""),
+                        "ketentuan": cb.get("ketentuan"),
+                        "note": cb.get("note", "-"),
                     }
                     for cb in CABANG_LOMBA
                     if cb["category"] == category_id
@@ -287,6 +291,8 @@ def nordelia_category(category_id: str):
             sub["format_type"] = cb.get("format_type", "olimpiade_akademik") if cb else "olimpiade_akademik"
             sub["is_external_gform"] = cb.get("is_external_gform", False) if cb else sub.get("is_external_gform", False)
             sub["gform_url"] = cb.get("gform_url", "") if cb else sub.get("gform_url", "")
+            sub["ketentuan"] = cb.get("ketentuan") if cb else None
+            sub["note"] = cb.get("note", "-") if cb else "-"
             
             # Pengecekan Peminatan IPA/IPS untuk OSN
             sub["is_ipa_only"] = sub_id in OSN_IPA_ONLY_IDS
@@ -309,6 +315,7 @@ def nordelia_category(category_id: str):
             group_link=resolve_group_link(),
             group_label=get_config("NORDELIA_GROUP_LABEL") or NORDELIA_INFO.get("group_label", "Masuk Grup WhatsApp"),
             selected_jurusan=jurusan,
+            ketentuan_detail=KETENTUAN_DETAIL,
         ),
     )
 

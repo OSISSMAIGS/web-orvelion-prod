@@ -206,6 +206,7 @@ CABINETS = [
             "Gerakan 'Ardraxis Peduli' donasi buku dan beasiswa sahabat sebaya",
         ],
         "keyLegacy": "Fondasi sistem digitalisasi terpadu dan tradisi kepemimpinan adaptif.",
+        "website": "https://ardraxis.osissmaigs.com",
     },
     {
         "id": "valiance",
@@ -222,6 +223,7 @@ CABINETS = [
             "Konser amal akbar bersama komunitas seni dan musik Palembang",
         ],
         "keyLegacy": "Semangat pantang menyerah, pembaharuan kreatif, dan kepedulian sosial yang hangat.",
+        "website": "https://valiance.osissmaigs.com",
     },
     {
         "id": "asteration",
@@ -238,6 +240,7 @@ CABINETS = [
             "Pengukuhan tata tertib dan persahabatan antar jenjang kelas",
         ],
         "keyLegacy": "Kehangatan persaudaraan sejati dan fondasi perlindungan hak-hak siswa.",
+        "website": "https://asteration.osissmaigs.com",
     },
     {
         "id": "credence",
@@ -254,6 +257,7 @@ CABINETS = [
             "Pembentukan tradisi kegiatan kreatif pertama di sekolah",
         ],
         "keyLegacy": "Fondasi awal keberadaan OSIS dan semangat gotong royong.",
+        "website": "https://osissma.ignatiusglobal.sch.id/Credence",
     },
 ]
 

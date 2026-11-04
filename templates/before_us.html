@@ -69,6 +69,23 @@
           <strong class="text-white block mb-0.5">Warisan</strong>
           <span id="cab-legacy" class="text-white/90">{{ cabinets[0].keyLegacy }}</span>
         </div>
+        <div id="cab-website-wrap" class="{% if not cabinets[0].get('website') %}hidden{% endif %}">
+          <a id="cab-website"
+             href="{{ cabinets[0].get('website', '#') }}"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orvelion-coral/15 hover:bg-orvelion-coral/30 border border-orvelion-coral/40 hover:border-orvelion-coral/70 text-orvelion-coral font-semibold text-sm transition-all duration-200 group">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+            Kunjungi Website Kabinet
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 shrink-0 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+          </a>
+        </div>
       </div>
     </div>
   </div>

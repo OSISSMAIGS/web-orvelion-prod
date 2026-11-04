@@ -172,6 +172,12 @@
               <h4 class="text-base sm:text-lg font-bold text-white group-hover:text-[#FDE68A] transition-colors leading-snug">
                 {{ sub.name }}
               </h4>
+              {% if sub.ketentuan %}
+                <div class="mt-1.5 text-[11px] px-2.5 py-1 rounded-lg bg-amber-400/10 border border-amber-400/25 text-[#FDE68A] leading-tight flex items-center gap-1.5">
+                  <span class="font-extrabold uppercase text-[9px] px-1.5 py-0.2 bg-[#F5D061]/20 rounded">Tema</span>
+                  <span class="truncate italic">"{{ sub.ketentuan.tema }}"</span>
+                </div>
+              {% endif %}
               {% if sub.tempat and sub.tempat != '-' %}
                 <p class="text-xs text-stone-400 mt-1 flex items-center gap-1.5">
                   <svg class="w-3.5 h-3.5 text-stone-500"><use href="#i-location"></use></svg>
@@ -208,7 +214,17 @@
             {% endif %}
           </div>
 
-          <div class="pt-4 mt-4 border-t border-white/10">
+          <div class="pt-4 mt-4 border-t border-white/10 space-y-2">
+            {% if sub.ketentuan or (ketentuan_detail and ketentuan_detail.get(sub.id)) %}
+              <button type="button"
+                      data-open-ketentuan="{{ sub.id }}"
+                      data-sub-name="{{ sub.name }}"
+                      class="w-full py-2.5 px-3 rounded-xl text-xs font-bold text-[#FDE68A] bg-white/[0.06] hover:bg-white/[0.12] border border-[#F5D061]/35 hover:border-[#F5D061]/70 transition-all flex items-center justify-center gap-2 shadow-sm hover:scale-[1.01]">
+                <svg class="w-4 h-4 text-[#F5D061]"><use href="#i-sparkles"></use></svg>
+                <span>Lihat Ketentuan & Juknis Lengkap</span>
+              </button>
+            {% endif %}
+
             {% if sub.is_external_gform %}
               <a href="{{ sub.gform_url }}"
                  target="_blank"
@@ -310,9 +326,60 @@
   </div>
 </div>
 
+<!-- ========================================================================= -->
+<!-- MODAL KETENTUAN & JUKNIS LOMBA LENGKAP -->
+<!-- ========================================================================= -->
+<div id="modal-ketentuan" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+  <div class="relative w-full max-w-2xl rounded-3xl p-6 sm:p-8 bg-[#0F172A] border border-[#F5D061]/40 shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_35px_rgba(245,208,97,0.15)] max-h-[92vh] overflow-y-auto shadow-2xl">
+    
+    <button type="button" id="btn-close-ketentuan-modal" class="absolute top-5 right-5 p-2 rounded-full bg-white/10 text-stone-300 hover:text-white" aria-label="Tutup">
+      <svg class="w-5 h-5"><use href="#i-x"></use></svg>
+    </button>
+
+    <div class="flex items-center gap-3 mb-4">
+      <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-gradient-to-tr from-[#38BDF8] via-[#FDE68A] to-[#F5D061] text-[#0B1120] font-black">
+        <svg class="w-5 h-5"><use href="#i-trophy"></use></svg>
+      </div>
+      <div>
+        <span id="ketentuan-category-badge" class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-white/10 text-[#FBBF24]">
+          Petunjuk Teknis & Ketentuan
+        </span>
+        <h3 id="ketentuan-modal-title" class="text-xl sm:text-2xl font-black text-white">Ketentuan Lomba</h3>
+      </div>
+    </div>
+
+    <!-- Highlight Meta Box: Tema, Deadline, Biaya -->
+    <div id="ketentuan-meta-box" class="p-4 rounded-2xl bg-black/50 border border-white/10 space-y-2 mb-5">
+      <!-- Injected dynamically -->
+    </div>
+
+    <!-- Sections (Peserta, Karya, Pengumpulan, dsb.) -->
+    <div id="ketentuan-sections-container" class="space-y-4 mb-6">
+      <!-- Injected dynamically -->
+    </div>
+
+    <!-- Bottom Actions -->
+    <div class="pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-end gap-3">
+      <button type="button" id="btn-close-ketentuan-footer" class="w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs font-bold text-stone-300 bg-white/10 hover:bg-white/15 hover:text-white transition-colors">
+        Tutup
+      </button>
+      <a id="ketentuan-modal-gform-btn"
+         href="#"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="w-full sm:w-auto px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider text-[#0B1120] bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-lg transition-transform hover:scale-[1.01] flex items-center justify-center gap-2">
+        <svg class="w-4 h-4"><use href="#i-external"></use></svg>
+        <span>Buka Formulir Pendaftaran (Google Form)</span>
+      </a>
+    </div>
+
+  </div>
+</div>
+
 {% include "partials/nordelia_success.html" %}
 {% include "partials/nordelia_jurusan_modal.html" %}
 
+<script id="nordelia-ketentuan-json" type="application/json">{{ (ketentuan_detail or {}) | tojson | safe }}</script>
 <script id="nordelia-formats-json" type="application/json">{{ format_registrasi | tojson | safe }}</script>
 <script id="nordelia-cabang-json" type="application/json">{{ cabang_lomba | tojson | safe }}</script>
 
@@ -335,6 +402,142 @@ document.addEventListener("DOMContentLoaded", function () {
     "olimpiade-informatika", "olimpiade-kebumian", "olimpiade-astronomi", "olimpiade-geografi",
     "olimpiade-ekonomi", "olimpiade-ai"
   ];
+
+
+  // =========================================================================
+  // MODAL KETENTUAN LOMBA HANDLER
+  // =========================================================================
+  const modalKetentuan = document.getElementById("modal-ketentuan");
+  const closeKetentuanBtn = document.getElementById("btn-close-ketentuan-modal");
+  const closeKetentuanFooterBtn = document.getElementById("btn-close-ketentuan-footer");
+  const ketentuanTitle = document.getElementById("ketentuan-modal-title");
+  const ketentuanCategoryBadge = document.getElementById("ketentuan-category-badge");
+  const ketentuanMetaBox = document.getElementById("ketentuan-meta-box");
+  const ketentuanSections = document.getElementById("ketentuan-sections-container");
+  const ketentuanGformBtn = document.getElementById("ketentuan-modal-gform-btn");
+
+  let ketentuanData = {};
+  try {
+    ketentuanData = JSON.parse(document.getElementById("nordelia-ketentuan-json")?.textContent || "{}");
+  } catch(e) {
+    console.error("Gagal parse ketentuan data:", e);
+  }
+
+  function openKetentuanModal(cabangId, fallbackName) {
+    const k = ketentuanData[cabangId];
+    if (!k) {
+      const cb = (cabangList || []).find(c => c.id === cabangId);
+      if (cb) {
+        ketentuanTitle.textContent = "Ketentuan " + (cb.name || fallbackName);
+        ketentuanCategoryBadge.textContent = cb.category ? cb.category.toUpperCase() : "LOMBA";
+        ketentuanMetaBox.innerHTML = `
+          <div class="text-xs text-stone-300">
+            <strong>Lokasi:</strong> ${cb.tempat || '-'}<br>
+            <strong>PIC:</strong> ${cb.pic || '-'}
+          </div>
+        `;
+        ketentuanSections.innerHTML = `
+          <div class="p-4 rounded-xl bg-white/[0.04] border border-white/10 text-xs text-stone-200 leading-relaxed">
+            <h4 class="font-bold text-[#FDE68A] mb-2 uppercase text-[11px] tracking-wider">Ketentuan Lomba:</h4>
+            <p>${cb.note || 'Tidak ada ketentuan khusus.'}</p>
+          </div>
+        `;
+        if (cb.gform_url) {
+          ketentuanGformBtn.href = cb.gform_url;
+          ketentuanGformBtn.classList.remove("hidden");
+        } else {
+          ketentuanGformBtn.classList.add("hidden");
+        }
+        modalKetentuan.classList.remove("hidden");
+        document.body.classList.add("overflow-hidden");
+      }
+      return;
+    }
+
+    ketentuanTitle.textContent = k.title || ("Ketentuan " + fallbackName);
+    ketentuanCategoryBadge.textContent = k.category || "FESTIVAL BULAN BAHASA";
+
+    let metaHtml = `
+      <div class="space-y-2 text-xs text-stone-200">
+        <div class="flex items-start gap-2">
+          <span class="px-2 py-0.5 rounded bg-[#F5D061]/20 text-[#FDE68A] font-black text-[10px] uppercase shrink-0">Tema</span>
+          <span class="font-bold text-white italic">“${k.tema}”</span>
+        </div>
+        ${k.deadline ? `
+          <div class="flex items-center gap-2 text-[11px] text-[#FDE68A] pt-1">
+            <svg class="w-3.5 h-3.5 text-[#F5D061] shrink-0"><use href="#i-calendar"></use></svg>
+            <span><strong>Batas Pengumpulan:</strong> ${k.deadline}</span>
+          </div>
+        ` : ''}
+        ${k.biaya ? `
+          <div class="flex items-center gap-2 text-[11px] text-emerald-300">
+            <span class="font-bold">Biaya:</span> <span>${k.biaya}</span>
+          </div>
+        ` : ''}
+        ${k.durasi ? `
+          <div class="flex items-center gap-2 text-[11px] text-sky-300">
+            <span class="font-bold">Durasi:</span> <span>${k.durasi}</span>
+          </div>
+        ` : ''}
+        ${k.contact_person ? `
+          <div class="flex flex-wrap items-center gap-2 text-[11px] text-stone-300 pt-1.5 border-t border-white/10">
+            <span><strong>Narahubung (CP):</strong> ${k.contact_person.name}</span>
+            <a href="${k.contact_person.wa_url}" target="_blank" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold hover:bg-emerald-500/30 transition-colors">
+              Chat WA (${k.contact_person.phone}) &rarr;
+            </a>
+          </div>
+        ` : ''}
+      </div>
+    `;
+    ketentuanMetaBox.innerHTML = metaHtml;
+
+    let secHtml = "";
+    (k.sections || []).forEach(sec => {
+      secHtml += `
+        <div class="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2.5">
+          <div class="flex items-center justify-between gap-2">
+            <h4 class="text-sm font-bold text-white flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-[#F5D061]"></span>
+              ${sec.heading}
+            </h4>
+            ${sec.badge ? `<span class="text-[10px] px-2.5 py-0.5 rounded-full bg-white/10 text-[#FDE68A] font-semibold border border-white/10">${sec.badge}</span>` : ''}
+          </div>
+          <ul class="space-y-2 pl-1 text-xs text-stone-300">
+            ${sec.items.map(item => `
+              <li class="flex items-start gap-2.5">
+                <span class="text-[#FDE68A] mt-1 shrink-0">✦</span>
+                <span class="leading-relaxed">${item}</span>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+      `;
+    });
+    ketentuanSections.innerHTML = secHtml;
+
+    ketentuanGformBtn.href = k.gform_url || "https://forms.google.com";
+    ketentuanGformBtn.classList.remove("hidden");
+
+    modalKetentuan.classList.remove("hidden");
+    document.body.classList.add("overflow-hidden");
+  }
+
+  function closeKetentuanModal() {
+    modalKetentuan?.classList.add("hidden");
+    document.body.classList.remove("overflow-hidden");
+  }
+
+  document.querySelectorAll("[data-open-ketentuan]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      openKetentuanModal(btn.getAttribute("data-open-ketentuan"), btn.getAttribute("data-sub-name"));
+    });
+  });
+
+  closeKetentuanBtn?.addEventListener("click", closeKetentuanModal);
+  closeKetentuanFooterBtn?.addEventListener("click", closeKetentuanModal);
+  modalKetentuan?.addEventListener("click", (e) => {
+    if (e.target === modalKetentuan) closeKetentuanModal();
+  });
 
   function openRegisterModal(subId, subName) {
     inputCabangId.value = subId;

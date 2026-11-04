@@ -109,10 +109,138 @@ GFORM_URL_DEFAULT = os.getenv("NORDELIA_GFORM_DEFAULT", "https://forms.google.co
 GFORM_URLS = {
     "opsi": os.getenv("NORDELIA_GFORM_OPSI", "https://forms.google.com"),
     "fiksi": os.getenv("NORDELIA_GFORM_FIKSI", "https://forms.google.com"),
-    "jurnalistik": os.getenv("NORDELIA_GFORM_JURNALISTIK", "https://forms.google.com"),
+    "jurnalistik": os.getenv("NORDELIA_GFORM_JURNALISTIK", "https://docs.google.com/forms/d/e/1FAIpQLSfyLRFiI2eID99KkUe9KEwGfz_4XXLu2fWWfJ_vxmSTnpzZEA/viewform?usp=publish-editor"),
     "cipta-lagu": os.getenv("NORDELIA_GFORM_CIPTA_LAGU", "https://forms.google.com"),
-    "fotografi": os.getenv("NORDELIA_GFORM_FOTOGRAFI", "https://forms.google.com"),
-    "film-pendek": os.getenv("NORDELIA_GFORM_FILM_PENDEK", "https://forms.google.com"),
+    "fotografi": os.getenv("NORDELIA_GFORM_FOTOGRAFI", "https://docs.google.com/forms/d/e/1FAIpQLSfyLRFiI2eID99KkUe9KEwGfz_4XXLu2fWWfJ_vxmSTnpzZEA/viewform?usp=publish-editor"),
+    "film-pendek": os.getenv("NORDELIA_GFORM_FILM_PENDEK", "https://docs.google.com/forms/d/e/1FAIpQLSfyLRFiI2eID99KkUe9KEwGfz_4XXLu2fWWfJ_vxmSTnpzZEA/viewform?usp=publish-editor"),
+}
+
+
+KETENTUAN_DETAIL = {
+    "fotografi": {
+        "title": "Ketentuan Lomba Fotografi",
+        "category": "FLS3N / Seni",
+        "tema": "Ekspresikan Kata, Wujudkan Karya, Lanjutkan Perjuangan!",
+        "biaya": "Rp 10.000 (Biaya Cetak per karya)",
+        "deadline": "06 November 2026, pukul 23.59 WIB",
+        "contact_person": {
+            "name": "Adinda Zafirah (Dinda)",
+            "phone": "0812-7348-6350",
+            "wa_url": "https://wa.me/6281273486350"
+        },
+        "gform_url": "https://docs.google.com/forms/d/e/1FAIpQLSfyLRFiI2eID99KkUe9KEwGfz_4XXLu2fWWfJ_vxmSTnpzZEA/viewform?usp=publish-editor",
+        "sections": [
+            {
+                "heading": "Ketentuan Lomba",
+                "badge": "Aturan Peserta & Karya",
+                "items": [
+                    "Peserta merupakan siswa/i aktif kelas 10, 11, dan 12 SMA Ignatius Global School Mayor Ruslan & CGC.",
+                    "Lomba bersifat individu.",
+                    "Setiap peserta dari setiap kelas hanya boleh mengumpulkan satu karya foto.",
+                    "Foto harus sesuai dengan tema: “Ekspresikan Kata, Wujudkan Karya, Lanjutkan Perjuangan!”",
+                    "Foto merupakan karya asli peserta dan boleh diambil menggunakan kamera apapun.",
+                    "Pengeditan foto diperbolehkan secara wajar, seperti cropping, penyesuaian cahaya, kontras, saturasi, dan warna, tetapi DILARANG menggunakan AI untuk menambah, menghilangkan, atau memanipulasi objek maupun bagian foto lainnya sehingga tidak mengubah kondisi asli saat pengambilan gambar.",
+                    "Setiap karya wajib disertai judul yang menjelaskan makna dari fotonya.",
+                    "Foto tidak boleh mengandung unsur SARA, pornografi, atau konten yang tidak pantas."
+                ]
+            },
+            {
+                "heading": "Pengumpulan Karya",
+                "badge": "Format & Deadline",
+                "items": [
+                    "Format foto: JPG/JPEG.",
+                    "Foto dikumpulkan melalui Google Form / Google Drive yang telah disiapkan panitia.",
+                    "Wajib mencantumkan: Nama Lengkap, Kelas, Judul Foto, dan Deskripsi Singkat makna foto.",
+                    "Batas akhir pengumpulan karya: 06 November 2026, pukul 23.59 WIB.",
+                    "Konfirmasi pengumpulan dengan menghubungi Dinda ke No. WA: 0812-7348-6350 (Adinda Zafirah).",
+                    "Setiap pengumpulan foto dikenakan biaya cetak sebesar Rp 10.000."
+                ]
+            }
+        ]
+    },
+    "jurnalistik": {
+        "title": "Ketentuan Lomba Jurnalistik",
+        "category": "FLS3N / Seni",
+        "tema": "Ekspresikan Kata, Wujudkan Karya, Lanjutkan Perjuangan!",
+        "deadline": "06 November 2026",
+        "gform_url": "https://docs.google.com/forms/d/e/1FAIpQLSfyLRFiI2eID99KkUe9KEwGfz_4XXLu2fWWfJ_vxmSTnpzZEA/viewform?usp=publish-editor",
+        "sections": [
+            {
+                "heading": "Ketentuan Penulisan & Karya",
+                "badge": "Format Artikel Feature",
+                "items": [
+                    "Bentuk tulisan: Artikel Feature dengan tema “Ekspresikan Kata, Wujudkan Karya, Lanjutkan Perjuangan!”",
+                    "Artikel yang disertakan dalam lomba belum pernah atau tidak sedang diikutsertakan dalam lomba apa pun.",
+                    "Tulisan merupakan hasil karya mandiri dan orisinal, bukan merupakan arahan, pesanan, atau hasil bimbingan guru, pendamping, dan/atau pihak lain.",
+                    "Bukan karya plagiarisme (penjiplakan hak cipta) dan murni hasil liputan siswa tanpa bantuan pihak mana pun, termasuk teknologi kecerdasan buatan (AI, ChatGPT, dan sejenisnya), serta melampirkan bukti wawancara.",
+                    "Pelanggaran terhadap ketentuan di atas dikenakan sanksi diskualifikasi.",
+                    "Karya jurnalistik tidak boleh menyinggung SARA, unsur pornografi, bias gender, dan kepentingan politik/golongan tertentu.",
+                    "Tulisan menggunakan Bahasa Indonesia dengan baik dan benar, dengan jumlah maksimal 2500 karakter dengan spasi, rata kiri, font Times New Roman 12 pt, jarak paragraf 1,5 pt.",
+                    "Jika dalam bagian narasi menggunakan bahasa daerah/asing, penulisan mengikuti panduan dari EYD (Ejaan Yang Disempurnakan).",
+                    "Karya feature harus menyertakan Judul, Foto Hasil Liputan lengkap dengan takarir (caption), dan disimpan dalam satu file dalam bentuk PDF."
+                ]
+            },
+            {
+                "heading": "Ketentuan Pengumpulan",
+                "badge": "Format File & Batas Waktu",
+                "items": [
+                    "Karya dikumpulkan melalui tautan Google Form resmi yang telah disediakan oleh tim OSIS.",
+                    "Format penamaan file: (NAMA_KELAS_ASAL SEKOLAH/CGC/MAYOR) dalam format file PDF.",
+                    "Batas akhir pengumpulan karya: Paling lambat 6 November 2026."
+                ]
+            }
+        ]
+    },
+    "film-pendek": {
+        "title": "Ketentuan Lomba Film Pendek",
+        "category": "FLS3N / Seni",
+        "tema": "Ekspresikan Kata, Wujudkan Karya, Lanjutkan Perjuangan!",
+        "durasi": "Maks. 1 menit (60 detik) + opening/closing maks. 15 detik",
+        "deadline": "06 November 2026",
+        "gform_url": "https://docs.google.com/forms/d/e/1FAIpQLSfyLRFiI2eID99KkUe9KEwGfz_4XXLu2fWWfJ_vxmSTnpzZEA/viewform?usp=publish-editor",
+        "sections": [
+            {
+                "heading": "A. Ketentuan Peserta",
+                "badge": "Persyaratan Kontestan",
+                "items": [
+                    "Peserta merupakan siswa aktif SMA/SMK/sederajat Mayor Ruslan dan CGC.",
+                    "Lomba dapat diikuti secara individu atau berkelompok, dengan jumlah anggota maksimal 3 orang.",
+                    "Setiap peserta atau kelompok hanya diperbolehkan mengirimkan 1 karya film pendek.",
+                    "Peserta wajib mengisi formulir pendaftaran yang disediakan oleh panitia.",
+                    "Peserta wajib mematuhi seluruh peraturan yang telah ditetapkan oleh panitia."
+                ]
+            },
+            {
+                "heading": "B. Ketentuan Karya",
+                "badge": "Spesifikasi Teknis & Konten",
+                "items": [
+                    "Film pendek mengangkat tema “Ekspresikan Kata, Wujudkan Karya, Lanjutkan Perjuangan!”",
+                    "Durasi film maksimal 1 menit (60 detik), ditambah bagian pembuka dan penutup maks. 15 detik.",
+                    "Film dibuat dalam format video MP4 dengan resolusi minimal 720p (HD).",
+                    "Video direkam dengan orientasi horizontal (landscape) atau vertikal (portrait), sesuai ketentuan panitia.",
+                    "Karya harus orisinal, dibuat oleh peserta, dan belum pernah memenangkan perlombaan sejenis.",
+                    "Film dapat berupa drama pendek, dokumenter mini, animasi, video kreatif, atau bentuk audiovisual lainnya.",
+                    "Isi film harus sesuai dengan tema serta mengandung pesan positif, edukatif, dan membangun semangat nasionalisme.",
+                    "Film wajib menggunakan bahasa Indonesia yang baik dan santun. Penggunaan bahasa daerah diperbolehkan dengan menyertakan terjemahan atau subtitle bahasa Indonesia.",
+                    "Peserta diperbolehkan menggunakan musik, gambar, dan materi pendukung lainnya yang tidak melanggar hak cipta.",
+                    "Film tidak boleh mengandung unsur SARA, pornografi, kekerasan berlebihan, perundungan, ujaran kebencian, maupun konten yang bertentangan dengan norma pendidikan.",
+                    "Penggunaan aplikasi penyuntingan video diperbolehkan.",
+                    "Karya tidak boleh mengandung unsur plagiarisme atau mengambil karya orang lain tanpa izin."
+                ]
+            },
+            {
+                "heading": "C. Ketentuan Pengumpulan",
+                "badge": "Drive & Identitas",
+                "items": [
+                    "Karya dikumpulkan dalam bentuk tautan Google Drive atau media pengumpulan lain yang ditentukan panitia (Google Form).",
+                    "Format nama berkas: Nama Kelompok_Judul Film_Kelas_Sekolah.",
+                    "Setiap karya wajib disertai identitas peserta, meliputi: Nama Tim, Nama ketua dan anggota kelompok, Judul film.",
+                    "Batas akhir pengumpulan karya: 6 November 2026.",
+                    "Karya yang dikumpulkan melewati batas waktu atau tidak sesuai ketentuan dapat didiskualifikasi."
+                ]
+            }
+        ]
+    }
 }
 
 OLIMPIADE_9_DAN_AI_IDS = [
@@ -130,6 +258,15 @@ OLIMPIADE_9_DAN_AI_IDS = [
 
 # Sheet 2: Format Pendaftaran per Tipe Lomba Sesuai Dokumen Resmi
 FORMAT_REGISTRASI = {
+    # Fotografi, Jurnalistik, Film Pendek — Redirect ke Google Form Resmi
+    "bulan_bahasa_karya": {
+        "title": "Daftar via Google Form Resmi Panitia",
+        "fields": [
+            {"name": "nama_lengkap", "label": "1.) Nama Lengkap / Nama Tim", "type": "text", "required": True, "placeholder": "Contoh: Budi Pratama atau Tim Sinema CGC"},
+            {"name": "kelas", "label": "2.) Kelas (Cth: 10.1 CGC, 10.2 MAYOR)", "type": "text", "required": True, "placeholder": "Contoh: 11.2 MAYOR"},
+        ],
+    },
+
     # 9. Format Tari Kreasi (2 Peserta/Tim)
     "tari_kreasi": {
         "title": "Format Pendaftaran Tari Kreasi (2 Peserta/Tim)",
@@ -791,16 +928,17 @@ CABANG_LOMBA = [
     },
     {
         'category': 'seni',
-        'format_type': 'olimpiade_akademik',
+        'format_type': 'bulan_bahasa_karya',
         'gform_url': GFORM_URLS.get('jurnalistik', 'https://forms.google.com'),
         'id': 'jurnalistik',
+        'ketentuan': KETENTUAN_DETAIL.get('jurnalistik'),
         'is_external_gform': True,
         'is_olimpiade_or_ai': False,
         'juara': 'I, II, III',
         'max_quota': None,
         'name': 'Jurnalistik',
         'no': 31,
-        'note': 'Peliputan berita dan penulisan feature jurnalistik festival. Pendaftaran via Google Form resmi.',
+        'note': 'Artikel Feature, maks. 2500 karakter, font Times New Roman 12pt, spasi 1.5. Tema: Ekspresikan Kata, Wujudkan Karya, Lanjutkan Perjuangan! Orisinal, tanpa AI, sertakan foto liputan & caption (PDF). Format file: NAMA_KELAS_SEKOLAH.pdf. Deadline: 6 Nov 2026. Daftar via Google Form resmi. Pelanggaran = diskualifikasi.',
         'penghargaan': 'Piala, Sertifikat',
         'peserta_max': None,
         'peserta_min': None,
@@ -886,16 +1024,17 @@ CABANG_LOMBA = [
     },
     {
         'category': 'seni',
-        'format_type': 'komik_digital',
+        'format_type': 'bulan_bahasa_karya',
         'gform_url': GFORM_URLS.get('fotografi', 'https://forms.google.com'),
         'id': 'fotografi',
+        'ketentuan': KETENTUAN_DETAIL.get('fotografi'),
         'is_external_gform': True,
         'is_olimpiade_or_ai': False,
         'juara': 'I, II, III',
         'max_quota': None,
         'name': 'Fotografi',
         'no': 36,
-        'note': 'Pengambilan foto artistik jurnalistik momen festival. Pendaftaran via Google Form resmi.',
+        'note': 'Individu, 1 karya per peserta. Tema: Ekspresikan Kata, Wujudkan Karya, Lanjutkan Perjuangan! Format JPG/JPEG. Boleh diedit (crop, cahaya, warna) — DILARANG manipulasi AI. Wajib sertakan judul & deskripsi. Biaya cetak Rp10.000. Deadline: 6 Nov 2026, 23.59 WIB. Hubungi Dinda (Adinda Zafirah) WA: 0812-7348-6350. Daftar via Google Form resmi.',
         'penghargaan': 'Piala, Sertifikat',
         'peserta_max': None,
         'peserta_min': None,
@@ -1000,16 +1139,17 @@ CABANG_LOMBA = [
     },
     {
         'category': 'seni',
-        'format_type': 'komik_digital',
+        'format_type': 'bulan_bahasa_karya',
         'gform_url': GFORM_URLS.get('film-pendek', 'https://forms.google.com'),
         'id': 'film-pendek',
+        'ketentuan': KETENTUAN_DETAIL.get('film-pendek'),
         'is_external_gform': True,
         'is_olimpiade_or_ai': False,
         'juara': 'I, II, III',
         'max_quota': None,
         'name': 'Film Pendek',
         'no': 42,
-        'note': 'Sinematografi dan narasi film pendek berdurasi 3-7 menit. Pendaftaran via Google Form resmi.',
+        'note': 'Individu/kelompok (maks. 3 orang). Durasi maks. 60 detik + opening/closing 15 detik. Format MP4, resolusi min. 720p. Tema: Ekspresikan Kata, Wujudkan Karya, Lanjutkan Perjuangan! Orisinal, belum pernah menang lomba, bebas SARA & kekerasan. Format nama file: NamaKelompok_JudulFilm_Kelas_Sekolah. Kumpulkan via Google Drive / G-Form panitia. Deadline: 6 Nov 2026. Daftar via Google Form resmi.',
         'penghargaan': 'Piala, Sertifikat',
         'peserta_max': None,
         'peserta_min': None,

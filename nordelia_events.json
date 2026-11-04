@@ -307,7 +307,7 @@
           "id": "jurnalistik",
           "name": "JURNALISTIK",
           "is_external_gform": true,
-          "gform_url": "https://forms.google.com/",
+          "gform_url": "https://docs.google.com/forms/d/e/1FAIpQLSfyLRFiI2eID99KkUe9KEwGfz_4XXLu2fWWfJ_vxmSTnpzZEA/viewform?usp=publish-editor",
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas"
@@ -352,7 +352,7 @@
           "id": "fotografi",
           "name": "FOTOGRAFI",
           "is_external_gform": true,
-          "gform_url": "https://forms.google.com/",
+          "gform_url": "https://docs.google.com/forms/d/e/1FAIpQLSfyLRFiI2eID99KkUe9KEwGfz_4XXLu2fWWfJ_vxmSTnpzZEA/viewform?usp=publish-editor",
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas",
@@ -408,7 +408,7 @@
           "id": "film-pendek",
           "name": "FILM PENDEK",
           "is_external_gform": true,
-          "gform_url": "https://forms.google.com/",
+          "gform_url": "https://docs.google.com/forms/d/e/1FAIpQLSfyLRFiI2eID99KkUe9KEwGfz_4XXLu2fWWfJ_vxmSTnpzZEA/viewform?usp=publish-editor",
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas",

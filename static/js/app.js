@@ -135,6 +135,16 @@ function initCabinets() {
     $("#cab-tagline").textContent = cab.tagline;
     $("#cab-philosophy").textContent = cab.philosophy;
     $("#cab-legacy").textContent = cab.keyLegacy;
+    const websiteWrap = $("#cab-website-wrap");
+    const websiteLink = $("#cab-website");
+    if (websiteWrap && websiteLink) {
+      if (cab.website) {
+        websiteLink.href = cab.website;
+        websiteWrap.classList.remove("hidden");
+      } else {
+        websiteWrap.classList.add("hidden");
+      }
+    }
     const list = $("#cab-achievements");
     list.innerHTML = cab.achievements
       .map(
