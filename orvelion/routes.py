@@ -171,6 +171,8 @@ def nordelia_category(category_id: str):
     cat_id_clean = category_id.lower().strip()
     if cat_id_clean in ("olimpiade-9-cabang", "osn"):
         target_ids = ("osn", "olimpiade-9-cabang")
+    elif cat_id_clean in ("lomba-debat", "lomba-debat-indonesia"):
+        target_ids = ("lomba-debat", "lomba-debat-indonesia")
     else:
         target_ids = (cat_id_clean, category_id)
 

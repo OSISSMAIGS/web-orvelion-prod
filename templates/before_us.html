@@ -51,24 +51,6 @@
           <div class="text-xs font-bold uppercase tracking-wider text-orvelion-coral mb-2">Makna Filosofi Lambang</div>
           <p id="cab-philosophy" class="text-xs sm:text-sm text-white/90 leading-relaxed">{{ cabinets[0].philosophy }}</p>
         </div>
-        <div class="space-y-4">
-          <h4 class="text-xs font-bold uppercase tracking-wider text-orvelion-coral">Karya & Tonggak Prestasi Utama</h4>
-          <div id="cab-achievements" class="relative pl-6 space-y-4">
-            <div class="absolute left-2 top-2 bottom-2 w-0.5 bg-gradient-to-b from-orvelion-coral/60 via-orvelion-rust/40 to-transparent"></div>
-            {% for ach in cabinets[0].achievements %}
-              <div class="relative">
-                <div class="absolute -left-4 top-1.5 w-3 h-3 rounded-full bg-orvelion-coral border-2 border-[#141414]"></div>
-                <div class="p-3 rounded-xl bg-orvelion-card/90 border border-orvelion-coral/20 text-xs text-white/90">
-                  {{ ach }}
-                </div>
-              </div>
-            {% endfor %}
-          </div>
-        </div>
-        <div class="p-4 rounded-2xl bg-gradient-to-r from-orvelion-rust/30 to-transparent border-l-4 border-orvelion-coral text-xs sm:text-sm">
-          <strong class="text-white block mb-0.5">Warisan</strong>
-          <span id="cab-legacy" class="text-white/90">{{ cabinets[0].keyLegacy }}</span>
-        </div>
         <div id="cab-website-wrap" class="{% if not cabinets[0].get('website') %}hidden{% endif %}">
           <a id="cab-website"
              href="{{ cabinets[0].get('website', '#') }}"

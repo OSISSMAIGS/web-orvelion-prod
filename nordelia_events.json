@@ -159,7 +159,7 @@
     },
     {
       "id": "lomba-debat-indonesia",
-      "name": "LOMBA DEBAT INDONESIA",
+      "name": "LOMBA DEBAT",
       "hasSubEvents": true,
       "description": "Pilih jenis debat",
       "subEvents": [

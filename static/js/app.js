@@ -134,7 +134,8 @@ function initCabinets() {
     $("#cab-name").textContent = cab.name;
     $("#cab-tagline").textContent = cab.tagline;
     $("#cab-philosophy").textContent = cab.philosophy;
-    $("#cab-legacy").textContent = cab.keyLegacy;
+    const legacyEl = $("#cab-legacy");
+    if (legacyEl) legacyEl.textContent = cab.keyLegacy;
     const websiteWrap = $("#cab-website-wrap");
     const websiteLink = $("#cab-website");
     if (websiteWrap && websiteLink) {
@@ -146,12 +147,14 @@ function initCabinets() {
       }
     }
     const list = $("#cab-achievements");
-    list.innerHTML = cab.achievements
+    if (list && cab.achievements) {
+      list.innerHTML = cab.achievements
       .map(
         (item) =>
           `<div class="relative"><div class="absolute -left-4 top-1.5 w-3 h-3 rounded-full bg-[#FD8C5A] border-2 border-[#161210]"></div><div class="p-3 rounded-xl bg-[#1c1714]/80 border border-[rgba(253,140,90,0.15)] text-xs text-[#fdb18f]/85">${item}</div></div>`
       )
       .join("");
+    }
     $$("[data-cabinet]").forEach((btn) => {
       btn.classList.toggle("is-selected", btn.getAttribute("data-cabinet") === cab.id);
     });

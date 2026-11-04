@@ -1302,7 +1302,7 @@ SHEET2_FORMAT_SPEC = [
         "catatan": "Format resmi pendaftaran cabang olimpiade akademik sains dan litnum. Kuota maksimal 20 orang per cabang lomba.",
     },
     {
-        "kategori_lomba": "LOMBA DEBAT INDONESIA (LDBI) & NSDC",
+        "kategori_lomba": "LOMBA DEBAT (LDBI) & NSDC",
         "format_isi": [
             "1.) Nama Tim",
             "2.) Asal Kelas Tim",

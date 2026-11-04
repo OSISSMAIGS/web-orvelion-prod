@@ -123,7 +123,7 @@ function setupNordeliaSpreadsheet() {
       "", ""
     ],
     [
-      "LOMBA DEBAT INDONESIA (LDBI) & NSDC",
+      "LOMBA DEBAT (LDBI) & NSDC",
       "1.) Nama Tim\n2.) Asal Kelas Tim\n3.) 1st, 2nd, and 3rd Speaker (NSDC) [Beri (-) jika tdk ikut]\n4.) Pembicara 1, 2, 3 (LDBI) [Beri (-) jika tdk ikut]",
       "", "",
       "Rhetoric Squad IGS\n11.1 MAYOR & 11.2 CGC\n1st: Alex, 2nd: Cindy, 3rd: David",

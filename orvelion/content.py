@@ -199,13 +199,6 @@ CABINETS = [
         "image": "ardraxis.png",
         "tagline": "Mengalir Bijak, Mengguncang Cakrawala",
         "philosophy": "Melambangkan kebijaksanaan yang mendalam, kelincahan dalam beradaptasi menghadapi tantangan zaman, serta kekuatan visioner yang merangkul seluruh elemen siswa tanpa gentar.",
-        "achievements": [
-            "Penyelenggaraan IGS Youth Innovation Carnival Tingkat Provinsi",
-            "Implementasi sistem E-Voting & transparansi aspirasi siswa real-time",
-            "Pemberdayaan ekskul riset sains & olimpiade ke kancah nasional",
-            "Gerakan 'Ardraxis Peduli' donasi buku dan beasiswa sahabat sebaya",
-        ],
-        "keyLegacy": "Fondasi sistem digitalisasi terpadu dan tradisi kepemimpinan adaptif.",
         "website": "https://ardraxis.osissmaigs.com",
     },
     {
@@ -216,13 +209,6 @@ CABINETS = [
         "image": "valiance.png",
         "tagline": "Terlahir Kembali dalam Kobaran Prestasi",
         "philosophy": "Mengadopsi kekuatan burung phoenix yang senantiasa bangkit dengan api yang lebih berkobar. Simbol kebangkitan gairah berkarya, optimisme membara, dan inovasi yang tak pernah padam.",
-        "achievements": [
-            "Revitalisasi total festival seni 'Valiance Art Fest & Exhibition'",
-            "Rekor partisipasi delegasi lomba akademik dan olahraga terbanyak",
-            "Inisiasi gerakan ramah lingkungan 'Green Ignatian' di sekolah",
-            "Konser amal akbar bersama komunitas seni dan musik Palembang",
-        ],
-        "keyLegacy": "Semangat pantang menyerah, pembaharuan kreatif, dan kepedulian sosial yang hangat.",
         "website": "https://valiance.osissmaigs.com",
     },
     {
@@ -233,13 +219,6 @@ CABINETS = [
         "image": "asteration.png",
         "tagline": "Bercahaya di Langit Malam, Menjaga Persaudaraan",
         "philosophy": "Rusa bertanduk anggun berpadu dengan perisai bintang melambangkan keagungan martabat, ketenangan dalam mengambil keputusan, serta komitmen menjadi pelindung kehangatan keluarga besar sekolah.",
-        "achievements": [
-            "Penyelenggaraan IGS Cup Reborn pasca masa transisi",
-            "Pendirian kanal Forum Aspirasi Siswa Terbuka dan Konseling Sebaya",
-            "Penerbitan Majalah & Buletin Digital Siswa 'Asteration Voice'",
-            "Pengukuhan tata tertib dan persahabatan antar jenjang kelas",
-        ],
-        "keyLegacy": "Kehangatan persaudaraan sejati dan fondasi perlindungan hak-hak siswa.",
         "website": "https://asteration.osissmaigs.com",
     },
     {
@@ -250,13 +229,6 @@ CABINETS = [
         "image": "credence.png",
         "tagline": "Cerdas Mengambil Langkah, Setia Memegang Amanat",
         "philosophy": "Rubah melambangkan kecerdasan, ketangkasan, dan kemampuan beradaptasi. Simbol kebijaksanaan dalam mengambil keputusan, kelincahan mengatasi tantangan, serta kesetiaan pada amanah yang diberikan.",
-        "achievements": [
-            "Pendirian fondasi OSIS SMA IGS pasca pandemi",
-            "Inisiasi program 'Credence Care' bantuan sosial untuk siswa",
-            "Pengembangan sistem komunikasi awal antara OSIS dan siswa",
-            "Pembentukan tradisi kegiatan kreatif pertama di sekolah",
-        ],
-        "keyLegacy": "Fondasi awal keberadaan OSIS dan semangat gotong royong.",
         "website": "https://osissma.ignatiusglobal.sch.id/Credence",
     },
 ]
