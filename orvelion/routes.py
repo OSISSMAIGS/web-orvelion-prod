@@ -132,6 +132,7 @@ def build_decorated_cabang_list():
         c_copy["is_team"] = c.get("is_team", False)
         c_copy["is_external_gform"] = c.get("is_external_gform", False)
         c_copy["gform_url"] = c.get("gform_url", "")
+        c_copy["email_notice"] = "Gunakan akun email resmi sekolah untuk mendaftar" if c_copy["is_external_gform"] else ""
         c_copy["group_link"] = c.get("group_link", "")
         c_copy["group_label"] = c.get("group_label", "Masuk Grup LINE")
         c_copy["juknis_url"] = c.get("juknis_url", "")
@@ -267,6 +268,7 @@ def nordelia_category(category_id: str):
                 "is_team": cabang_info.get("is_team", False) if cabang_info else False,
                 "is_external_gform": cabang_info.get("is_external_gform", False) if cabang_info else False,
                 "gform_url": cabang_info.get("gform_url", "") if cabang_info else "",
+                "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar" if (cabang_info.get("is_external_gform", False) if cabang_info else False) else "",
                 "group_link": cabang_info.get("group_link", "") if cabang_info else "",
                 "group_label": cabang_info.get("group_label", "Masuk Grup LINE") if cabang_info else "Masuk Grup LINE",
                 "juknis_url": cabang_info.get("juknis_url", "") if cabang_info else "",
@@ -308,6 +310,7 @@ def nordelia_category(category_id: str):
             sub["is_team"] = cb.get("is_team", False) if cb else False
             sub["is_external_gform"] = cb.get("is_external_gform", False) if cb else sub.get("is_external_gform", False)
             sub["gform_url"] = cb.get("gform_url", "") if cb else sub.get("gform_url", "")
+            sub["email_notice"] = "Gunakan akun email resmi sekolah untuk mendaftar" if sub["is_external_gform"] else ""
             sub["group_link"] = cb.get("group_link", "") if cb else sub.get("group_link", "")
             sub["group_label"] = cb.get("group_label", "Masuk Grup LINE") if cb else sub.get("group_label", "Masuk Grup LINE")
             sub["juknis_url"] = cb.get("juknis_url", "") if cb else sub.get("juknis_url", "")

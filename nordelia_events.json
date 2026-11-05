@@ -158,7 +158,8 @@
           ],
           "group_link": "https://line.me/R/ti/g/nJFGvpBBCE",
           "pic": "Ms. Nisak dan Marla",
-          "juknis_url": "https://drive.google.com/drive/folders/1Mx_iljhr44fKL8N9xVx8pwwMWftKRhed?usp=sharing"
+          "juknis_url": "https://drive.google.com/drive/folders/1Mx_iljhr44fKL8N9xVx8pwwMWftKRhed?usp=sharing",
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
         },
         {
           "id": "fiksi",
@@ -171,7 +172,8 @@
           ],
           "group_link": "https://line.me/R/ti/g/e3UfBDmz9v",
           "pic": "Ms. Priti, Vina, Sir Ifaldi",
-          "juknis_url": "https://drive.google.com/drive/folders/1Mx_iljhr44fKL8N9xVx8pwwMWftKRhed?usp=sharing"
+          "juknis_url": "https://drive.google.com/drive/folders/1Mx_iljhr44fKL8N9xVx8pwwMWftKRhed?usp=sharing",
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
         }
       ]
     },
@@ -193,7 +195,11 @@
             "No. WhatsApp / Kontak"
           ],
           "is_external_gform": true,
-          "gform_url": "https://docs.google.com/forms/d/e/1FAIpQLSdRda2GTYJLbgLETVedIjf88liRiDereOR-UVqfrUFI2Z9L0g/viewform"
+          "gform_url": "https://docs.google.com/forms/d/e/1FAIpQLSdRda2GTYJLbgLETVedIjf88liRiDereOR-UVqfrUFI2Z9L0g/viewform",
+          "juknis_url": "https://drive.google.com/file/d/1SWIr93HronVi4S6NmA4KJzHxYVX13IGr/view?usp=sharing",
+          "group_link": "https://line.me/R/ti/g/tZjxTwpBRy",
+          "pic": "Sir Pebrian",
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
         },
         {
           "id": "debat-bahasa-inggris",
@@ -207,7 +213,11 @@
             "No. WhatsApp / Kontak"
           ],
           "is_external_gform": true,
-          "gform_url": "https://docs.google.com/forms/d/e/1FAIpQLSdRda2GTYJLbgLETVedIjf88liRiDereOR-UVqfrUFI2Z9L0g/viewform"
+          "gform_url": "https://forms.gle/CAkMHSi7Fd1QRKWc9",
+          "juknis_url": "https://drive.google.com/drive/folders/1rmuC3J1dxD9nISqjL4z6h9VNP9A_CnYE",
+          "group_link": "https://line.me/R/ti/g/tf-h4h7_Az",
+          "pic": "Ms. Ninis",
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
         }
       ]
     },
@@ -346,7 +356,8 @@
             "Nama Lengkap",
             "Kelas"
           ],
-          "group_link": "https://line.me/ti/g/rPVWg2xsuB"
+          "group_link": "https://line.me/ti/g/rPVWg2xsuB",
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
         },
         {
           "id": "menulis-cerpen",
@@ -375,7 +386,8 @@
             "Nama Lengkap",
             "Kelas"
           ],
-          "group_link": "https://line.me/ti/g/nE-VFvcF3x"
+          "group_link": "https://line.me/ti/g/nE-VFvcF3x",
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
         },
         {
           "id": "desain-poster",
@@ -387,7 +399,8 @@
           ],
           "is_external_gform": true,
           "gform_url": "https://forms.gle/MGVWmKZ5uZ5sqeGc8",
-          "group_link": "https://line.me/ti/g/g-U6bYGFEs"
+          "group_link": "https://line.me/ti/g/g-U6bYGFEs",
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
         },
         {
           "id": "fotografi",
@@ -399,7 +412,8 @@
             "Kelas",
             "Link Portofolio"
           ],
-          "group_link": "https://line.me/ti/g/g-U6bYGFEs"
+          "group_link": "https://line.me/ti/g/g-U6bYGFEs",
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
         },
         {
           "id": "solo-gitar",
@@ -410,7 +424,8 @@
           ],
           "is_external_gform": true,
           "gform_url": "https://forms.gle/MGVWmKZ5uZ5sqeGc8",
-          "group_link": "https://line.me/ti/g/ZXQuZzQG8A"
+          "group_link": "https://line.me/ti/g/ZXQuZzQG8A",
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
         },
         {
           "id": "vokal-putri",
@@ -423,7 +438,8 @@
           ],
           "is_external_gform": true,
           "gform_url": "https://forms.gle/MGVWmKZ5uZ5sqeGc8",
-          "group_link": "https://line.me/ti/g/82ZajrAe_e"
+          "group_link": "https://line.me/ti/g/82ZajrAe_e",
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
         },
         {
           "id": "vokal-putra",
@@ -436,7 +452,8 @@
           ],
           "is_external_gform": true,
           "gform_url": "https://forms.gle/MGVWmKZ5uZ5sqeGc8",
-          "group_link": "https://line.me/ti/g/82ZajrAe_e"
+          "group_link": "https://line.me/ti/g/82ZajrAe_e",
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
         },
         {
           "id": "kriya",
@@ -447,7 +464,8 @@
           ],
           "is_external_gform": true,
           "gform_url": "https://forms.gle/MGVWmKZ5uZ5sqeGc8",
-          "group_link": "https://line.me/ti/g/TkPrU9CGf4"
+          "group_link": "https://line.me/ti/g/TkPrU9CGf4",
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
         },
         {
           "id": "komik-digital",
@@ -459,7 +477,8 @@
           ],
           "is_external_gform": true,
           "gform_url": "https://forms.gle/MGVWmKZ5uZ5sqeGc8",
-          "group_link": "https://line.me/ti/g/J4f9wa-v4f"
+          "group_link": "https://line.me/ti/g/J4f9wa-v4f",
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
         },
         {
           "id": "film-pendek",
@@ -471,7 +490,8 @@
             "Kelas",
             "Link Portofolio"
           ],
-          "group_link": "https://line.me/ti/g/Y45atM5JVv"
+          "group_link": "https://line.me/ti/g/Y45atM5JVv",
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
         },
         {
           "id": "tari-kreasi",

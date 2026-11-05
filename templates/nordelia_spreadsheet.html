@@ -211,9 +211,9 @@
             {% if registrations %}
               {% for r in registrations %}
                 <tr class="hover:bg-white/5 transition-colors" data-table-row>
-                  <td class="py-3 px-4 text-stone-500 font-mono">#{{ r.id }}</td>
-                  <td class="py-3 px-4 text-stone-400 whitespace-nowrap">{{ r.created_at }}</td>
-                  <td class="py-3 px-4">
+                  <td class="py-3.5 px-4 text-stone-500 font-mono align-top">#{{ r.id }}</td>
+                  <td class="py-3.5 px-4 text-stone-400 whitespace-nowrap align-top">{{ r.created_at }}</td>
+                  <td class="py-3.5 px-4 align-top">
                     <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase
                                  {% if r.category_id == 'akademik' %}bg-[#0284C7]/20 text-[#38BDF8] border border-[#38BDF8]/30
                                  {% elif r.category_id == 'bahasa' %}bg-[#FBBF24]/20 text-[#FBBF24] border border-[#FBBF24]/30
@@ -222,23 +222,39 @@
                       {{ r.category_id }}
                     </span>
                   </td>
-                  <td class="py-3 px-4 font-sans font-bold text-white whitespace-nowrap">{{ r.cabang_name }}</td>
-                  <td class="py-3 px-4 font-sans text-stone-100 font-semibold">{{ r.participant_name }}</td>
-                  <td class="py-3 px-4 whitespace-nowrap">{{ r.kelas }}</td>
-                  <td class="py-3 px-4 whitespace-nowrap">{{ r.whatsapp }}</td>
-                  <td class="py-3 px-4 font-sans text-[11px] text-stone-300 max-w-sm">
-                    {% if r.details %}
-                      <div class="truncate text-stone-400" title="{{ r.details | tojson }}">{{ r.details | tojson }}</div>
+                  <td class="py-3.5 px-4 font-sans font-bold text-white whitespace-nowrap align-top">{{ r.cabang_name }}</td>
+                  <td class="py-3.5 px-4 font-sans text-stone-100 font-semibold align-top whitespace-pre-line leading-relaxed min-w-[220px]">{{ r.participant_name | replace('\\n', '\n') }}</td>
+                  <td class="py-3.5 px-4 font-sans align-top whitespace-pre-line leading-relaxed min-w-[120px]">{{ r.kelas | replace('\\n', '\n') }}</td>
+                  <td class="py-3.5 px-4 whitespace-nowrap align-top">{{ r.whatsapp }}</td>
+                  <td class="py-3.5 px-4 font-sans text-[11px] text-stone-300 max-w-sm align-top">
+                    {% if r.details and r.details is mapping %}
+                      <div class="space-y-1.5">
+                        {% set found_extra = [] %}
+                        {% for k, v in r.details.items() %}
+                          {% if k not in ['id', 'created_at', 'category_id', 'cabang_id', 'cabang_name', 'sheet_name', 'nama_lengkap', 'nama_tim', 'nama', 'kelas', 'whatsapp', 'csrf_token', 'raw'] and v and v != '-' %}
+                            {% set _ = found_extra.append(k) %}
+                            <div class="bg-black/40 p-2 rounded-xl border border-white/5">
+                              <span class="text-stone-400 font-bold uppercase text-[9px] tracking-wider block">{{ k | replace('_', ' ') }}:</span>
+                              <div class="text-stone-200 whitespace-pre-line leading-relaxed mt-0.5">{{ v | replace('\\n', '\n') }}</div>
+                            </div>
+                          {% endif %}
+                        {% endfor %}
+                        {% if not found_extra %}
+                          <span class="text-stone-500">-</span>
+                        {% endif %}
+                      </div>
+                    {% elif r.details and r.details != '-' %}
+                      <div class="whitespace-pre-line leading-relaxed text-stone-300">{{ r.details | replace('\\n', '\n') }}</div>
                     {% else %}
-                      -
+                      <span class="text-stone-500">-</span>
                     {% endif %}
                   </td>
-                  <td class="py-3 px-4 whitespace-nowrap font-sans">
+                  <td class="py-3.5 px-4 whitespace-nowrap font-sans align-top">
                     <span class="inline-flex items-center gap-1 text-[11px] text-emerald-400 font-bold">
                       <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Real-Time Database
                     </span>
                   </td>
-                  <td class="py-3 px-4 text-center whitespace-nowrap font-sans">
+                  <td class="py-3.5 px-4 text-center whitespace-nowrap font-sans align-top">
                     <button type="button"
                             class="btn-delete-row px-2.5 py-1 rounded-lg text-xs font-bold text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 hover:border-rose-500/60 transition-all inline-flex items-center gap-1.5 shadow-sm hover:scale-105"
                             data-id="{{ r.id }}"
