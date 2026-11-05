@@ -415,7 +415,7 @@ FORMAT_REGISTRASI = {
     },
     # 5. Format Cosplay (Sheet 2: Nama Anggota 1-2-3, Kelas Anggota 1-2-3)
     "cosplay": {
-        "title": "Format Pendaftaran Cosplay (Jepang)",
+        "title": "Format Pendaftaran Cosplay",
         "fields": [
             {"name": "nama_lengkap", "label": "Nama Anggota 1-2-3 :", "type": "textarea", "required": True, "placeholder": "Anggota 1: Tommy (10.1)\nAnggota 2: Jessica (10.2)\nAnggota 3: -"},
             {"name": "kelas", "label": "Kelas Anggota 1-2-3 :", "type": "text", "required": True, "placeholder": "Contoh: 10.1 CGC & 10.2 MAYOR"},
@@ -1035,7 +1035,7 @@ CABANG_LOMBA = [
         'is_olimpiade_or_ai': False,
         'juara': 'I, II, III, Harapan I, II, III',
         'max_quota': None,
-        'name': 'Cosplay (Jepang)',
+        'name': 'Cosplay',
         'no': 28,
         'note': 'Kompetisi cosplay karakter anime, manga, dan game. Kuota terbuka.',
         'penghargaan': 'Piala, Sertifikat',
@@ -1516,7 +1516,7 @@ SHEET2_FORMAT_SPEC = [
         "catatan": "Khusus Story Telling Korea menggunakan format: Nama, Kelas.",
     },
     {
-        "kategori_lomba": "COSPLAY (JEPANG)",
+        "kategori_lomba": "COSPLAY",
         "cabang_termasuk": "Cosplay Anime / Game Jepang",
         "format_isi": [
             "Nama Anggota 1-2-3 (atau 1-2-3-4)",
