@@ -89,7 +89,7 @@ EVENTS = [
         "id": "nordelia",
         "title": "NORDELIA 2026: Festival Kompetisi IGS",
         "category": "Unggulan",
-        "date": "13 - 14 Oktober 2026",
+        "date": "20 - 21 Oktober 2026",
         "time": "07.00 - 15.15 WIB",
         "location": "SMA Ignatius Global School",
         "status": "Pendaftaran Dibuka",
