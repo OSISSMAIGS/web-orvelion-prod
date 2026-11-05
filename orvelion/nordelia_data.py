@@ -307,6 +307,7 @@ KETENTUAN_DETAIL = {
         "biaya": "Gratis",
         "durasi": "Penyisihan 20 Menit | Final 120 Menit",
         "deadline": "20 - 21 Oktober 2026",
+        "juknis_url": "https://drive.google.com/drive/folders/1QjuO7vX9MhtvZt92LAbHpCFfwKd3IPGF?usp=drive_link",
         "contact_person": {
             "name": "Sir Sepri (Informatics)",
             "phone": "Grup LINE AI",
@@ -835,6 +836,7 @@ CABANG_LOMBA = [
         'id': 'olimpiade-ai',
         'is_external_gform': False,
         'is_olimpiade_or_ai': True,
+        'juknis_url': 'https://drive.google.com/drive/folders/1QjuO7vX9MhtvZt92LAbHpCFfwKd3IPGF?usp=drive_link',
         'juara': 'Emas, Perak, Perunggu',
         'max_quota': 20,
         'name': 'Olimpiade Kecerdasan Artifisial',
