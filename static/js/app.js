@@ -428,7 +428,7 @@ function initNordelia() {
         <div class="mt-2.5 pt-2 border-t border-white/10">
           <a href="${juknisUrl}" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold text-[#FDE68A] bg-amber-400/10 hover:bg-amber-400/20 border border-[#F5D061]/40 hover:border-[#F5D061]/80 transition-all flex items-center justify-center gap-2 shadow-sm hover:scale-[1.01]">
             <svg class="w-4 h-4 text-[#F5D061]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-            <span>Buka Petunjuk Teknis (Juknis Drive) &rarr;</span>
+            <span>Buka Petunjuk Teknis (Juknis) &rarr;</span>
           </a>
         </div>
       `;
