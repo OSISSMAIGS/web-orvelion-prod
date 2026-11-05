@@ -218,6 +218,13 @@ function initNordelia() {
 
   const cabangDataEl = document.getElementById("nordelia-data-cabang");
   const formatDataEl = document.getElementById("nordelia-data-formats");
+  const ketentuanDataEl = document.getElementById("nordelia-data-ketentuan");
+  let ketentuanData = {};
+  try {
+    ketentuanData = JSON.parse(ketentuanDataEl ? ketentuanDataEl.textContent : "{}");
+  } catch(e) {
+    console.error("Gagal parse ketentuan data:", e);
+  }
 
   console.log("cabangDataEl:", cabangDataEl);
   console.log("formatDataEl:", formatDataEl);
@@ -412,8 +419,38 @@ function initNordelia() {
         <span class="text-stone-300">${labelText} <strong class="text-white" id="modal-live-reg-count">${regCount} ${unitText}</strong></span>
         <span id="modal-live-quota-wrapper">${quotaDisplay}</span>
       </div>
-      <p class="text-[11px] text-stone-300"><strong class="text-white">Ketentuan:</strong> ${c.note || '-'}</p>
     `;
+
+    const hasKetentuan = !!(ketentuanData && (ketentuanData[c.id] || (c.id === 'ai' && ketentuanData['olimpiade-ai']) || (c.id.includes('ai') && ketentuanData['olimpiade-ai'])));
+    const juknisUrl = c.juknis_url || "";
+    if (juknisUrl) {
+      formRuleBox.innerHTML += `
+        <div class="mt-2.5 pt-2 border-t border-white/10">
+          <a href="${juknisUrl}" target="_blank" rel="noopener noreferrer" class="w-full py-2 px-3 rounded-xl text-xs font-bold text-sky-200 bg-sky-950/70 border border-sky-400/40 hover:bg-sky-900/80 transition-all flex items-center justify-center gap-1.5 shadow-sm">
+            <svg class="w-3.5 h-3.5 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            <span>Buka Petunjuk Teknis (Juknis Drive) &rarr;</span>
+          </a>
+        </div>
+      `;
+    } else if (hasKetentuan) {
+      formRuleBox.innerHTML += `
+        <div class="mt-2.5 pt-2 border-t border-white/10">
+          <button type="button" id="btn-open-juknis-from-reg" class="w-full py-2 px-3 rounded-xl text-xs font-bold text-[#FDE68A] bg-amber-400/10 hover:bg-amber-400/20 border border-[#F5D061]/40 hover:border-[#F5D061]/80 transition-all flex items-center justify-center gap-2 shadow-sm hover:scale-[1.01]">
+            <svg class="w-4 h-4 text-[#F5D061]"><use href="#i-sparkles"></use></svg>
+            <span>Lihat Petunjuk Teknis (Juknis) Lengkap &rarr;</span>
+          </button>
+        </div>
+      `;
+      setTimeout(() => {
+        const btnJuknis = document.getElementById("btn-open-juknis-from-reg");
+        if (btnJuknis) {
+          btnJuknis.onclick = () => {
+            closeRegisterModal();
+            openKetentuanModal(c.id, c.name);
+          };
+        }
+      }, 10);
+    }
 
     // Ambil live count & kuota langsung dari Google Sheet via API
     fetch(`/api/nordelia/cabang-quota?cabang_id=${encodeURIComponent(c.id)}`)
@@ -823,3 +860,146 @@ document.addEventListener("DOMContentLoaded", () => {
   initWaitingRoom();
   initNordelia();
 });
+
+  // =========================================================================
+  // MODAL KETENTUAN LOMBA HANDLER
+  // =========================================================================
+  const modalKetentuan = document.getElementById("modal-ketentuan");
+  const closeKetentuanBtn = document.getElementById("btn-close-ketentuan-modal");
+  const closeKetentuanFooterBtn = document.getElementById("btn-close-ketentuan-footer");
+  const ketentuanTitle = document.getElementById("ketentuan-modal-title");
+  const ketentuanCategoryBadge = document.getElementById("ketentuan-category-badge");
+  const ketentuanMetaBox = document.getElementById("ketentuan-meta-box");
+  const ketentuanSections = document.getElementById("ketentuan-sections-container");
+  const ketentuanGformBtn = document.getElementById("ketentuan-modal-gform-btn");
+
+  function openKetentuanModal(cabangId, fallbackName) {
+    if (!modalKetentuan) return;
+    const k = (ketentuanData && ketentuanData[cabangId]) || (ketentuanData && (cabangId.includes('ai') ? ketentuanData['olimpiade-ai'] : null));
+    const cb = (cabangList || []).find(c => c.id === cabangId || (cabangId.includes('ai') && c.id.includes('ai')));
+    if (!k) {
+      if (cb) {
+        if (ketentuanTitle) ketentuanTitle.textContent = "Ketentuan " + (cb.name || fallbackName);
+        if (ketentuanCategoryBadge) ketentuanCategoryBadge.textContent = cb.category ? cb.category.toUpperCase() : "LOMBA";
+        if (ketentuanMetaBox) {
+          ketentuanMetaBox.innerHTML = `
+            <div class="text-xs text-stone-300">
+              <strong>Lokasi:</strong> ${cb.tempat || '-'}<br>
+              <strong>PIC:</strong> ${cb.pic || '-'}
+            </div>
+          `;
+        }
+        if (ketentuanSections) {
+          ketentuanSections.innerHTML = `
+            <div class="p-4 rounded-xl bg-white/[0.04] border border-white/10 text-xs text-stone-200 leading-relaxed">
+              <h4 class="font-bold text-[#FDE68A] mb-2 uppercase text-[11px] tracking-wider">Ketentuan Lomba:</h4>
+              <p>${cb.note || 'Tidak ada ketentuan khusus.'}</p>
+            </div>
+          `;
+        }
+        const juknisBtn = document.getElementById("ketentuan-modal-juknis-btn");
+        if (juknisBtn) {
+          if (cb.juknis_url) {
+            juknisBtn.href = cb.juknis_url;
+            juknisBtn.classList.remove("hidden");
+          } else {
+            juknisBtn.classList.add("hidden");
+          }
+        }
+        modalKetentuan.classList.remove("hidden");
+        document.body.classList.add("overflow-hidden");
+      }
+      return;
+    }
+
+    if (ketentuanTitle) ketentuanTitle.textContent = k.title || ("Ketentuan " + (cb ? cb.name : fallbackName));
+    if (ketentuanCategoryBadge) ketentuanCategoryBadge.textContent = k.category || "LOMBA";
+
+    let metaHtml = `
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+        ${k.tema ? `<div><span class="text-stone-400">Tema:</span> <strong class="text-[#FDE68A]">${k.tema}</strong></div>` : ''}
+        ${k.biaya ? `<div><span class="text-stone-400">Biaya:</span> <strong class="text-emerald-400">${k.biaya}</strong></div>` : ''}
+        ${k.deadline ? `<div><span class="text-stone-400">Jadwal:</span> <strong class="text-stone-200">${k.deadline}</strong></div>` : ''}
+        ${k.durasi ? `<div><span class="text-stone-400">Durasi:</span> <strong class="text-sky-300">${k.durasi}</strong></div>` : ''}
+      </div>
+      ${k.contact_person ? `
+        <div class="mt-3 pt-2 border-t border-white/10 flex items-center justify-between text-xs">
+          <span class="text-stone-400">Narahubung: <strong class="text-stone-200">${k.contact_person.name}</strong></span>
+          ${k.contact_person.wa_url ? `<a href="${k.contact_person.wa_url}" target="_blank" class="px-2.5 py-1 rounded-lg bg-[#06C755]/20 text-[#06C755] border border-[#06C755]/30 font-bold hover:bg-[#06C755]/30">Chat &rarr;</a>` : ''}
+        </div>
+      ` : ''}
+    `;
+    if (ketentuanMetaBox) ketentuanMetaBox.innerHTML = metaHtml;
+
+    let secHtml = "";
+    (k.sections || []).forEach(sec => {
+      secHtml += `
+        <div class="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2.5">
+          <div class="flex items-center justify-between gap-2">
+            <h4 class="text-sm font-bold text-white flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-[#F5D061]"></span>
+              ${sec.heading}
+            </h4>
+            ${sec.badge ? `<span class="text-[10px] px-2.5 py-0.5 rounded-full bg-white/10 text-[#FDE68A] font-semibold border border-white/10">${sec.badge}</span>` : ''}
+          </div>
+          <ul class="space-y-2 pl-1 text-xs text-stone-300">
+            ${sec.items.map(item => `
+              <li class="flex items-start gap-2.5">
+                <span class="text-[#FDE68A] mt-1 shrink-0">✦</span>
+                <span class="leading-relaxed">${item}</span>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+      `;
+    });
+    if (ketentuanSections) ketentuanSections.innerHTML = secHtml;
+
+    const hasGform = !!(k.gform_url || (cb && cb.is_external_gform && cb.gform_url));
+    const modalEmailNotice = document.getElementById("ketentuan-modal-email-notice");
+    const modalInAppRegBtn = document.getElementById("ketentuan-modal-inapp-reg-btn");
+
+    if (ketentuanGformBtn) {
+      if (hasGform) {
+        ketentuanGformBtn.href = k.gform_url || (cb && cb.gform_url) || "https://forms.google.com";
+        ketentuanGformBtn.classList.remove("hidden");
+        if (modalEmailNotice) modalEmailNotice.classList.remove("hidden");
+        if (modalInAppRegBtn) modalInAppRegBtn.classList.add("hidden");
+      } else {
+        ketentuanGformBtn.classList.add("hidden");
+        if (modalEmailNotice) modalEmailNotice.classList.add("hidden");
+        if (modalInAppRegBtn) {
+          modalInAppRegBtn.classList.remove("hidden");
+          modalInAppRegBtn.onclick = () => {
+            closeKetentuanModal();
+            openRegisterModal(cb ? cb.id : cabangId, (cb && cb.name) ? cb.name : fallbackName);
+          };
+        }
+      }
+    }
+
+    const juknisBtn = document.getElementById("ketentuan-modal-juknis-btn");
+    const juknisUrl = k.juknis_url || (cb && cb.juknis_url) || "";
+    if (juknisBtn) {
+      if (juknisUrl) {
+        juknisBtn.href = juknisUrl;
+        juknisBtn.classList.remove("hidden");
+      } else {
+        juknisBtn.classList.add("hidden");
+      }
+    }
+
+    modalKetentuan.classList.remove("hidden");
+    document.body.classList.add("overflow-hidden");
+  }
+
+  function closeKetentuanModal() {
+    modalKetentuan?.classList.add("hidden");
+    document.body.classList.remove("overflow-hidden");
+  }
+
+  closeKetentuanBtn?.addEventListener("click", closeKetentuanModal);
+  closeKetentuanFooterBtn?.addEventListener("click", closeKetentuanModal);
+  modalKetentuan?.addEventListener("click", function(e) {
+    if (e.target === modalKetentuan) closeKetentuanModal();
+  });

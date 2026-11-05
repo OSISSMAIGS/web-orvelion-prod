@@ -162,6 +162,7 @@ def nordelia():
             cabang_lomba=build_decorated_cabang_list(),
             sheet2_formats=SHEET2_FORMAT_SPEC,
             format_registrasi=FORMAT_REGISTRASI,
+            ketentuan_detail=KETENTUAN_DETAIL,
             summary=summary,
             registrations=all_regs[:10],
             spreadsheet_url=spreadsheet_url,

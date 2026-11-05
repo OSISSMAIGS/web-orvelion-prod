@@ -299,8 +299,129 @@ KETENTUAN_DETAIL = {
                 ]
             }
         ]
-    }
+    },
+    "olimpiade-ai": {
+        "title": "Petunjuk Teknis Olimpiade Kecerdasan Artifisial (A.I.)",
+        "category": "Olimpiade Akademik / OSN & AI",
+        "tema": "Collaboration with Club Informatics",
+        "biaya": "Gratis",
+        "durasi": "Penyisihan 20 Menit | Final 120 Menit",
+        "deadline": "20 - 21 Oktober 2026",
+        "contact_person": {
+            "name": "Sir Sepri (Informatics)",
+            "phone": "Grup LINE AI",
+            "wa_url": "https://line.me/R/ti/g/bCDDgAgzmz",
+        },
+        "sections": [
+            {
+                "heading": "Ruang Lingkup Materi",
+                "badge": "Silabus & Kompetensi",
+                "items": [
+                    "A.1. Babak Penyisihan: Kemampuan berpikir komputasional dan logis.",
+                    "A.2. Babak Final: Kemampuan bahasa koding (Python).",
+                    "Kemampuan menggunakan library-library Python seperti scikit-learn, numpy, pandas, matplotlib, seaborn, dll.",
+                    "Pemahaman materi silabus IOAI / EKKA (2026)."
+                ]
+            },
+            {
+                "heading": "Peraturan Pengerjaan Soal & Perangkat",
+                "badge": "Tata Tertib",
+                "items": [
+                    "Alat elektronik seperti handphone, tablet, smartwatch, dan lain sebagainya tidak diperbolehkan pada babak penyisihan.",
+                    "Peserta diharapkan untuk membawa laptop dengan code editor & pengisi daya (charger) untuk melaksanakan babak final."
+                ]
+            },
+            {
+                "heading": "B.1. Babak Penyisihan",
+                "badge": "Durasi 20 Menit",
+                "items": [
+                    "Semua peserta akan diarahkan ke sebuah ruangan.",
+                    "Peserta diberikan waktu 20 menit untuk mengerjakan dua bagian.",
+                    "Peserta akan menulis nama, kelas, dan jawaban pada selembar kertas yang diberikan panitia (kertas boleh dioret-oret).",
+                    "Peserta akan diberikan selembar kertas soal pada setiap bagian babak.",
+                    "Ketuntasan peserta ke bagian/babak selanjutnya akan diukur dari kecepatan peserta mengumpulkan jawaban.",
+                    "Kelulusan peserta akan diumumkan setiap kali sebuah bagian dari babak penyisihan selesai."
+                ]
+            },
+            {
+                "heading": "B.2. Babak Intermisi",
+                "badge": "Opsional (Mini Benefit)",
+                "items": [
+                    "Sebelum babak semifinal dimulai, akan ada babak intermisi yang bersifat tidak wajib.",
+                    "Berfungsi untuk memberikan mini benefit yang akan dipakai pada babak semifinal.",
+                    "Peserta akan bermain minigame escape-room, di mana peserta diminta mencari string 5 huruf dengan memanfaatkan clue yang tersedia.",
+                    "Peserta dapat memenangkan minigame dengan dua cara: (1) Menemukan string 5 huruf, atau (2) Menembak penjaga dengan senjata.",
+                    "Peserta memiliki waktu 5 menit untuk mencari string tersebut.",
+                    "Jika berhasil memenangkan minigame, peserta akan mendapatkan mini benefit.",
+                    "Peserta yang menang dengan menemukan string huruf dapat memilih 1 dari 2 mini benefit.",
+                    "Peserta yang menang dengan menembak penjaga akan diberikan mini benefit secara acak.",
+                    "Peserta akan diarahkan ke waiting room (peserta yang bermain di minigame akan dipisah)."
+                ]
+            },
+            {
+                "heading": "B.3. Babak Semifinal",
+                "badge": "Best of Five",
+                "items": [
+                    "Empat peserta dari waiting room akan dipanggil secara acak untuk mengikuti permainan selanjutnya.",
+                    "Rock paper scissors adalah gim yang menggunakan papan dan dua dadu (dadu angka biru dan dadu gambar merah).",
+                    "Papan dan dadu gambar berisi gambar gunting, batu, dan kertas yang teracak.",
+                    "Peserta bergiliran melempar dadu angka (blue dice) yang akan menentukan jumlah gerakan yang akan dilakukan peserta.",
+                    "Pada setiap gerakan, peserta akan menggulingkan dadu gambar (red dice) di atas papan bermain.",
+                    "Apabila peserta memperoleh mini benefit pada minigame sebelumnya, peserta dapat menggunakannya hanya pada giliran peserta tersebut.",
+                    "Dadu hanya dapat digulingkan ke sebuah kotak apabila gambar dadu yang akan mengenai kotak tersebut menang terhadap gambar kotak tersebut.",
+                    "Permainan akan berlangsung dengan sistem best of five."
+                ]
+            },
+            {
+                "heading": "B.4. Babak Final — Ketentuan Teknis & Perangkat",
+                "badge": "Durasi 120 Menit",
+                "items": [
+                    "Babak final berlangsung selama 120 menit.",
+                    "Peserta wajib membawa laptop pribadi dengan pengisi daya (charger) masing-masing.",
+                    "Lingkungan pengerjaan menggunakan Google Colab / Jupyter Notebook (atau script Python .py lokal).",
+                    "Peserta hanya diperbolehkan menggunakan library standar yang ditentukan: numpy, pandas, scikit-learn, matplotlib, seaborn."
+                ]
+            },
+            {
+                "heading": "Format Pengerjaan Soal (Practical Task IOAI)",
+                "badge": "Studi Kasus & Model",
+                "items": [
+                    "Peserta akan diberikan studi kasus berupa dataset tabular/gambar dan template notebook pengerjaan.",
+                    "Tugas peserta mencakup: (1) Data Preprocessing & Exploratory Data Analysis (EDA), (2) Feature Engineering & Model Training, (3) Model Evaluation & Error Analysis."
+                ]
+            },
+            {
+                "heading": "Fasilitas Cheatsheet & Batasan Akses",
+                "badge": "Aturan Ketat",
+                "items": [
+                    "Fasilitas Cheatsheet: Panitia menyediakan cheatsheet resmi (dokumentasi sintaks dasar Python & library terkait).",
+                    "Koneksi Internet & AI Tool: Akses internet HANYA diizinkan untuk membuka platform lomba / Google Colab dan dokumentasi resmi library.",
+                    "DILARANG KERAS menggunakan AI generative asisten (seperti ChatGPT, Gemini, GitHub Copilot, Claude) atau komunikasi antarpeserta/pihak luar (pelanggaran = diskualifikasi langsung)."
+                ]
+            },
+            {
+                "heading": "Kriteria Penilaian & Sistem Tie-Breaker",
+                "badge": "Total 100%",
+                "items": [
+                    "Metrik Kinerja Model (50%): Akurasi, F1-Score, dan lainnya pada test set yang telah ditentukan panitia.",
+                    "Kualitas Kode & Pipeline (30%): Validitas langkah preprocessing, penanganan data leakage, dan kerapian kode.",
+                    "Analisis & Interpretasi (20%): Ketepatan jawaban analisis terhadap hasil prediksi model.",
+                    "Tie-Breaker: Jika skor akhir identik, pemenang ditentukan berdasarkan waktu pengumpulan berkas final tercepat yang valid."
+                ]
+            },
+            {
+                "heading": "Mekanisme Pengumpulan Berkas Final",
+                "badge": "Deadline 120 Menit",
+                "items": [
+                    "Peserta mengumpulkan file notebook final (.ipynb) beserta file output prediksi (submission.csv) sebelum batas waktu 120 menit berakhir melalui form/folder drive pengumpulan yang disediakan panitia."
+                ]
+            }
+        ]
+    },
 }
+
+KETENTUAN_DETAIL["ai"] = KETENTUAN_DETAIL["olimpiade-ai"]
+KETENTUAN_DETAIL["kecerdasan-artifisial"] = KETENTUAN_DETAIL["olimpiade-ai"]
 
 OLIMPIADE_9_DAN_AI_IDS = [
     "olimpiade-matematika",
@@ -718,7 +839,8 @@ CABANG_LOMBA = [
         'max_quota': 20,
         'name': 'Olimpiade Kecerdasan Artifisial',
         'no': 13,
-        'note': 'Konsep Machine Learning, logika kecerdasan buatan, prompt engineering, etika AI. Maksimal 20 orang.',
+        'note': 'Kompetisi kecerdasan artifisial kolaborasi Club Informatics (Computational Thinking, Python & Practical ML IOAI). Kuota maks 20 orang.',
+        'ketentuan': KETENTUAN_DETAIL.get('olimpiade-ai'),
         'penghargaan': 'Medali, Sertifikat',
         'peserta_max': '20',
         'peserta_min': None,
