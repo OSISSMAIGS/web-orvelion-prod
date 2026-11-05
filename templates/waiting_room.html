@@ -1,36 +1,66 @@
 {% extends "base.html" %}
-{% block title %}Ruang Antrean | {{ site.name }}{% endblock %}
+{% block title %}Ruang Antrean Virtual | {{ site.name }}{% endblock %}
 {% block content %}
-<div id="waiting-room" data-return-url="{{ return_url }}" class="min-h-[80vh] flex items-center justify-center px-4 py-12">
-  <div class="max-w-lg w-full rounded-3xl p-7 sm:p-10 bg-[#141414] border border-orvelion-coral/30 shadow-2xl text-center space-y-6 relative overflow-hidden">
+<div id="waiting-room" data-return-url="{{ return_url }}" class="min-h-[85vh] flex items-center justify-center px-4 py-12 relative overflow-hidden">
+  <!-- Glow orbs background -->
+  <div class="absolute -top-10 left-1/4 w-72 h-72 rounded-full blur-[120px] bg-[#38BDF8]/15 pointer-events-none"></div>
+  <div class="absolute -bottom-10 right-1/4 w-80 h-80 rounded-full blur-[130px] bg-[#F5D061]/15 pointer-events-none"></div>
+
+  <div class="max-w-lg w-full rounded-3xl p-7 sm:p-10 border border-[#F5D061]/35 shadow-[0_25px_60px_rgba(0,0,0,0.8),0_0_40px_rgba(245,208,97,0.12)] text-center space-y-6 relative overflow-hidden backdrop-blur-xl"
+       style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.96) 0%, rgba(22, 32, 60, 0.92) 100%);">
+    
+    <!-- Top gold accent bar -->
+    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#F5D061] to-transparent opacity-80"></div>
+
+    <!-- Spinner Icon Mascot / Logo -->
     <div class="relative mx-auto w-24 h-24 sm:w-28 sm:h-28">
-      <div class="absolute -inset-2 rounded-full border-2 border-dashed border-orvelion-coral/50 spin-slow"></div>
-      <div class="relative w-full h-full rounded-full overflow-hidden border border-orvelion-coral/40 bg-[#0a0a0a]">
-        <img src="{{ url_for('static', filename='images/orvelion.jpg') }}" alt="Orvelion Logo" class="w-full h-full object-cover" />
+      <div class="absolute -inset-2.5 rounded-full border-2 border-dashed border-[#F5D061]/60 animate-spin" style="animation-duration: 8s;"></div>
+      <div class="relative w-full h-full rounded-full overflow-hidden border-2 border-[#F5D061]/50 bg-black/60 shadow-inner flex items-center justify-center">
+        <img src="{{ url_for('static', filename='images/orvelion.jpg') }}" alt="Logo Kabinet Orvelion" class="w-full h-full object-cover" />
       </div>
     </div>
+
     <div class="space-y-2">
-      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orvelion-coral/15 border border-orvelion-coral/30 text-orvelion-coral text-xs font-semibold">2-Core Safety Guard Aktif</div>
-      <h1 class="text-2xl sm:text-3xl font-black text-white">Ruang Antrean <span class="text-gradient-orvelion">Orvélion</span></h1>
-      <p class="text-xs sm:text-sm text-white/80 leading-relaxed">Situs ini sedang melayani kapasitas optimal (<strong class="text-white">90 pengguna aktif</strong>). Anda berada di antrean prioritas agar pengalaman tetap lancar.</p>
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F5D061]/15 border border-[#F5D061]/35 text-[#FDE68A] text-xs font-bold uppercase tracking-wider">
+        <span class="w-2 h-2 rounded-full bg-[#F5D061] animate-ping"></span>
+        Sistem Proteksi Server Aktif
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
+        Ruang Antrean <span class="bg-gradient-to-r from-white via-[#FDE68A] to-[#F5D061] bg-clip-text text-transparent">Nordelia 2026</span>
+      </h1>
+      <p class="text-xs sm:text-sm text-stone-300 leading-relaxed">
+        Antusiasme peserta sangat tinggi! Situs saat ini sedang melayani kapasitas optimal (<strong class="text-white">195 pengunjung aktif</strong>). Anda berada di antrean prioritas agar proses pendaftaran tetap stabil dan lancar.
+      </p>
     </div>
-    <div class="p-4 rounded-2xl bg-[#0a0a0a] border border-white/10 space-y-3">
+
+    <!-- Live Capacity Progress Card -->
+    <div class="p-4 rounded-2xl bg-black/60 border border-white/10 space-y-3 shadow-inner">
       <div class="flex items-center justify-between text-xs font-mono">
-        <span class="text-white/70">Kapasitas Terisi</span>
-        <span id="queue-count" class="text-orvelion-coral font-bold">90 / 90 Slot</span>
+        <span class="text-stone-300">Kapasitas Pengunjung Aktif</span>
+        <span id="queue-count" class="text-[#FDE68A] font-bold">195 / 195 Slot</span>
       </div>
-      <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-        <div id="queue-bar" class="h-full bg-gradient-to-r from-orvelion-rust to-orvelion-coral rounded-full" style="width:100%"></div>
+      <div class="w-full h-2 rounded-full bg-white/10 overflow-hidden border border-white/5">
+        <div id="queue-bar" class="h-full bg-gradient-to-r from-sky-400 via-[#F5D061] to-[#FDE68A] rounded-full transition-all duration-500" style="width:100%"></div>
       </div>
-      <div class="flex items-center justify-between text-[11px] text-white/60 pt-1">
-        <span>Pemeriksaan ulang dalam: <strong id="queue-countdown" class="text-white font-mono">3s</strong></span>
-        <span id="queue-status" class="text-orvelion-coral font-semibold">Siaga</span>
+      <div class="flex items-center justify-between text-[11px] text-stone-400 pt-1">
+        <span>Pengecekan otomatis dalam: <strong id="queue-countdown" class="text-white font-mono">3s</strong></span>
+        <span id="queue-status" class="text-amber-300 font-semibold flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span> Dalam Antrean
+        </span>
       </div>
     </div>
-    <div class="text-xs text-white/75 bg-[#181818] p-3 rounded-xl border border-white/10">
-      ✦ Halaman ini akan <strong>terbuka otomatis</strong> begitu slot tersedia. Mohon jangan menutup tab ini.
+
+    <div class="text-xs text-stone-300 bg-black/40 p-3.5 rounded-xl border border-white/10 leading-relaxed text-left flex items-start gap-2.5">
+      <div class="text-base text-[#F5D061] shrink-0">✨</div>
+      <div>
+        Halaman ini akan <strong>terbuka otomatis</strong> begitu slot giliran Anda tersedia. Mohon <strong>jangan menutup tab ini</strong> agar nomor antrean Anda tidak hilang.
+      </div>
     </div>
-    <button id="try-access" type="button" class="w-full py-3 px-5 rounded-full text-xs font-bold uppercase tracking-wider text-black bg-gradient-to-r from-orvelion-rust via-orvelion-coral to-orvelion-apricot hover:brightness-110 shadow-lg">Coba Akses Sekarang</button>
+
+    <button id="try-access" type="button" class="w-full py-3.5 px-6 rounded-2xl text-xs font-black uppercase tracking-wider text-[#0B1120] bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-[0_10px_25px_rgba(245,208,97,0.35)] transition-all hover:scale-[1.01] flex items-center justify-center gap-2">
+      <span>Coba Akses Sekarang</span>
+      <span class="text-sm">&rarr;</span>
+    </button>
   </div>
 </div>
 {% endblock %}
