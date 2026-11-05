@@ -20,7 +20,8 @@
       "registrationFormat": [
         "Nama Lengkap",
         "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
-      ]
+      ],
+      "juknis_url": "https://drive.google.com/drive/folders/1t1EXwSke9bOO4umHiqkWTLiUVcsMiPra?usp=drive_link"
     },
     {
       "id": "literasi-bahasa-indonesia",
@@ -29,7 +30,8 @@
       "registrationFormat": [
         "Nama Lengkap",
         "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
-      ]
+      ],
+      "juknis_url": "https://drive.google.com/drive/folders/1t1EXwSke9bOO4umHiqkWTLiUVcsMiPra?usp=drive_link"
     },
     {
       "id": "literasi-science",
@@ -38,7 +40,8 @@
       "registrationFormat": [
         "Nama Lengkap",
         "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
-      ]
+      ],
+      "juknis_url": "https://drive.google.com/drive/folders/1t1EXwSke9bOO4umHiqkWTLiUVcsMiPra?usp=drive_link"
     },
     {
       "id": "osn",
@@ -261,7 +264,8 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
-          ]
+          ],
+          "juknis_url": "https://docs.google.com/document/d/1PJMT9igQ6Kvpdu8b4yacLhwi5V0A4QsZ/edit?usp=sharing&ouid=109865866449396565860&rtpof=true&sd=true"
         },
         {
           "id": "olimpiade-bahasa-mandarin",
@@ -287,7 +291,8 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
-          ]
+          ],
+          "juknis_url": "https://docs.google.com/document/d/1mvKAOo6QdYukbRAN0XyLzpfImzgokxubbpF7r96I8yI/edit?usp=sharing"
         },
         {
           "id": "olimpiade-bahasa-arab",
@@ -304,7 +309,8 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
-          ]
+          ],
+          "juknis_url": "https://docs.google.com/document/d/1npb_kiT47lK2RBBTUGRt4cXKaXlISgTZHWkjxf7L8K8/edit?usp=sharing"
         },
         {
           "id": "menyanyi-bahasa-mandarin",
@@ -323,7 +329,8 @@
             "Nama Lengkap",
             "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
           ],
-          "group_link": "https://line.me/ti/g/tcFLBqfME2"
+          "group_link": "https://line.me/ti/g/tcFLBqfME2",
+          "juknis_url": "https://docs.google.com/document/d/1QFSPQU3nLSG3tgS3wDDMN3xo5MLT_gqo/edit?usp=sharing&ouid=110241978970163482491&rtpof=true&sd=true"
         }
       ]
     },
@@ -376,7 +383,8 @@
             "Kelas"
           ],
           "group_link": "https://line.me/ti/g/rPVWg2xsuB",
-          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar.",
+          "juknis_url": "https://drive.google.com/file/d/1kf0ZmBqNyJzBBvQE5XfeuuyWcVXj6mzu/view?usp=drivesdk"
         },
         {
           "id": "menulis-cerpen",
@@ -408,7 +416,8 @@
             "Kelas"
           ],
           "group_link": "https://line.me/ti/g/nE-VFvcF3x",
-          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar.",
+          "juknis_url": "https://drive.google.com/drive/folders/1zapJ5mny5D9pbecFDW6eIllNispLAb8x?usp=drive_link"
         },
         {
           "id": "desain-poster",
@@ -421,7 +430,8 @@
           "is_external_gform": true,
           "gform_url": "https://forms.gle/MGVWmKZ5uZ5sqeGc8",
           "group_link": "https://line.me/ti/g/g-U6bYGFEs",
-          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar.",
+          "juknis_url": "https://drive.google.com/drive/folders/1zapJ5mny5D9pbecFDW6eIllNispLAb8x?usp=drive_link"
         },
         {
           "id": "fotografi",
@@ -446,7 +456,8 @@
           "is_external_gform": true,
           "gform_url": "https://forms.gle/MGVWmKZ5uZ5sqeGc8",
           "group_link": "https://line.me/ti/g/ZXQuZzQG8A",
-          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar.",
+          "juknis_url": "https://drive.google.com/drive/folders/1zapJ5mny5D9pbecFDW6eIllNispLAb8x?usp=drive_link"
         },
         {
           "id": "vokal-putri",
@@ -460,7 +471,8 @@
           "is_external_gform": true,
           "gform_url": "https://forms.gle/MGVWmKZ5uZ5sqeGc8",
           "group_link": "https://line.me/ti/g/82ZajrAe_e",
-          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar.",
+          "juknis_url": "https://drive.google.com/drive/folders/1zapJ5mny5D9pbecFDW6eIllNispLAb8x?usp=drive_link"
         },
         {
           "id": "vokal-putra",
@@ -474,7 +486,8 @@
           "is_external_gform": true,
           "gform_url": "https://forms.gle/MGVWmKZ5uZ5sqeGc8",
           "group_link": "https://line.me/ti/g/82ZajrAe_e",
-          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar.",
+          "juknis_url": "https://drive.google.com/drive/folders/1zapJ5mny5D9pbecFDW6eIllNispLAb8x?usp=drive_link"
         },
         {
           "id": "kriya",
@@ -486,7 +499,8 @@
           "is_external_gform": true,
           "gform_url": "https://forms.gle/MGVWmKZ5uZ5sqeGc8",
           "group_link": "https://line.me/ti/g/TkPrU9CGf4",
-          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar.",
+          "juknis_url": "https://drive.google.com/drive/folders/1zapJ5mny5D9pbecFDW6eIllNispLAb8x?usp=drive_link"
         },
         {
           "id": "komik-digital",
@@ -499,7 +513,8 @@
           "is_external_gform": true,
           "gform_url": "https://forms.gle/MGVWmKZ5uZ5sqeGc8",
           "group_link": "https://line.me/ti/g/J4f9wa-v4f",
-          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar.",
+          "juknis_url": "https://drive.google.com/drive/folders/1zapJ5mny5D9pbecFDW6eIllNispLAb8x?usp=drive_link"
         },
         {
           "id": "film-pendek",
@@ -524,7 +539,8 @@
             "Nama Peserta 2"
           ],
           "group_link": "https://line.me/ti/g/mCh8SGDs6N",
-          "tempat": "Mayor"
+          "tempat": "Mayor",
+          "juknis_url": "https://bit.ly/4f7IZjE"
         }
       ]
     },
