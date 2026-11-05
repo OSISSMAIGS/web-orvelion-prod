@@ -157,7 +157,7 @@ def init_queue(app: Flask) -> None:
             return None
 
         cookie_name = app.config.get("SESSION_COOKIE_NAME", "orvelion_session")
-        max_users = app.config.get("MAX_ACTIVE_USERS", 195)
+        max_users = app.config.get("MAX_ACTIVE_USERS", 150)
         ttl = app.config.get("SESSION_TTL_SECONDS", 90)
 
         session_id = request.cookies.get(cookie_name) or f"guest_{uuid.uuid4().hex[:12]}"
@@ -177,7 +177,7 @@ def init_queue(app: Flask) -> None:
     def attach_capacity_headers(response):
         slot = getattr(g, "orvelion_slot", None)
         if slot:
-            max_users = app.config.get("MAX_ACTIVE_USERS", 195)
+            max_users = app.config.get("MAX_ACTIVE_USERS", 150)
             response.headers["X-Orvelion-Active-Users"] = f"{slot['activeCount']}/{max_users}"
             response.headers["X-Orvelion-Capacity-Limit"] = f"{max_users} Users"
             if getattr(g, "orvelion_set_cookie", False):
@@ -194,7 +194,7 @@ def init_queue(app: Flask) -> None:
     @app.get("/api/queue-status")
     def queue_status():
         cookie_name = app.config.get("SESSION_COOKIE_NAME", "orvelion_session")
-        max_users = app.config.get("MAX_ACTIVE_USERS", 195)
+        max_users = app.config.get("MAX_ACTIVE_USERS", 150)
         ttl = app.config.get("SESSION_TTL_SECONDS", 90)
 
         session_id = request.cookies.get(cookie_name)

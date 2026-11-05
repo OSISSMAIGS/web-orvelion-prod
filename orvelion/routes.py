@@ -108,8 +108,9 @@ def build_decorated_cabang_list():
         c_copy["registered_count"] = reg_count
         
         c_copy["peserta_min"] = None
-        # 1. Aturan Olimpiade (OSN 9 Cabang + Kecerdasan Artifisial): Max 20 Orang, TANPA Minimal Peserta
-        if c.get("is_olimpiade_or_ai") or cid in OLIMPIADE_9_DAN_AI_IDS:
+        # 1. Aturan Olimpiade (OSN 9 Cabang + Kecerdasan Artifisial): Max 20 Orang (Bahasa Asing Kuota Terbuka Bebas)
+        is_bahasa = (c.get("category") == "bahasa") or "bahasa" in cid.lower()
+        if not is_bahasa and (c.get("is_olimpiade_or_ai") or cid in OLIMPIADE_9_DAN_AI_IDS):
             c_copy["is_olimpiade_or_ai"] = True
             c_copy["peserta_max"] = "20"
             c_copy["max_quota"] = 20
@@ -241,7 +242,8 @@ def nordelia_category(category_id: str):
     if not cat_match.get("subEvents"):
         cabang_info = get_cabang_by_id(cat_match["id"])
         sub_name = cabang_info["name"] if cabang_info else cat_match["name"]
-        is_olimp = (cabang_info.get("is_olimpiade_or_ai", False) if cabang_info else False) or cat_match["id"] in OLIMPIADE_9_DAN_AI_IDS or "ai" in cat_match["id"].lower() or "artifisial" in sub_name.lower()
+        is_bahasa_cat = (cat_match.get("id") == "bahasa") or "bahasa" in cat_match["id"].lower() or "bahasa" in sub_name.lower()
+        is_olimp = not is_bahasa_cat and ((cabang_info.get("is_olimpiade_or_ai", False) if cabang_info else False) or cat_match["id"] in OLIMPIADE_9_DAN_AI_IDS or "ai" in cat_match["id"].lower() or "artifisial" in sub_name.lower())
         is_lit = sub_name.lower().startswith("literasi") or cat_match["id"].startswith("literasi")
         reg_c = counts.get(cabang_info["id"] if cabang_info else cat_match["id"], 0)
         rem = max(0, 20 - reg_c) if is_olimp else None
@@ -280,13 +282,13 @@ def nordelia_category(category_id: str):
             
             sub_id = cb["id"] if cb else sub.get("id", "")
             sub_name = cb.get("name", sub.get("name", ""))
-            is_olimp = (
+            is_bahasa = (cb.get("category") == "bahasa" if cb else False) or "bahasa" in sub_id.lower() or "bahasa" in sub_name.lower()
+            is_olimp = not is_bahasa and not ("desain" in sub_id.lower() or "poster" in sub_id.lower()) and (
                 (cb.get("is_olimpiade_or_ai", False) if cb else False)
                 or sub_id in OLIMPIADE_9_DAN_AI_IDS
                 or sub_id in ("ai", "olimpiade-ai")
                 or "artifisial" in sub_name.lower()
-                or ("olimpiade" in sub_id.lower() and not ("desain" in sub_id.lower() or "poster" in sub_id.lower()))
-            ) and not ("desain" in sub_id.lower() or "poster" in sub_id.lower())
+            )
             is_lit = sub_name.lower().startswith("literasi") or sub_id.startswith("literasi")
             reg_c = counts.get(sub_id, 0)
             rem = max(0, 20 - reg_c) if is_olimp else None
@@ -476,7 +478,7 @@ def api_nordelia_register():
             }), 400
 
         # ATURAN 2: Olimpiade 9 cabang + artificial intelligence maksimal 20 orang per cabang
-        if cabang_id in OLIMPIADE_9_DAN_AI_IDS:
+        if cabang_id in OLIMPIADE_9_DAN_AI_IDS and not ("bahasa" in cabang_id.lower()):
             current_count = storage.get_cabang_count(cabang_id)
             if current_count >= 20:
                 return jsonify({
@@ -573,7 +575,7 @@ def api_nordelia_cabang_quota():
     count = storage.get_cabang_count(cabang_id)
     cb_info = get_cabang_by_id(cabang_id)
     is_team = bool(cb_info.get("is_team", False)) if cb_info else False
-    is_limited = cabang_id in OLIMPIADE_9_DAN_AI_IDS
+    is_limited = (cabang_id in OLIMPIADE_9_DAN_AI_IDS) and not ("bahasa" in cabang_id.lower())
     rem = max(0, 20 - count) if is_limited else None
     return jsonify({
         "cabang_id": cabang_id,

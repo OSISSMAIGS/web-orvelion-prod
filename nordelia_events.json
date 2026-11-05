@@ -191,7 +191,9 @@
             "Pembicara 2 (Nama & Kelas)",
             "Pembicara 3 (Nama & Kelas)",
             "No. WhatsApp / Kontak"
-          ]
+          ],
+          "is_external_gform": true,
+          "gform_url": "https://docs.google.com/forms/d/e/1FAIpQLSdRda2GTYJLbgLETVedIjf88liRiDereOR-UVqfrUFI2Z9L0g/viewform"
         },
         {
           "id": "debat-bahasa-inggris",
@@ -203,7 +205,9 @@
             "2nd Speaker (Nama & Kelas)",
             "3rd Speaker (Nama & Kelas)",
             "No. WhatsApp / Kontak"
-          ]
+          ],
+          "is_external_gform": true,
+          "gform_url": "https://docs.google.com/forms/d/e/1FAIpQLSdRda2GTYJLbgLETVedIjf88liRiDereOR-UVqfrUFI2Z9L0g/viewform"
         }
       ]
     },
@@ -283,7 +287,8 @@
           "registrationFormat": [
             "Nama Lengkap",
             "Kelas (Cth: 10.1 CGC, 10.2 MAYOR)"
-          ]
+          ],
+          "tempat": "Mayor"
         },
         {
           "id": "story-telling-korea",
@@ -477,7 +482,8 @@
             "Nama Peserta 1",
             "Nama Peserta 2"
           ],
-          "group_link": "https://line.me/ti/g/mCh8SGDs6N"
+          "group_link": "https://line.me/ti/g/mCh8SGDs6N",
+          "tempat": "Mayor"
         }
       ]
     },
@@ -485,7 +491,7 @@
       "id": "o2sn",
       "name": "O2SN",
       "hasSubEvents": true,
-      "description": "Pilih cabang olahraga",
+      "description": "Kompetisi O2SN (silat, atletik, basket, futsal, catur) menguji sportivitas dan stamina atlet muda.",
       "subEvents": [
         {
           "id": "silat",
@@ -501,8 +507,7 @@
           "name": "ATLETIK",
           "registrationFormat": [
             "Nama Lengkap",
-            "Kelas",
-            "Jenis Lomba (Lari 60 meter / Tolak Peluru / Lompat Jauh)"
+            "Kelas"
           ],
           "group_link": "https://line.me/ti/g/pMyrkYrbUH"
         },
@@ -525,15 +530,6 @@
           "group_link": "https://line.me/ti/g/ZA3_64qsVv"
         },
         {
-          "id": "voli",
-          "name": "VOLI",
-          "registrationFormat": [
-            "Nama Anggota 1-2-3-4-5-6-Cadangan (opsional)",
-            "Kelas"
-          ],
-          "group_link": "https://line.me/ti/g/5MjD_KK9bd"
-        },
-        {
           "id": "catur",
           "name": "CATUR",
           "registrationFormat": [
@@ -542,7 +538,8 @@
           ],
           "group_link": "https://line.me/ti/g/rcke9_bpcU"
         }
-      ]
+      ],
+      "badge": "5 Cabang Lomba"
     }
   ]
 }

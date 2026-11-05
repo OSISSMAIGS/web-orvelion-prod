@@ -227,12 +227,6 @@
                   <td class="py-3 px-4 whitespace-nowrap">{{ r.kelas }}</td>
                   <td class="py-3 px-4 whitespace-nowrap">{{ r.whatsapp }}</td>
                   <td class="py-3 px-4 font-sans text-[11px] text-stone-300 max-w-sm">
-                    {% if r.details and r.details.get('jenis_lomba_atletik') %}
-                      <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-500/30 font-bold mb-1">
-                        <span>🏃 Nomor:</span>
-                        <strong class="text-white">{{ r.details.get('jenis_lomba_atletik') }}</strong>
-                      </div>
-                    {% endif %}
                     {% if r.details %}
                       <div class="truncate text-stone-400" title="{{ r.details | tojson }}">{{ r.details | tojson }}</div>
                     {% else %}

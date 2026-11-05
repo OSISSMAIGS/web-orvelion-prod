@@ -94,7 +94,7 @@ EVENTS = [
         "location": "SMA Ignatius Global School",
         "status": "Pendaftaran Dibuka",
         "description": "Festival kompetisi akademik dan non-akademik terbesar SMA IGS mencakup Literasi, Olimpiade, Bahasa, Seni, dan Olahraga.",
-        "highlight": "49 Cabang Lomba - Literasi, Olimpiade, Bahasa Asing, Cosplay, FLS3N, O2SN",
+        "highlight": "48 Cabang Lomba - Literasi, Olimpiade, Bahasa Asing, Cosplay, FLS3N, O2SN",
         "target": "Seluruh Siswa SMA IGS",
         "isNordelia": True,
         "custom_url": "/nordelia",

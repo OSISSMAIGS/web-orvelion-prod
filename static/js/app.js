@@ -381,7 +381,7 @@ function initNordelia() {
     formCabangTitle.textContent = c.name;
     formBadgeCategory.textContent = (c.category ? c.category.toUpperCase() : "LOMBA");
     
-    const isOlimp = !!((c.is_olimpiade_or_ai || c.id === "olimpiade-ai" || c.id.includes("olimpiade") || (c.name && c.name.toLowerCase().includes("artifisial"))) && !c.id.includes("desain") && !c.id.includes("poster"));
+    const isOlimp = !c.id.includes("bahasa") && !(c.category && c.category === "bahasa") && !c.id.includes("desain") && !c.id.includes("poster") && !!(c.is_olimpiade_or_ai || c.id === "olimpiade-ai" || (c.id.includes("olimpiade") && !c.id.includes("bahasa")) || (c.name && c.name.toLowerCase().includes("artifisial")));
     const isLit = !!(c.is_literasi || (c.name && c.name.toLowerCase().startsWith("literasi")) || (c.id && c.id.startsWith("literasi")));
     const regCount = (typeof c.registered_count === "number") ? c.registered_count : 0;
     

@@ -622,7 +622,7 @@ document.addEventListener("DOMContentLoaded", function () {
     inputCabangId.value = subId;
     formSubTitle.textContent = subName;
 
-    const isOlimpOrAI = (olimpiade9DanAI.includes(subId) || subId.includes("olimpiade") || subId === "ai" || subId === "olimpiade-ai" || subName.toLowerCase().includes("artifisial")) && !subId.includes("desain") && !subId.includes("poster");
+    const isOlimpOrAI = !subId.includes("bahasa") && !subName.toLowerCase().includes("bahasa") && !subId.includes("desain") && !subId.includes("poster") && (olimpiade9DanAI.includes(subId) || (subId.includes("olimpiade") && !subId.includes("bahasa")) || subId === "ai" || subId === "olimpiade-ai" || subName.toLowerCase().includes("artifisial"));
     quotaBanner.classList.toggle("hidden", !isOlimpOrAI);
 
     // Tentukan format type sesuai Sheet 2
