@@ -182,6 +182,7 @@ KETENTUAN_DETAIL = {
         "tema": "Ekspresikan Kata, Wujudkan Karya, Lanjutkan Perjuangan!",
         "biaya": "Rp 10.000 (Biaya Cetak per karya)",
         "deadline": "06 November 2026, pukul 23.59 WIB",
+        "juknis_url": "https://docs.google.com/document/d/1C2A_UifBMAxa2EoJ2yQzcO-UiRZTjtMq-b2oPgVS5xc/edit?usp=sharing",
         "contact_person": {
             "name": "Adinda Zafirah (Dinda)",
             "phone": "0812-7348-6350",
@@ -256,6 +257,7 @@ KETENTUAN_DETAIL = {
         "tema": "Ekspresikan Kata, Wujudkan Karya, Lanjutkan Perjuangan!",
         "durasi": "Maks. 1 menit (60 detik) + opening/closing maks. 15 detik",
         "deadline": "06 November 2026",
+        "juknis_url": "https://drive.google.com/file/d/1A2YPw6YBF_d7AaZGcKqjhBYDBQJpby-K/view?usp=drivesdk",
         "gform_url": "https://docs.google.com/forms/d/e/1FAIpQLSfyLRFiI2eID99KkUe9KEwGfz_4XXLu2fWWfJ_vxmSTnpzZEA/viewform?usp=publish-editor",
         "sections": [
             {
@@ -450,13 +452,29 @@ FORMAT_REGISTRASI = {
 
     # 9. Format Tari Kreasi (2 Peserta/Tim)
     "tari_kreasi": {
-        "title": "Format Pendaftaran Tari Kreasi (2 Peserta/Tim)",
+        "title": "Format Pendaftaran Tari Kreasi (FLS3N)",
         "fields": [
-            {"name": "nama_tim", "label": "1.) Nama Tim / Grup Tari", "type": "text", "required": True, "placeholder": "Contoh: Tim Tari Kreasi CGC"},
-            {"name": "kelas", "label": "2.) Asal Kelas (Cth: 10.1 CGC, 10.2 MAYOR)", "type": "text", "required": True, "placeholder": "Contoh: 10.1 CGC atau 10.2 MAYOR"},
-            {"name": "nama_peserta_1", "label": "3.) Nama Lengkap Peserta 1", "type": "text", "required": True, "placeholder": "Nama lengkap peserta 1"},
-            {"name": "nama_peserta_2", "label": "4.) Nama Lengkap Peserta 2", "type": "text", "required": True, "placeholder": "Nama lengkap peserta 2"},
-            {"name": "kontak", "label": "5.) No. WhatsApp / Kontak Perwakilan", "type": "tel", "required": True, "placeholder": "Contoh: 081234567890"},
+            {
+                "name": "nama_tim",
+                "label": "Nama Tim / Grup Tari :",
+                "type": "text",
+                "required": True,
+                "placeholder": "Contoh: Sanggar Tari Kreasi",
+            },
+            {
+                "name": "nama_lengkap",
+                "label": "Nama Anggota & Kelas (2 atau lebih) :",
+                "type": "textarea",
+                "required": True,
+                "placeholder": "(Nama_Peserta_1 Kelas_Peserta_1)\n(nama_peserta_2 Kelas_Peserta_2)\n(dst...)",
+            },
+            {
+                "name": "kelas",
+                "label": "Asal Kelas Tim / Kontingen :",
+                "type": "text",
+                "required": True,
+                "placeholder": "Contoh: 10.1 CGC & 10.2 MAYOR",
+            },
         ],
     },
 
@@ -932,8 +950,8 @@ CABANG_LOMBA = [
         'peserta_min': None,
         'pic': 'Sir Pebrian',
         'sheet_name': 'LDBI',
-        'group_link': 'https://line.me/R/ti/g/tZjxTwpBRy',
-        'group_label': 'Masuk Grup LINE',
+        'group_link': '',
+        'group_label': '',
         'tempat': 'Mayor',
     },
     {
@@ -1222,7 +1240,7 @@ CABANG_LOMBA = [
         'sheet_name': 'Baca Puisi',
         'group_link': 'https://line.me/ti/g/rv4NHtgGQs',
         'group_label': 'Masuk Grup LINE',
-        'tempat': 'CGC',
+        'tempat': 'Mayor',
     },
     {
         'category': 'seni',
@@ -1244,7 +1262,7 @@ CABANG_LOMBA = [
         'sheet_name': 'Cipta Puisi',
         'group_link': 'https://line.me/ti/g/yAuEw6Zz65',
         'group_label': 'Masuk Grup LINE',
-        'tempat': 'CGC',
+        'tempat': 'Mayor',
     },
     {
         'category': 'seni',
@@ -1290,7 +1308,7 @@ CABANG_LOMBA = [
         'sheet_name': 'Menulis Cerpen',
         'group_link': 'https://line.me/ti/g/Y45atM5JVv',
         'group_label': 'Masuk Grup LINE',
-        'tempat': 'CGC',
+        'tempat': 'Mayor',
     },
     {
         'category': 'seni',
@@ -1312,7 +1330,7 @@ CABANG_LOMBA = [
         'sheet_name': 'Monolog',
         'group_link': 'https://line.me/ti/g/vvXXSwa5Mt',
         'group_label': 'Masuk Grup LINE',
-        'tempat': 'CGC',
+        'tempat': 'Mayor',
     },
     {
         'category': 'seni',
@@ -1365,6 +1383,7 @@ CABANG_LOMBA = [
         'format_type': 'bulan_bahasa_karya',
         'gform_url': GFORM_URLS.get('fotografi', 'https://forms.google.com'),
         'id': 'fotografi',
+        'juknis_url': 'https://docs.google.com/document/d/1C2A_UifBMAxa2EoJ2yQzcO-UiRZTjtMq-b2oPgVS5xc/edit?usp=sharing',
         'ketentuan': KETENTUAN_DETAIL.get('fotografi'),
         'is_external_gform': True,
         'email_notice': 'Gunakan akun email resmi sekolah untuk mendaftar.',
@@ -1503,6 +1522,7 @@ CABANG_LOMBA = [
         'format_type': 'bulan_bahasa_karya',
         'gform_url': GFORM_URLS.get('film-pendek', 'https://forms.google.com'),
         'id': 'film-pendek',
+        'juknis_url': 'https://drive.google.com/file/d/1A2YPw6YBF_d7AaZGcKqjhBYDBQJpby-K/view?usp=drivesdk',
         'is_team': True,
         'ketentuan': KETENTUAN_DETAIL.get('film-pendek'),
         'is_external_gform': True,
@@ -1535,10 +1555,10 @@ CABANG_LOMBA = [
         'max_quota': None,
         'name': 'Tari Kreasi',
         'no': 43,
-        'note': 'Lomba seni tari kreasi beregu (2 peserta/tim). Kuota terbuka.',
+        'note': 'Lomba seni tari kreasi beregu (2 atau lebih peserta/tim). Kuota terbuka.',
         'penghargaan': 'Piala, Sertifikat',
-        'peserta_max': '2',
-        'peserta_min': None,
+        'peserta_max': None,
+        'peserta_min': 2,
         'pic': 'Panitia Seni',
         'sheet_name': 'Tari Kreasi',
         'group_link': 'https://line.me/ti/g/mCh8SGDs6N',

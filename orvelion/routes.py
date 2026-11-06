@@ -493,14 +493,19 @@ def api_nordelia_register():
                     "max_quota": 20,
                 }), 400
 
-        # Gabungkan nama peserta jika format tim / beregu 2 orang (Tari Kreasi)
+        # Gabungkan nama peserta jika format tim / beregu (Tari Kreasi, Futsal, Basket, Voli)
+        tim_label = str(data.get("nama_tim", "")).strip()
+        anggota_label = str(data.get("nama_lengkap", "")).strip()
         p1 = str(data.get("nama_peserta_1", "")).strip()
         p2 = str(data.get("nama_peserta_2", "")).strip()
         if p1 and p2:
-            tim_label = str(data.get("nama_tim", "")).strip()
-            combined = f"{tim_label} (1. {p1}, 2. {p2})" if tim_label else f"1. {p1}, 2. {p2}"
-            if not data.get("nama_lengkap"):
-                data["nama_lengkap"] = combined
+            combined = f"{tim_label}\n(1. {p1})\n(2. {p2})" if tim_label else f"(1. {p1})\n(2. {p2})"
+            data["nama_lengkap"] = combined
+        elif tim_label and anggota_label:
+            if tim_label not in anggota_label:
+                data["nama_lengkap"] = f"{tim_label}\n{anggota_label}"
+        elif tim_label and not anggota_label:
+            data["nama_lengkap"] = tim_label
 
         # Gabungkan nama anggota jika format debat (NSDC / LDBI)
         sp1 = str(data.get("speaker_1") or data.get("pembicara_1", "")).strip()

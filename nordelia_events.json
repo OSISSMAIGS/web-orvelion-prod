@@ -210,7 +210,6 @@
           "is_external_gform": true,
           "gform_url": "https://docs.google.com/forms/d/e/1FAIpQLSdRda2GTYJLbgLETVedIjf88liRiDereOR-UVqfrUFI2Z9L0g/viewform",
           "juknis_url": "https://drive.google.com/file/d/1SWIr93HronVi4S6NmA4KJzHxYVX13IGr/view?usp=sharing",
-          "group_link": "https://line.me/R/ti/g/tZjxTwpBRy",
           "pic": "Sir Pebrian",
           "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
         },
@@ -361,7 +360,8 @@
             "Kelas"
           ],
           "group_link": "https://line.me/ti/g/rv4NHtgGQs",
-          "juknis_url": "https://bit.ly/JuknisSastraIGS2026"
+          "juknis_url": "https://bit.ly/JuknisSastraIGS2026",
+          "tempat": "Mayor"
         },
         {
           "id": "cipta-puisi",
@@ -371,7 +371,8 @@
             "Kelas"
           ],
           "group_link": "https://line.me/ti/g/yAuEw6Zz65",
-          "juknis_url": "https://bit.ly/JuknisSastraIGS2026"
+          "juknis_url": "https://bit.ly/JuknisSastraIGS2026",
+          "tempat": "Mayor"
         },
         {
           "id": "jurnalistik",
@@ -394,7 +395,8 @@
             "Kelas"
           ],
           "group_link": "https://line.me/ti/g/Y45atM5JVv",
-          "juknis_url": "https://bit.ly/JuknisSastraIGS2026"
+          "juknis_url": "https://bit.ly/JuknisSastraIGS2026",
+          "tempat": "Mayor"
         },
         {
           "id": "monolog",
@@ -404,7 +406,8 @@
             "Kelas"
           ],
           "group_link": "https://line.me/ti/g/vvXXSwa5Mt",
-          "juknis_url": "https://bit.ly/JuknisSastraIGS2026"
+          "juknis_url": "https://bit.ly/JuknisSastraIGS2026",
+          "tempat": "Mayor"
         },
         {
           "id": "cipta-lagu",
@@ -444,7 +447,8 @@
             "Link Portofolio"
           ],
           "group_link": "https://line.me/ti/g/g-U6bYGFEs",
-          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar.",
+          "juknis_url": "https://docs.google.com/document/d/1C2A_UifBMAxa2EoJ2yQzcO-UiRZTjtMq-b2oPgVS5xc/edit?usp=sharing"
         },
         {
           "id": "solo-gitar",
@@ -527,16 +531,16 @@
             "Link Portofolio"
           ],
           "group_link": "https://line.me/ti/g/Y45atM5JVv",
-          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar."
+          "email_notice": "Gunakan akun email resmi sekolah untuk mendaftar.",
+          "juknis_url": "https://drive.google.com/file/d/1A2YPw6YBF_d7AaZGcKqjhBYDBQJpby-K/view?usp=drivesdk"
         },
         {
           "id": "tari-kreasi",
           "name": "TARI KREASI",
           "registrationFormat": [
             "Nama Tim",
-            "Kelas",
-            "Nama Peserta 1",
-            "Nama Peserta 2"
+            "Nama Anggota & Kelas (2 atau lebih)",
+            "Asal Kelas"
           ],
           "group_link": "https://line.me/ti/g/mCh8SGDs6N",
           "tempat": "Mayor",
