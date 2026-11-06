@@ -1353,7 +1353,7 @@ CABANG_LOMBA = [
         'sheet_name': 'Cipta Lagu',
         'group_link': 'https://line.me/ti/g/nE-VFvcF3x',
         'group_label': 'Masuk Grup LINE',
-        'tempat': 'CGC',
+        'tempat': 'Mayor',
     },
     {
         'category': 'seni',
@@ -1376,7 +1376,7 @@ CABANG_LOMBA = [
         'sheet_name': 'Desain Poster',
         'group_link': 'https://line.me/ti/g/g-U6bYGFEs',
         'group_label': 'Masuk Grup LINE',
-        'tempat': 'CGC',
+        'tempat': 'Mayor',
     },
     {
         'category': 'seni',
@@ -1400,7 +1400,7 @@ CABANG_LOMBA = [
         'sheet_name': 'Fotografi',
         'group_link': 'https://line.me/ti/g/g-U6bYGFEs',
         'group_label': 'Masuk Grup LINE',
-        'tempat': 'CGC',
+        'tempat': 'Mayor',
     },
     {
         'category': 'seni',
@@ -1492,7 +1492,7 @@ CABANG_LOMBA = [
         'sheet_name': 'Kriya',
         'group_link': 'https://line.me/ti/g/TkPrU9CGf4',
         'group_label': 'Masuk Grup LINE',
-        'tempat': 'CGC',
+        'tempat': 'Mayor',
     },
     {
         'category': 'seni',
@@ -1515,7 +1515,7 @@ CABANG_LOMBA = [
         'sheet_name': 'Komik Digital',
         'group_link': 'https://line.me/ti/g/J4f9wa-v4f',
         'group_label': 'Masuk Grup LINE',
-        'tempat': 'CGC',
+        'tempat': 'Mayor',
     },
     {
         'category': 'seni',
@@ -1540,7 +1540,7 @@ CABANG_LOMBA = [
         'sheet_name': 'Film Pendek',
         'group_link': 'https://line.me/ti/g/Y45atM5JVv',
         'group_label': 'Masuk Grup LINE',
-        'tempat': 'CGC',
+        'tempat': 'Mayor',
     },
     {
         'category': 'seni',
