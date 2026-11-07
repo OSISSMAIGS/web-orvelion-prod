@@ -116,9 +116,29 @@ class NordeliaStorage:
         }
         self._init_db()
 
+    def _connect(self):
+        """Koneksi SQLite dengan mode konkurensi tinggi (WAL).
+
+        Non-fungsional: skema tabel, data, dan hasil query TIDAK berubah.
+        Yang berubah hanya mode jurnal + ketahanan terhadap kuncian:
+        - journal_mode=WAL : penulis tidak lagi memblokir pembaca (dan
+          sebaliknya) — saat event ramai, penyimpanan pendaftaran baru
+          (POST) berjalan paralel dengan pembacaan kuota/statistik (GET).
+        - busy_timeout=5000 : dua penulisan bersamaan otomatis menunggu
+          antre (bukan langsung error "database is locked").
+        - synchronous=NORMAL : aman bersama WAL dan jauh lebih cepat.
+        (queue.py memakai file DB yang sama dan sudah memakai pengaturan
+        identik — kini selaras di seluruh aplikasi.)
+        """
+        conn = sqlite3.connect(self.db_path, timeout=5.0)
+        conn.execute("PRAGMA journal_mode=WAL")
+        conn.execute("PRAGMA busy_timeout=5000")
+        conn.execute("PRAGMA synchronous=NORMAL")
+        return conn
+
     def _init_db(self):
         try:
-            conn = sqlite3.connect(self.db_path)
+            conn = self._connect()
             c = conn.cursor()
             c.execute("""
                 CREATE TABLE IF NOT EXISTS registrations (
@@ -134,6 +154,10 @@ class NordeliaStorage:
                     synced_to_sheets INTEGER DEFAULT 0
                 )
             """)
+            # Index untuk mempercepat agregasi kuota/statistik per cabang & kategori
+            # (struktur tabel dan data tidak berubah sama sekali)
+            c.execute("CREATE INDEX IF NOT EXISTS idx_registrations_cabang ON registrations(cabang_id)")
+            c.execute("CREATE INDEX IF NOT EXISTS idx_registrations_category ON registrations(category_id)")
             conn.commit()
             conn.close()
         except Exception as e:
@@ -314,7 +338,7 @@ class NordeliaStorage:
 
         # Simpan ke SQLite
         try:
-            conn = sqlite3.connect(self.db_path)
+            conn = self._connect()
             c = conn.cursor()
             c.execute("""
                 INSERT INTO registrations (
@@ -353,12 +377,40 @@ class NordeliaStorage:
 
         return entry
 
-    def retry_unsynced(self) -> int:
-        """Kirim ulang pendaftaran lokal yang belum masuk Google Sheet."""
+    def _get_unsynced_registrations(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
+        """Entri lokal yang belum berhasil masuk Google Sheet (untuk retry).
+        Query langsung dengan flag synced_to_sheets=0 — tidak memuat seluruh
+        tabel, aman dipanggil berkala oleh thread background."""
+        results: List[Dict[str, Any]] = []
+        try:
+            conn = self._connect()
+            conn.row_factory = sqlite3.Row
+            c = conn.cursor()
+            if limit is not None:
+                c.execute(
+                    "SELECT * FROM registrations WHERE synced_to_sheets = 0 ORDER BY id ASC LIMIT ?",
+                    (int(limit),),
+                )
+            else:
+                c.execute("SELECT * FROM registrations WHERE synced_to_sheets = 0 ORDER BY id ASC")
+            rows = c.fetchall()
+            for r in rows:
+                results.append(self._row_to_registration(r))
+            conn.close()
+        except Exception as e:
+            print(f"[DB] Gagal query unsynced: {e}")
+        return results
+
+    def retry_unsynced(self, limit: Optional[int] = None) -> int:
+        """Kirim ulang pendaftaran lokal yang belum masuk Google Sheet.
+
+        limit: batas jumlah entri per putaran (None = semua). Dipanggil
+        otomatis oleh thread background (lihat optimizations.py) setiap
+        5 menit dengan limit 50 — pendaftaran yang gagal terkirim karena
+        gangguan jaringan akan self-heal tanpa campur tangan panitia.
+        """
         sent = 0
-        for entry in self._get_local_registrations():
-            if entry.get("synced_to_sheets"):
-                continue
+        for entry in self._get_unsynced_registrations(limit):
             if push_to_google_sheet(entry):
                 self._mark_synced(entry["id"])
                 sent += 1
@@ -368,7 +420,7 @@ class NordeliaStorage:
 
     def _mark_synced(self, reg_id: int):
         try:
-            conn = sqlite3.connect(self.db_path)
+            conn = self._connect()
             c = conn.cursor()
             c.execute("UPDATE registrations SET synced_to_sheets = 1 WHERE id = ?", (reg_id,))
             conn.commit()
@@ -412,7 +464,7 @@ class NordeliaStorage:
     def delete_registration(self, reg_id: int) -> bool:
         deleted = False
         try:
-            conn = sqlite3.connect(self.db_path)
+            conn = self._connect()
             c = conn.cursor()
             c.execute("DELETE FROM registrations WHERE id = ?", (reg_id,))
             conn.commit()
@@ -437,10 +489,30 @@ class NordeliaStorage:
         self.invalidate_cache()
         return deleted
 
+    def _row_to_registration(self, r) -> Dict[str, Any]:
+        """Mapping satu baris SQLite ke dict pendaftaran (dipakai semua query)."""
+        details = {}
+        try:
+            details = json.loads(r["details_json"])
+        except Exception:
+            pass
+        return {
+            "id": r["id"],
+            "created_at": r["created_at"],
+            "category_id": r["category_id"],
+            "cabang_id": r["cabang_id"],
+            "cabang_name": r["cabang_name"],
+            "participant_name": r["participant_name"],
+            "kelas": r["kelas"],
+            "whatsapp": r["whatsapp"],
+            "details": details,
+            "synced_to_sheets": bool(r["synced_to_sheets"]),
+        }
+
     def _get_local_registrations(self, category_id: Optional[str] = None) -> List[Dict[str, Any]]:
         results = []
         try:
-            conn = sqlite3.connect(self.db_path)
+            conn = self._connect()
             conn.row_factory = sqlite3.Row
             c = conn.cursor()
             if category_id and category_id.lower() != "semua":
@@ -452,23 +524,7 @@ class NordeliaStorage:
                 c.execute("SELECT * FROM registrations ORDER BY id DESC")
             rows = c.fetchall()
             for r in rows:
-                details = {}
-                try:
-                    details = json.loads(r["details_json"])
-                except Exception:
-                    pass
-                results.append({
-                    "id": r["id"],
-                    "created_at": r["created_at"],
-                    "category_id": r["category_id"],
-                    "cabang_id": r["cabang_id"],
-                    "cabang_name": r["cabang_name"],
-                    "participant_name": r["participant_name"],
-                    "kelas": r["kelas"],
-                    "whatsapp": r["whatsapp"],
-                    "details": details,
-                    "synced_to_sheets": bool(r["synced_to_sheets"]),
-                })
+                results.append(self._row_to_registration(r))
             conn.close()
         except Exception as e:
             print(f"[DB] Gagal query sqlite: {e}")
@@ -485,6 +541,28 @@ class NordeliaStorage:
         return results
 
     def _get_local_counts_by_cabang(self) -> Dict[str, int]:
+        # Optimasi: agregasi GROUP BY langsung di SQL (hasil identik dengan
+        # menghitung baris satu per satu di Python, tanpa memuat seluruh isi
+        # tabel + parse details_json pada setiap request).
+        counts: Dict[str, int] = {}
+        try:
+            conn = self._connect()
+            c = conn.cursor()
+            grouped = c.execute(
+                "SELECT cabang_id, COUNT(*) FROM registrations "
+                "WHERE cabang_id IS NOT NULL AND cabang_id != '' "
+                "GROUP BY cabang_id"
+            ).fetchall()
+            conn.close()
+            for cid, n in grouped:
+                counts[cid] = n
+                cb = get_cabang_by_id(cid)
+                if cb and cb["id"] != cid:
+                    counts[cb["id"]] = counts.get(cb["id"], 0) + n
+            return counts
+        except Exception as e:
+            print(f"[DB] Gagal hitung per cabang (fallback ke Python): {e}")
+
         counts = {}
         all_regs = self._get_local_registrations()
         for r in all_regs:
@@ -497,6 +575,36 @@ class NordeliaStorage:
         return counts
 
     def _get_local_summary_stats(self) -> Dict[str, Any]:
+        # Optimasi: hitungan kategori via GROUP BY + 5 data terakhir via LIMIT,
+        # tanpa memuat seluruh tabel ke memori (hasil identik).
+        try:
+            conn = self._connect()
+            conn.row_factory = sqlite3.Row
+            c = conn.cursor()
+            grouped = c.execute(
+                "SELECT LOWER(category_id) AS cat, COUNT(*) AS n FROM registrations "
+                "GROUP BY LOWER(category_id)"
+            ).fetchall()
+            by_cat = {row["cat"]: row["n"] for row in grouped}
+            latest_rows = c.execute(
+                "SELECT * FROM registrations ORDER BY id DESC LIMIT 5"
+            ).fetchall()
+            conn.close()
+            return {
+                "counts": {
+                    "total": sum(by_cat.values()),
+                    "akademik": by_cat.get("akademik", 0),
+                    "bahasa": by_cat.get("bahasa", 0),
+                    "seni": by_cat.get("seni", 0),
+                    "cosplay": by_cat.get("cosplay", 0),
+                    "olahraga": by_cat.get("olahraga", 0),
+                },
+                "latest": [self._row_to_registration(r) for r in latest_rows],
+                "total_cabang": len(CABANG_LOMBA),
+            }
+        except Exception as e:
+            print(f"[DB] Gagal ringkasan statistik (fallback ke Python): {e}")
+
         all_regs = self._get_local_registrations()
         counts = {
             "total": len(all_regs),

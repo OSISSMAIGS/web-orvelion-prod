@@ -252,3 +252,60 @@ body {
 .card-nordelia-decorated:hover::before {
   opacity: 1;
 }
+
+/* ==================================================================
+   PJAX: transisi fade-out → fade-in murni pada <main> saja.
+   Total ~300 ms (120 ms memudar + 180 ms muncul) — cepat tapi halus.
+   Header & elemen tetap tidak ikut memudar (anti kelap-kelip);
+   pergantian DOM dan lompatan scroll terjadi saat layar sedang gelap.
+   Keadaan diam halaman tidak berubah sama sekali.
+   prefers-reduced-motion dihormati penuh (pergantian instan).
+   ================================================================== */
+
+/* Tahap 1 — konten lama memudar cepat */
+main.orv-pjax-exit {
+  opacity: 0;
+  transition: opacity 120ms ease-out;
+}
+
+/* Tahap 2 — konten baru muncul dari transparan penuh */
+@keyframes orv-pjax-enter {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+main.orv-pjax-enter {
+  animation: orv-pjax-enter 180ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main.orv-pjax-exit {
+    transition: none;
+  }
+  main.orv-pjax-enter {
+    animation: none !important;
+  }
+}
+
+/* Progress bar navigasi tipis (2px) — hanya muncul bila fetch > 180 ms */
+.orv-pjax-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: var(--coral, #FF6B00);
+  box-shadow: 0 0 6px rgba(255, 107, 0, 0.55);
+  z-index: 2147483000;
+  opacity: 0;
+  transition: width 260ms ease-out, opacity 160ms linear;
+  pointer-events: none;
+}
+.orv-pjax-progress.orv-pjax-progress-active {
+  opacity: 1;
+  width: 72%;
+}
+.orv-pjax-progress.orv-pjax-progress-done {
+  width: 100% !important;
+  opacity: 0;
+  transition: width 90ms ease-out, opacity 260ms linear 60ms;
+}

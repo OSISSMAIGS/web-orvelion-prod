@@ -24,6 +24,9 @@ def _now() -> float:
 def _get_db():
     conn = sqlite3.connect(DB_PATH, timeout=5.0)
     conn.execute("PRAGMA journal_mode=WAL")
+    # synchronous=NORMAL aman bersama WAL dan jauh lebih cepat untuk
+    # tabel tracker sesi (data ini sembuh-sendiri / tidak kritis).
+    conn.execute("PRAGMA synchronous=NORMAL")
     return conn
 
 

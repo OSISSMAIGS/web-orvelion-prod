@@ -31,7 +31,7 @@
       <!-- Actions & External Links -->
       <div class="flex items-center gap-4">
         <div class="hidden sm:block w-20 h-20 relative">
-          <img src="{{ url_for('static', filename='images/gumball.svg') }}" alt="Gumball" class="w-full h-full object-contain filter drop-shadow-md" />
+          <img src="{{ url_for('static', filename='images/gumball.svg') }}" alt="Gumball" class="w-full h-full object-contain filter drop-shadow-md" decoding="async" />
         </div>
         <div class="space-y-2">
           <a href="/api/nordelia/export.csv?category={{ selected_category }}"

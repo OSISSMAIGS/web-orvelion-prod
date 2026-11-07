@@ -7,9 +7,14 @@ function initNav() {
   const drawer = $("#nav-drawer");
   if (!header) return;
 
-  window.addEventListener("scroll", () => {
-    header.classList.toggle("is-scrolled", window.scrollY > 20);
-  });
+  // Listener scroll hanya didaftarkan sekali (aman terhadap re-init oleh PJAX)
+  if (!window.__orvNavScrollBound) {
+    window.__orvNavScrollBound = true;
+    window.addEventListener("scroll", () => {
+      const h = $("#site-header");
+      if (h) h.classList.toggle("is-scrolled", window.scrollY > 20);
+    });
+  }
 
   toggle?.addEventListener("click", () => {
     drawer?.classList.toggle("hidden");
@@ -38,11 +43,19 @@ function initScrollTop() {
   });
 }
 
+let countdownTimer = null;
+
 function initCountdown() {
   const root = $("#countdown");
   if (!root) return;
   const target = new Date("2026-11-14T08:00:00+07:00").getTime();
   const tick = () => {
+    if (!root.isConnected) {
+      // Halaman sudah diganti (PJAX): hentikan interval lama
+      if (countdownTimer) clearInterval(countdownTimer);
+      countdownTimer = null;
+      return;
+    }
     const diff = Math.max(0, target - Date.now());
     const days = Math.floor(diff / 86400000);
     const hours = Math.floor((diff % 86400000) / 3600000);
@@ -54,7 +67,8 @@ function initCountdown() {
     root.querySelector("[data-seconds]").textContent = String(seconds).padStart(2, "0");
   };
   tick();
-  setInterval(tick, 1000);
+  if (countdownTimer) clearInterval(countdownTimer);
+  countdownTimer = setInterval(tick, 1000);
 }
 
 function initEvents() {
@@ -212,10 +226,6 @@ function initWaitingRoom() {
 }
 
 function initNordelia() {
-  console.log("initNordelia called");
-  console.log("Current URL:", window.location.href);
-  console.log("Checking for nordelia-data-cabang element...");
-
   const cabangDataEl = document.getElementById("nordelia-data-cabang");
   const formatDataEl = document.getElementById("nordelia-data-formats");
   const ketentuanDataEl = document.getElementById("nordelia-data-ketentuan");
@@ -226,15 +236,9 @@ function initNordelia() {
     console.error("Gagal parse ketentuan data:", e);
   }
 
-  console.log("cabangDataEl:", cabangDataEl);
-  console.log("formatDataEl:", formatDataEl);
-
   if (!cabangDataEl || !formatDataEl) {
-    console.log("Nordelia data elements not found - not on Nordelia page");
     return;
   }
-
-  console.log("=== NORDelia PAGE SCRIPT START ===");
 
   let cabangList, formatList;
   try {
@@ -244,12 +248,6 @@ function initNordelia() {
     console.error("Gagal parse JSON:", e);
     return;
   }
-
-  console.log("Data loaded:", {
-    cabangCount: cabangList.length,
-    formatKeys: Object.keys(formatList),
-    sampleCabang: cabangList.slice(0, 3),
-  });
 
   const cabangCards = Array.from(document.querySelectorAll("[data-cabang-card]"));
   const emptyNotice = document.getElementById("cabang-empty");
@@ -350,20 +348,8 @@ function initNordelia() {
   const formAlert = document.getElementById("form-alert");
   const regForm = document.getElementById("nordelia-reg-form");
 
-  console.log("Modal elements:", {
-    modalReg: !!modalReg,
-    closeRegBtn: !!closeRegBtn,
-    formCabangTitle: !!formCabangTitle,
-    formBadgeCategory: !!formBadgeCategory,
-    formRuleBox: !!formRuleBox,
-    inputCabangId: !!inputCabangId,
-    dynamicFormFields: !!dynamicFormFields,
-    formAlert: !!formAlert,
-    regForm: !!regForm,
-  });
 
   function openRegisterModal(cabangId) {
-    console.log("openRegisterModal dipanggil dengan cabangId:", cabangId);
     let c = cabangList.find(item => item.id === cabangId);
     if (!c) {
       c = cabangList.find(item => 
@@ -377,7 +363,6 @@ function initNordelia() {
       window.open(c.gform_url, "_blank");
       return;
     }
-    console.log("Cabang ditemukan:", c ? c.name : "tidak ditemukan");
     if (!c) {
       console.error("Cabang tidak ditemukan untuk ID:", cabangId);
       return;
@@ -523,7 +508,6 @@ function initNordelia() {
     formAlert.classList.add("hidden");
     modalReg.classList.remove("hidden");
     document.body.classList.add("overflow-hidden");
-    console.log("Modal pendaftaran berhasil dibuka");
   }
 
   function closeRegisterModal() {
@@ -745,25 +729,16 @@ function initNordelia() {
   });
 
   const registerButtons = document.querySelectorAll("[data-register-cabang]");
-  console.log("Tombol daftar ditemukan:", registerButtons.length);
 
   if (registerButtons.length === 0) {
     console.warn("Tidak ada tombol daftar yang ditemukan dengan attribute data-register-cabang");
-  } else {
-    console.log("Detail tombol daftar:", Array.from(registerButtons).map(btn => ({
-      cabangId: btn.getAttribute("data-register-cabang"),
-      text: btn.textContent.trim(),
-    })));
   }
 
   registerButtons.forEach((btn, index) => {
-    console.log(`Event listener dipasang pada tombol ${index + 1} dengan cabangId:`, btn.getAttribute("data-register-cabang"));
     btn.addEventListener("click", (e) => {
-      console.log("=== CLICK EVENT TRIGGERED ===");
       e.preventDefault();
       e.stopPropagation();
       const cabangId = btn.getAttribute("data-register-cabang");
-      console.log("Tombol daftar diklik untuk cabang:", cabangId);
       
       const cObj = cabangList.find(x => x.id === cabangId) || {};
       const cabangName = cObj.name || "Cabang Lomba";
@@ -991,13 +966,9 @@ function initNordelia() {
   window.ketentuanData = ketentuanData;
   window.cabangList = cabangList;
 
-  console.log("=== NORDelia PAGE SCRIPT END ===");
 }
 
-console.log("app.js loaded");
-
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("DOMContentLoaded fired in app.js");
+function initAllPages() {
   initNav();
   initTabs();
   initScrollTop();
@@ -1006,4 +977,10 @@ document.addEventListener("DOMContentLoaded", () => {
   initCabinets();
   initWaitingRoom();
   initNordelia();
-});
+}
+
+// Diekspos agar PJAX dapat menjalankan ulang inisialisasi halaman
+// dengan urutan eksekusi yang sama seperti muatan halaman normal.
+window.OrvelionInit = initAllPages;
+
+document.addEventListener("DOMContentLoaded", initAllPages);

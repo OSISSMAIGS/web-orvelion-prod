@@ -1,5 +1,7 @@
+import copy
 import json
 import os
+import threading
 import time
 from flask import Blueprint, Response, jsonify, redirect, render_template, request, session, url_for
 
@@ -43,12 +45,80 @@ def resolve_group_link(cabang_info=None):
     ).strip()
 
 
+# Cache berbasis mtime untuk nordelia_events.json agar tidak dibaca ulang
+# dari disk pada setiap request. Hasil dikembalikan sebagai salinan dalam
+# (deep copy) karena route nordelia_category() memutasi objek kategori —
+# perilaku ini identik dengan kode asli yang selalu mem-parse ulang file.
+_nordelia_events_cache = {"key": None, "data": None}
+
+# ======================================================================
+# Micro-cache render untuk halaman yang isinya murni statis (home,
+# before_us, event) — tidak ada data kuota/pendaftaran di dalamnya.
+#
+# Body HTML di-cache di memori proses; kunci cache = mtime file template
+# + mtime sumber data (content.py / nordelia_events.json) sehingga setiap
+# deploy atau perubahan file OTOMATIS membatalkan cache (tidak ada halaman
+# basi). TTL hanyalah jaring pengaman tambahan. Hasil render identik byte
+# per byte dengan render langsung — hanya CPU yang dihemat saat ramai.
+# ======================================================================
+_page_cache: dict = {}
+_page_cache_lock = threading.Lock()
+
+_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+_TEMPLATES_DIR = os.path.join(_BASE_DIR, "..", "templates")
+_EVENTS_JSON_PATH = os.path.join(_BASE_DIR, "..", "nordelia_events.json")
+
+
+def _f_mtime(path: str) -> float:
+    try:
+        return os.path.getmtime(path)
+    except OSError:
+        return 0.0
+
+
+def render_cached(template_name: str, ctx_factory, ttl: float = 10.0, extra_key=()):
+    """render_template + micro-cache body (aman untuk halaman statis).
+
+    ctx_factory dipanggil HANYA saat cache miss (hemat pembuatan context
+    berat). Kunci mencakup mtime template + mtime modul konten sehingga
+    perubahan kode/deploy langsung membatalkan cache."""
+    key = (
+        template_name,
+        _f_mtime(os.path.join(_TEMPLATES_DIR, template_name)),
+        _f_mtime(os.path.join(_BASE_DIR, "content.py")),
+        _f_mtime(os.path.join(_BASE_DIR, "nordelia_data.py")),
+        tuple(extra_key),
+    )
+    now = time.time()
+    with _page_cache_lock:
+        hit = _page_cache.get(key)
+        if hit is not None and now - hit[0] < ttl:
+            return hit[1]
+
+    html = render_template(template_name, **ctx_factory())
+
+    with _page_cache_lock:
+        _page_cache[key] = (now, html)
+        # buang kunci basi untuk template yang sama (mtime lama)
+        if len(_page_cache) > 8:
+            for k in [k for k in list(_page_cache) if k[0] == template_name and k != key]:
+                _page_cache.pop(k, None)
+    return html
+
+
 def load_nordelia_events():
     try:
         events_path = os.path.join(os.path.dirname(__file__), "..", "nordelia_events.json")
         if os.path.exists(events_path):
+            st = os.stat(events_path)
+            key = (st.st_mtime_ns, st.st_size)
+            if _nordelia_events_cache["key"] == key and _nordelia_events_cache["data"] is not None:
+                return copy.deepcopy(_nordelia_events_cache["data"])
             with open(events_path, "r", encoding="utf-8") as f:
-                return json.load(f)
+                data = json.load(f)
+            _nordelia_events_cache["key"] = key
+            _nordelia_events_cache["data"] = data
+            return copy.deepcopy(data)
     except Exception:
         pass
     return {"categories": []}
@@ -71,29 +141,31 @@ def _ctx(**extra):
 
 @bp.get("/")
 def home():
-    return render_template(
+    return render_cached(
         "home.html",
-        **_ctx(
+        lambda: _ctx(
             active_page="home",
             pillars=PILLARS,
             divisions=DIVISIONS,
             missions=MISSIONS,
         ),
+        ttl=10.0,
     )
 
 
 @bp.get("/event")
 def event():
-    nordelia_data = load_nordelia_events()
-    return render_template(
+    return render_cached(
         "event.html",
-        **_ctx(
+        lambda: _ctx(
             active_page="event",
             events=EVENTS,
             categories=EVENT_CATEGORIES,
             roadmap=ROADMAP,
-            nordelia_events=nordelia_data,
+            nordelia_events=load_nordelia_events(),
         ),
+        ttl=15.0,
+        extra_key=("events_json", _f_mtime(_EVENTS_JSON_PATH)),
     )
 
 
@@ -146,7 +218,6 @@ def build_decorated_cabang_list():
 @bp.get("/event/nordelia")
 def nordelia():
     summary = storage.get_summary_stats()
-    all_regs = storage.get_all_registrations()
     spreadsheet_url = get_config(
         "NORDELIA_SPREADSHEET_URL",
         "https://docs.google.com/spreadsheets/d/" + get_config("NORDELIA_SPREADSHEET_ID", "1I5PF4GTdkiMUcfQ-YBskctP6X_WnSruRGACEUnAwG-c") + "/edit",
@@ -164,7 +235,6 @@ def nordelia():
             format_registrasi=FORMAT_REGISTRASI,
             ketentuan_detail=KETENTUAN_DETAIL,
             summary=summary,
-            registrations=all_regs[:10],
             spreadsheet_url=spreadsheet_url,
             spreadsheet_id=get_config("NORDELIA_SPREADSHEET_ID"),
             group_link=resolve_group_link(),
@@ -674,13 +744,14 @@ def api_nordelia_format_pendaftaran_csv():
 
 @bp.get("/before-us")
 def before_us():
-    return render_template(
+    return render_cached(
         "before_us.html",
-        **_ctx(
+        lambda: _ctx(
             active_page="before-us",
             cabinets=CABINETS,
             timeline=TIMELINE,
         ),
+        ttl=10.0,
     )
 
 

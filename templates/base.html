@@ -7,6 +7,8 @@
   <meta name="description" content="{{ site.description }}" />
   <title>{% block title %}{{ site.title }}{% endblock %}</title>
   <link rel="icon" href="{{ url_for('static', filename='images/orvelion.jpg') }}" />
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" />
+  <link rel="dns-prefetch" href="https://cdn.tailwindcss.com" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -64,6 +66,7 @@
   {% if show_chrome %}
     {% include "partials/footer.html" %}
   {% endif %}
-  <script src="{{ url_for('static', filename='js/app.js') }}?v=20261106v3"></script>
+  <script src="{{ url_for('static', filename='js/pjax.js', v=asset_v('js/pjax.js')) }}"></script>
+  <script src="{{ url_for('static', filename='js/app.js', v=asset_v('js/app.js')) }}"></script>
 </body>
 </html>
