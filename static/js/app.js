@@ -48,7 +48,7 @@ let countdownTimer = null;
 function initCountdown() {
   const root = $("#countdown");
   if (!root) return;
-  const target = new Date("2026-11-14T08:00:00+07:00").getTime();
+  const target = new Date("2026-11-20T08:00:00+07:00").getTime();
   const tick = () => {
     if (!root.isConnected) {
       // Halaman sudah diganti (PJAX): hentikan interval lama

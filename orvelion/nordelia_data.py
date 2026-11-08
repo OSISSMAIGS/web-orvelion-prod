@@ -308,7 +308,7 @@ KETENTUAN_DETAIL = {
         "tema": "Collaboration with Club Informatics",
         "biaya": "Gratis",
         "durasi": "Penyisihan 20 Menit | Final 120 Menit",
-        "deadline": "20 - 21 Oktober 2026",
+        "deadline": "20 - 21 November 2026",
         "juknis_url": "https://drive.google.com/drive/folders/1QjuO7vX9MhtvZt92LAbHpCFfwKd3IPGF?usp=drive_link",
         "contact_person": {
             "name": "Sir Sepri (Informatics)",
