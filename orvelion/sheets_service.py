@@ -643,20 +643,90 @@ class NordeliaStorage:
     # =========================================================================
 
     def get_counts_by_cabang(self, force_refresh: bool = False) -> Dict[str, int]:
-        """Mengembalikan jumlah pendaftar per cabang secara real-time langsung dari database lokal."""
-        return self._get_local_counts_by_cabang()
+        """
+        Mengembalikan jumlah pendaftar per cabang secara real-time dari Google Spreadsheet
+        dengan fallback otomatis ke database lokal jika offline.
+        Menyertakan mapping ID kanonikal, nama, dan seluruh alias sub-event.
+        """
+        sheet_data = self.fetch_from_google_sheet(force_refresh=force_refresh)
+        if sheet_data and "counts" in sheet_data:
+            base_counts = sheet_data["counts"]
+        else:
+            base_counts = self._get_local_counts_by_cabang()
+
+        expanded: Dict[str, int] = dict(base_counts)
+
+        # 1. Pastikan setiap cabang di CABANG_LOMBA memiliki entri count
+        for c in CABANG_LOMBA:
+            cid = c["id"]
+            cname = c.get("name", "")
+            sname = c.get("sheet_name", "")
+            cnt = base_counts.get(cid, 0)
+            if cnt == 0 and cname and cname in base_counts:
+                cnt = base_counts[cname]
+            if cnt == 0 and sname and sname in base_counts:
+                cnt = base_counts[sname]
+            if cnt == 0:
+                for k, v in base_counts.items():
+                    k_cb = get_cabang_by_id(k)
+                    if k_cb and k_cb.get("id") == cid:
+                        cnt = max(cnt, v)
+            if cnt > 0:
+                expanded[cid] = cnt
+                if cname:
+                    expanded[cname] = cnt
+                if sname:
+                    expanded[sname] = cnt
+
+        # 2. Sinkronkan juga sub-event IDs dari nordelia_events.json
+        try:
+            ev_path = os.path.join(BASE_DIR, "nordelia_events.json")
+            if os.path.exists(ev_path):
+                with open(ev_path, "r", encoding="utf-8") as ev_f:
+                    ev_data = json.load(ev_f)
+                for cat in ev_data.get("categories", []):
+                    for sub in cat.get("subEvents", []):
+                        sub_id = sub.get("id")
+                        if sub_id:
+                            cb = get_cabang_by_id(sub_id)
+                            if cb:
+                                target_id = cb.get("id")
+                                if target_id and target_id in expanded:
+                                    expanded[sub_id] = expanded[target_id]
+        except Exception:
+            pass
+
+        return expanded
 
     def get_cabang_count(self, cabang_id: str, force_refresh: bool = False) -> int:
         """Mengambil total pendaftar spesifik untuk 1 cabang lomba secara real-time."""
         counts = self.get_counts_by_cabang(force_refresh=force_refresh)
-        return counts.get(cabang_id, 0)
+        if cabang_id in counts:
+            return counts[cabang_id]
+        cb = get_cabang_by_id(cabang_id)
+        if cb and cb.get("id") in counts:
+            return counts[cb["id"]]
+        for k, v in counts.items():
+            k_cb = get_cabang_by_id(k)
+            if k_cb and cb and k_cb.get("id") == cb.get("id"):
+                return v
+        return 0
 
     def get_summary_stats(self, force_refresh: bool = False) -> Dict[str, Any]:
-        """Statistik ringkasan pendaftaran secara real-time langsung dari database."""
+        """Statistik ringkasan pendaftaran langsung dari Google Spreadsheet (fallback lokal)."""
+        sheet_data = self.fetch_from_google_sheet(force_refresh=force_refresh)
+        if sheet_data and "summary" in sheet_data and sheet_data["summary"]:
+            return sheet_data["summary"]
         return self._get_local_summary_stats()
 
     def get_all_registrations(self, category_id: Optional[str] = None, force_refresh: bool = False) -> List[Dict[str, Any]]:
-        """Mengambil seluruh data pendaftar langsung dari database internal."""
+        """Mengambil seluruh data pendaftar dari Google Spreadsheet (fallback lokal)."""
+        sheet_data = self.fetch_from_google_sheet(force_refresh=force_refresh)
+        if sheet_data and sheet_data.get("registrations") is not None:
+            regs = sheet_data["registrations"]
+            if category_id and category_id.lower() != "semua":
+                return [r for r in regs if r.get("category_id", "").lower() == category_id.lower()]
+            return regs
         return self._get_local_registrations(category_id)
 
 
@@ -712,7 +782,8 @@ def push_to_google_sheet(entry: Dict[str, Any]) -> bool:
 
 def export_registrations_csv(category_id: Optional[str] = None) -> str:
     """Mengekspor pendaftaran ke string CSV standar langsung dari data Google Sheet."""
-    regs = storage.get_all_registrations(category_id)
+    storage.invalidate_cache()
+    regs = storage.get_all_registrations(category_id, force_refresh=True)
     output = io.StringIO()
     writer = csv.writer(output)
 
