@@ -130,10 +130,13 @@ class NordeliaStorage:
         (queue.py memakai file DB yang sama dan sudah memakai pengaturan
         identik — kini selaras di seluruh aplikasi.)
         """
-        conn = sqlite3.connect(self.db_path, timeout=5.0)
-        conn.execute("PRAGMA journal_mode=WAL")
-        conn.execute("PRAGMA busy_timeout=5000")
-        conn.execute("PRAGMA synchronous=NORMAL")
+        conn = sqlite3.connect(self.db_path, timeout=10.0)
+        try:
+            conn.execute("PRAGMA journal_mode=WAL")
+            conn.execute("PRAGMA busy_timeout=5000")
+            conn.execute("PRAGMA synchronous=NORMAL")
+        except Exception:
+            pass
         return conn
 
     def _init_db(self):
@@ -203,6 +206,7 @@ class NordeliaStorage:
 
             lookup = _get_cabang_lookup()
             items: List[Dict[str, Any]] = []
+            parsed_items: List[Dict[str, Any]] = []
             counts: Dict[str, int] = {}
 
             # Parse setiap baris pendaftaran di Master Pendaftaran
@@ -247,8 +251,7 @@ class NordeliaStorage:
                     except Exception:
                         pass
 
-                items.append({
-                    "id": len(rows) - idx,
+                parsed_items.append({
                     "created_at": timestamp,
                     "category_id": cat_id,
                     "cabang_id": cid,
@@ -259,6 +262,11 @@ class NordeliaStorage:
                     "details": details_dict,
                     "synced_to_sheets": True,
                 })
+
+            for seq_id, itm in enumerate(parsed_items, start=1):
+                itm["id"] = seq_id
+                items.append(itm)
+            items.reverse()
 
             summary = {
                 "counts": {
@@ -361,7 +369,17 @@ class NordeliaStorage:
             conn.close()
         except Exception as e:
             print(f"[DB] Gagal insert sqlite: {e}")
-            entry["id"] = int(time.time() * 1000) % 1000000
+            next_id = 1
+            if os.path.exists(self.json_path):
+                try:
+                    with open(self.json_path, "r", encoding="utf-8") as f:
+                        existing = json.load(f)
+                        if existing:
+                            valid_ids = [r.get("id") for r in existing if isinstance(r.get("id"), int) and r.get("id") < 100000]
+                            next_id = (max(valid_ids) + 1) if valid_ids else (len(existing) + 1)
+                except Exception:
+                    next_id = 1
+            entry["id"] = next_id
 
         # Simpan juga ke file JSON sebagai cadangan
         self._append_json(entry)
@@ -638,7 +656,7 @@ class NordeliaStorage:
         return self._get_local_summary_stats()
 
     def get_all_registrations(self, category_id: Optional[str] = None, force_refresh: bool = False) -> List[Dict[str, Any]]:
-        """Mengambil seluruh data pendaftar secara real-time langsung dari database."""
+        """Mengambil seluruh data pendaftar langsung dari database internal."""
         return self._get_local_registrations(category_id)
 
 
