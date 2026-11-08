@@ -247,6 +247,13 @@
       try { document.activeElement.blur(); } catch (e) { /* abaikan */ }
     }
 
+    /* 2b. Bersihkan status modal & scroll lock dari halaman sebelumnya */
+    document.body.classList.remove("overflow-hidden");
+    if (doc.body && doc.body.className) {
+      document.body.className = doc.body.className;
+    }
+    document.body.classList.remove("overflow-hidden");
+
     /* 3. Inisialisasi app.js disingkirkan sementara dari event
           DOMContentLoaded agar urutan eksekusi bisa dikendalikan:
           skrip inline dulu, lalu app.js — sama seperti muatan normal. */

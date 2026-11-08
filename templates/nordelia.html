@@ -407,6 +407,7 @@
 <script>
   // Bridge to guarantee Juknis Drive button on AI modal
   document.addEventListener("DOMContentLoaded", function() {
+    document.body.classList.remove("overflow-hidden");
     const aiJuknisLink = "https://drive.google.com/drive/folders/1QjuO7vX9MhtvZt92LAbHpCFfwKd3IPGF?usp=drive_link";
     
     const origOpenReg = window.openRegisterModal;

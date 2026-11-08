@@ -290,6 +290,12 @@ function initNordelia() {
   modalOsn?.addEventListener("click", (e) => {
     if (e.target === modalOsn) closeOsnModal();
   });
+  // Pastikan klik tautan jurusan di dalam modal OSN menutup modal & membersihkan scroll lock
+  modalOsn?.querySelectorAll("a[href]").forEach((link) => {
+    link.addEventListener("click", () => {
+      closeOsnModal();
+    });
+  });
 
   // Category Buttons click handler
   document.querySelectorAll("[data-category-select]").forEach(function (btn) {
@@ -969,6 +975,7 @@ function initNordelia() {
 }
 
 function initAllPages() {
+  document.body.classList.remove("overflow-hidden");
   initNav();
   initTabs();
   initScrollTop();
