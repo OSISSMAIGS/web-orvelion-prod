@@ -1216,7 +1216,7 @@ CABANG_LOMBA = [
         'peserta_min': None,
         'pic': 'Tamara',
         'sheet_name': 'Cosplay',
-        'group_link': '',
+        'group_link': 'https://line.me/R/ti/g/PZw-2Hgnd6',
         'group_label': 'Masuk Grup LINE',
         'tempat': 'Mayor',
     },
