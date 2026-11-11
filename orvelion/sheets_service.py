@@ -102,7 +102,7 @@ class NordeliaStorage:
     Data kuota dan jumlah pendaftar diambil langsung dari Google Spreadsheet dengan sistem caching pintar.
     """
 
-    CACHE_TTL_SECONDS = 8.0  # 8 detik TTL: Cepat, responsif, dan tidak membebani Google
+    CACHE_TTL_SECONDS = 60.0  # 60 detik TTL: Cepat, responsif, dan tidak membebani Google/Server
 
     def __init__(self, db_path: str = DB_PATH, json_path: str = JSON_PATH):
         self.db_path = db_path

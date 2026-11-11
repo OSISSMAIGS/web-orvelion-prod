@@ -17,7 +17,7 @@
   var FETCH_TIMEOUT_MS = 10000;   // batas waktu fetch sebelum fallback reload
   var PREFETCH_TTL_MS = 15000;    // usia maksimum hasil prefetch (menjaga kesegaran kuota)
   var PREFETCH_MAX = 10;          // jumlah maksimum halaman ter-prefetch
-  var HOVER_DELAY_MS = 80;        // jeda hover sebelum prefetch dimulai
+  var HOVER_DELAY_MS = 300;       // jeda hover disesuaikan agar tidak membebani server saat kursor melintas
 
   /* Transisi: fade-out → fade-in murni pada <main> saja (~300 ms total).   */
   /* Header tidak ikut memudar; DOM diganti & scroll terjadi saat layar     */
