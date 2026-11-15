@@ -518,6 +518,13 @@ def api_nordelia_delete_registration():
 @bp.post("/api/nordelia/register")
 def api_nordelia_register():
     try:
+        # Pendaftaran NORDELIA 2026 telah resmi ditutup
+        return jsonify({
+            "success": False,
+            "error": "Maaf, pendaftaran NORDELIA 2026 telah resmi ditutup karena periode pendaftaran sudah selesai. Terima kasih atas antusiasme seluruh peserta!",
+            "is_closed": True,
+        }), 400
+
         # Terima data dari JSON atau form-data
         if request.is_json:
             data = request.get_json() or {}

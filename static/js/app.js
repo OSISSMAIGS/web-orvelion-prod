@@ -364,15 +364,8 @@ function initNordelia() {
         item.name.toLowerCase().includes(cabangId.toLowerCase())
       );
     }
-
-    if (c && c.is_external_gform && c.gform_url) {
-      window.open(c.gform_url, "_blank");
-      return;
-    }
-    if (!c) {
-      console.error("Cabang tidak ditemukan untuk ID:", cabangId);
-      return;
-    }
+    openClosedModal(cabangId, c ? c.name : null, c ? c.juknis_url : null, c ? c.group_link : null);
+    return;
 
     inputCabangId.value = c.id;
     if (inputCategoryId) inputCategoryId.value = c.category || "akademik";
@@ -918,25 +911,6 @@ function initNordelia() {
     const modalEmailNotice = document.getElementById("ketentuan-modal-email-notice");
     const modalInAppRegBtn = document.getElementById("ketentuan-modal-inapp-reg-btn");
 
-    if (ketentuanGformBtn) {
-      if (hasGform) {
-        ketentuanGformBtn.href = k.gform_url || (cb && cb.gform_url) || "https://forms.google.com";
-        ketentuanGformBtn.classList.remove("hidden");
-        if (modalEmailNotice) modalEmailNotice.classList.remove("hidden");
-        if (modalInAppRegBtn) modalInAppRegBtn.classList.add("hidden");
-      } else {
-        ketentuanGformBtn.classList.add("hidden");
-        if (modalEmailNotice) modalEmailNotice.classList.add("hidden");
-        if (modalInAppRegBtn) {
-          modalInAppRegBtn.classList.remove("hidden");
-          modalInAppRegBtn.onclick = () => {
-            closeKetentuanModal();
-            openRegisterModal(cb ? cb.id : cabangId, (cb && cb.name) ? cb.name : fallbackName);
-          };
-        }
-      }
-    }
-
     const juknisBtn = document.getElementById("ketentuan-modal-juknis-btn");
     const juknisUrl = k.juknis_url || (cb && cb.juknis_url) || "";
     if (juknisBtn) {
@@ -946,6 +920,25 @@ function initNordelia() {
       } else {
         juknisBtn.classList.add("hidden");
       }
+    }
+
+    const lineBtn = document.getElementById("ketentuan-modal-line-btn");
+    const lineUrl = (cb && cb.group_link) || "";
+    if (lineBtn) {
+      if (lineUrl) {
+        lineBtn.href = lineUrl;
+        lineBtn.classList.remove("hidden");
+      } else {
+        lineBtn.classList.add("hidden");
+      }
+    }
+
+    const closedKetentuanBtn = document.getElementById("ketentuan-modal-closed-btn");
+    if (closedKetentuanBtn) {
+      closedKetentuanBtn.onclick = () => {
+        closeKetentuanModal();
+        openClosedModal(cabangId, fallbackName, juknisUrl, lineUrl);
+      };
     }
 
     modalKetentuan.classList.remove("hidden");
@@ -965,6 +958,84 @@ function initNordelia() {
 
 
   // Expose to window
+  
+  // =========================================================================
+  // MODAL PENDAFTARAN DITUTUP
+  // =========================================================================
+  const modalClosed = document.getElementById("modal-pendaftaran-ditutup");
+  const closeClosedBtn = document.getElementById("btn-close-closed-modal");
+  const closeClosedFooter = document.getElementById("btn-close-closed-footer");
+  const closedCabangName = document.getElementById("closed-modal-cabang-name");
+  const closedJuknisBtn = document.getElementById("closed-modal-juknis-btn");
+  const closedLineBtn = document.getElementById("closed-modal-line-btn");
+
+  function openClosedModal(cabangId, fallbackName, explicitJuknis, explicitLine) {
+    let cb = null;
+    if (cabangId && typeof cabangList !== "undefined") {
+      cb = cabangList.find(x => x.id === cabangId);
+      if (!cb) {
+        cb = cabangList.find(x => 
+          ((cabangId === "ai" || cabangId === "olimpiade-ai") && (x.id.includes("ai") || x.name.toLowerCase().includes("artifisial"))) ||
+          ((cabangId === "cosplay" || cabangId === "cosplay-jepang") && (x.id.includes("cosplay") || x.name.toLowerCase().includes("cosplay"))) ||
+          x.name.toLowerCase().includes(String(cabangId).toLowerCase())
+        );
+      }
+    }
+
+    const cName = fallbackName || (cb && cb.name) || (cabangId ? String(cabangId).replace(/-/g, ' ').toUpperCase() : "");
+    if (closedCabangName) {
+      closedCabangName.textContent = cName ? `Cabang Lomba: ${cName}` : "";
+    }
+
+    const jUrl = explicitJuknis || (cb && cb.juknis_url) || "";
+    if (closedJuknisBtn) {
+      if (jUrl) {
+        closedJuknisBtn.href = jUrl;
+        closedJuknisBtn.classList.remove("hidden");
+      } else {
+        closedJuknisBtn.classList.add("hidden");
+      }
+    }
+
+    const lUrl = explicitLine || (cb && cb.group_link) || "";
+    if (closedLineBtn) {
+      if (lUrl) {
+        closedLineBtn.href = lUrl;
+        closedLineBtn.classList.remove("hidden");
+      } else {
+        closedLineBtn.classList.add("hidden");
+      }
+    }
+
+    modalClosed?.classList.remove("hidden");
+    document.body.classList.add("overflow-hidden");
+  }
+
+  function closeClosedModal() {
+    modalClosed?.classList.add("hidden");
+    document.body.classList.remove("overflow-hidden");
+  }
+
+  closeClosedBtn?.addEventListener("click", closeClosedModal);
+  closeClosedFooter?.addEventListener("click", closeClosedModal);
+  modalClosed?.addEventListener("click", (e) => {
+    if (e.target === modalClosed) closeClosedModal();
+  });
+
+  document.querySelectorAll("[data-closed-register]").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      openClosedModal(
+        btn.getAttribute("data-closed-register"),
+        btn.getAttribute("data-sub-name"),
+        btn.getAttribute("data-juknis-url"),
+        btn.getAttribute("data-group-link")
+      );
+    });
+  });
+
+  window.openClosedModal = openClosedModal;
+
   window.openRegisterModal = openRegisterModal;
   window.closeRegisterModal = closeRegisterModal;
   window.openKetentuanModal = openKetentuanModal;

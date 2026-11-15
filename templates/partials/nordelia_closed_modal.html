@@ -1,0 +1,76 @@
+<!-- ========================================================================= -->
+<!-- MODAL POP-UP: PENDAFTARAN SUDAH DITUTUP -->
+<!-- ========================================================================= -->
+<div id="modal-pendaftaran-ditutup" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md transition-opacity duration-200">
+  <div class="relative w-full max-w-lg rounded-3xl p-6 sm:p-8 bg-[#0F172A] border border-rose-500/40 shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_35px_rgba(244,63,94,0.18)] text-center space-y-5 animate-in fade-in zoom-in-95 duration-200">
+    
+    <!-- Close Button -->
+    <button type="button" id="btn-close-closed-modal" class="absolute top-5 right-5 p-2 rounded-full bg-white/10 text-stone-300 hover:text-white transition-colors" aria-label="Tutup">
+      <svg class="w-5 h-5"><use href="#i-x"></use></svg>
+    </button>
+
+    <!-- Header Icon -->
+    <div class="mx-auto w-16 h-16 rounded-2xl flex items-center justify-center bg-gradient-to-br from-rose-500/20 via-amber-500/15 to-rose-600/25 border border-rose-500/40 text-rose-400 shadow-inner">
+      <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+      </svg>
+    </div>
+
+    <!-- Badge & Title -->
+    <div class="space-y-1.5">
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-rose-500/15 text-rose-300 border border-rose-500/30">
+        <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+        Pendaftaran Telah Ditutup
+      </div>
+      <h3 class="text-xl sm:text-2xl font-black text-white">
+        Maaf, Pendaftaran Sudah Ditutup
+      </h3>
+      <p id="closed-modal-cabang-name" class="text-xs font-bold text-[#FDE68A]"></p>
+    </div>
+
+    <!-- Message Body -->
+    <div class="p-4 rounded-2xl bg-black/45 border border-white/10 text-xs sm:text-sm text-stone-200 leading-relaxed text-left space-y-2">
+      <p>
+        Periode pendaftaran untuk cabang ini dan seluruh kompetisi <strong class="text-white">NORDELIA 2026</strong> telah <strong>resmi ditutup</strong> karena batas waktu pendaftaran telah selesai.
+      </p>
+      <p class="text-stone-400 text-xs">
+        Terima kasih yang sebesar-besarnya atas partisipasi dan antusiasme luar biasa dari seluruh siswa-siswi <strong>SMA Ignatius Global School (IGS) Palembang</strong>!
+      </p>
+    </div>
+
+    <!-- Action Links (Juknis & Line Invitation) -->
+    <div class="space-y-2 text-left pt-1">
+      <p class="text-[10px] font-extrabold text-stone-400 uppercase tracking-wider text-center">
+        Akses Petunjuk Teknis & Grup Komunikasi:
+      </p>
+      
+      <!-- Dynamic Juknis Button -->
+      <a id="closed-modal-juknis-btn"
+         href="#"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="w-full py-2.5 px-4 rounded-xl text-xs font-bold text-[#FDE68A] bg-white/[0.06] hover:bg-white/[0.12] border border-[#F5D061]/35 hover:border-[#F5D061]/70 transition-all flex items-center justify-center gap-2 shadow-sm hover:scale-[1.01]">
+        <svg class="w-4 h-4 text-[#F5D061]"><use href="#i-sparkles"></use></svg>
+        <span>Lihat Ketentuan & Juknis Lengkap</span>
+      </a>
+
+      <!-- Dynamic LINE Group Invitation Button -->
+      <a id="closed-modal-line-btn"
+         href="#"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="w-full py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-[#06C755] hover:bg-[#05b34c] shadow-sm transition-all flex items-center justify-center gap-2 hover:scale-[1.01]">
+        <svg class="w-4 h-4 text-white"><use href="#i-message"></use></svg>
+        <span>Masuk Grup LINE Peserta &rarr;</span>
+      </a>
+    </div>
+
+    <!-- Footer Close Button -->
+    <div class="pt-2 border-t border-white/10">
+      <button type="button" id="btn-close-closed-footer" class="w-full py-2.5 rounded-xl text-xs font-bold text-stone-300 bg-white/10 hover:bg-white/15 hover:text-white transition-colors">
+        Tutup
+      </button>
+    </div>
+
+  </div>
+</div>
