@@ -309,15 +309,6 @@ def api_reset_ballots():
     return resp
 
 
-@bp.post("/api/voting/reset-my-device")
-def api_reset_my_device():
-    session.pop("eduvella_has_voted", None)
-    session.pop("google_user", None)
-    resp = jsonify({"ok": True, "message": "Batas suara di perangkat Anda telah berhasil di-reset!"})
-    resp.delete_cookie("eduvella_voted_token")
-    return resp
-
-
 @bp.get("/api/voting/db-status")
 def api_voting_db_status():
     driver, conn = voting_storage._get_db()
