@@ -70,7 +70,7 @@
       <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-[#F5D061]/15 text-[#FDE68A] border border-[#F5D061]/40 shadow-sm">
         <span class="w-2 h-2 rounded-full bg-[#F5D061] animate-ping"></span>
         <svg class="w-3.5 h-3.5 text-[#F5D061]"><use href="#i-sparkles"></use></svg>
-        Eduvella 2026 &bull; Hari Guru SMA IGS
+        Eduvella 2026 &bull; Hari Guru IGS
       </div>
 
       <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
@@ -86,8 +86,14 @@
           <span class="text-[#F5D061] font-bold">10</span> Kategori Nominasi
         </div>
         <div class="px-3.5 py-1.5 rounded-xl bg-black/60 border border-white/10 text-stone-300 flex items-center gap-2">
-          <span class="text-[#38BDF8] font-bold">200+</span> Guru SMA IGS
+          <span class="text-[#38BDF8] font-bold">{{ teachers|length }}</span> Guru IGS Terdata
         </div>
+        <button type="button"
+                id="btn-open-teacher-roster"
+                class="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/25 text-[#FDE68A] hover:text-white font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm">
+          <svg class="w-3.5 h-3.5 text-[#F5D061]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+          <span>Daftar Guru IGS ({{ teachers|length }})</span>
+        </button>
         <div class="px-3.5 py-1.5 rounded-xl bg-black/60 border border-emerald-500/30 text-emerald-300 flex items-center gap-2">
           <svg class="w-3.5 h-3.5 text-emerald-400"><use href="#i-shield"></use></svg>
           1 Orang = 1x Hak Pilih Sah
@@ -225,10 +231,10 @@
           </button>
         </div>
 
-        <!-- SEARCH ENGINE AUTOCOMPLETE INPUT -->
-        <div id="search-box-container-{{ nom.id }}" class="relative">
-          <label class="block text-xs font-bold text-stone-300 mb-2">
-            Cari & Pilih Guru untuk Nominasi Ini:
+        <!-- SEARCH ENGINE AUTOCOMPLETE INPUT & DIRECT SELECT DROPDOWN -->
+        <div id="search-box-container-{{ nom.id }}" class="relative space-y-2.5">
+          <label class="block text-xs font-bold text-stone-300">
+            Cari atau Pilih Guru untuk Nominasi Ini:
           </label>
           <div class="relative">
             <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#F5D061]"><use href="#i-search"></use></svg>
@@ -248,8 +254,21 @@
 
           <!-- Dropdown Results Box (Elevated with solid background and shadow) -->
           <div id="dropdown-{{ nom.id }}"
-               class="teacher-dropdown hidden absolute top-full left-0 right-0 mt-2 max-h-64 overflow-y-auto rounded-2xl bg-[#0F172A] border border-[#F5D061]/60 shadow-[0_25px_60px_rgba(0,0,0,0.95),0_0_35px_rgba(245,208,97,0.22)] py-2 divide-y divide-white/5">
+               class="teacher-dropdown hidden absolute top-full left-0 right-0 mt-2 max-h-72 overflow-y-auto rounded-2xl bg-[#0F172A] border border-[#F5D061]/60 shadow-[0_25px_60px_rgba(0,0,0,0.95),0_0_35px_rgba(245,208,97,0.22)] py-2 divide-y divide-white/5 z-50">
             <!-- Results populated by Javascript -->
+          </div>
+
+          <!-- Direct Select Dropdown -->
+          <div class="pt-0.5 flex flex-col sm:flex-row sm:items-center gap-2">
+            <span class="text-[11px] text-stone-400 shrink-0">Atau pilih langsung dari daftar:</span>
+            <select id="select-nom-{{ nom.id }}"
+                    data-select-nom="{{ nom.id }}"
+                    class="teacher-native-select w-full py-2.5 px-3 rounded-xl bg-black/80 border border-white/20 text-xs text-white focus:outline-none focus:border-[#F5D061] transition-all cursor-pointer">
+              <option value="">-- Buka & Pilih Dari Daftar Semua Guru ({{ teachers|length }} Guru IGS) --</option>
+              {% for t in teachers %}
+                <option value="{{ t }}">{{ loop.index }}. {{ t }}</option>
+              {% endfor %}
+            </select>
           </div>
         </div>
 
@@ -293,7 +312,7 @@
       </span>
       <h3 class="text-2xl font-black text-white">Terima Kasih Atas Suara Anda!</h3>
       <p class="text-xs text-stone-300 leading-relaxed">
-        Suara dan apresiasi Anda untuk 10 nominasi guru SMA Ignatius Global School telah sukses tersimpan di database resmi. Terima kasih atas partisipasi Anda!
+        Suara dan apresiasi Anda untuk 10 nominasi guru Ignatius Global School telah sukses tersimpan di database resmi. Terima kasih atas partisipasi Anda!
       </p>
     </div>
 
@@ -304,6 +323,66 @@
       <a href="/" class="w-full py-3 rounded-xl font-black text-xs uppercase tracking-wider bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] text-[#0B1120] hover:brightness-110 transition-all text-center">
         Menuju Beranda
       </a>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ROSTER SEMUA GURU IGS -->
+<div id="modal-all-teachers" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md">
+  <div class="relative w-full max-w-3xl max-h-[88vh] flex flex-col rounded-3xl bg-[#0F172A] border border-[#F5D061]/50 shadow-[0_25px_60px_rgba(0,0,0,0.9),0_0_45px_rgba(245,208,97,0.2)] overflow-hidden">
+    
+    <!-- Modal Header -->
+    <div class="p-5 sm:p-6 border-b border-white/10 flex items-center justify-between gap-3 bg-slate-900/90">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#F5D061]/15 text-[#FDE68A] border border-[#F5D061]/35">
+          <span>📚 Roster Resmi</span>
+        </div>
+        <h3 class="text-lg sm:text-2xl font-black text-white mt-1">
+          Daftar Guru Ignatius Global School ({{ teachers|length }} Guru)
+        </h3>
+        <p class="text-xs text-stone-300">
+          Daftar seluruh bapak dan ibu guru IGS terdata untuk nominasi Eduvella 2026.
+        </p>
+      </div>
+      <button type="button"
+              id="btn-close-all-teachers"
+              class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-lg font-bold transition-all shrink-0">
+        &times;
+      </button>
+    </div>
+
+    <!-- Modal Search Filter -->
+    <div class="p-4 border-b border-white/10 bg-black/40">
+      <div class="relative">
+        <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#F5D061]"><use href="#i-search"></use></svg>
+        <input type="text"
+               id="modal-teacher-search"
+               placeholder="Cari nama guru di modal ini..."
+               class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-black/70 border border-white/20 text-xs sm:text-sm text-white placeholder-stone-400 focus:outline-none focus:border-[#F5D061]" />
+      </div>
+    </div>
+
+    <!-- Modal List Body -->
+    <div id="modal-teacher-list" class="p-4 sm:p-6 overflow-y-auto space-y-1 divide-y divide-white/5 text-xs sm:text-sm">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2" id="modal-teacher-grid">
+        {% for t in teachers %}
+        <div class="modal-teacher-item p-2.5 rounded-xl bg-white/5 hover:bg-[#F5D061]/15 border border-white/5 hover:border-[#F5D061]/30 transition-all flex items-center gap-2.5">
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-black/60 text-[#FDE68A] shrink-0 border border-white/10">
+            {{ loop.index }}
+          </span>
+          <span class="text-stone-200 font-medium teacher-label">{{ t }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="p-4 border-t border-white/10 bg-slate-900/90 text-right">
+      <button type="button"
+              id="btn-close-all-teachers-bottom"
+              class="px-5 py-2.5 rounded-xl bg-[#F5D061] hover:bg-[#FDE68A] text-[#0B1120] text-xs font-black uppercase tracking-wider transition-all">
+        Tutup
+      </button>
     </div>
   </div>
 </div>
@@ -426,6 +505,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const selectedName = document.getElementById("selected-name-" + nomId);
     const pillSelected = document.getElementById("pill-selected-" + nomId);
     const searchContainer = document.getElementById("search-box-container-" + nomId);
+    const nativeSelect = document.getElementById("select-nom-" + nomId);
     const clearBtn = searchContainer.querySelector(".btn-clear-search");
 
     function openActiveCard() {
@@ -445,7 +525,7 @@ document.addEventListener("DOMContentLoaded", function() {
       
       let matches = [];
       if (!q) {
-        matches = teachers.slice(0, 30); // initial suggestions
+        matches = teachers; // Tampilkan seluruh guru IGS terdata
       } else {
         matches = teachers.filter(function(t) {
           return t.toLowerCase().includes(q);
@@ -459,6 +539,13 @@ document.addEventListener("DOMContentLoaded", function() {
         dropdown.appendChild(noRes);
         dropdown.classList.remove("hidden");
         return;
+      }
+
+      if (!q) {
+        const headerInfo = document.createElement("div");
+        headerInfo.className = "px-4 py-2 text-[11px] font-bold text-[#FDE68A] bg-white/5 border-b border-white/10 flex items-center justify-between sticky top-0 bg-[#0F172A] z-10";
+        headerInfo.innerHTML = `<span>Daftar Guru IGS (${teachers.length} Guru)</span><span class="text-stone-400 font-normal">Scroll ke bawah untuk nama lain &darr;</span>`;
+        dropdown.appendChild(headerInfo);
       }
 
       matches.forEach(function(teacher) {
@@ -488,6 +575,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function selectTeacher(teacherName) {
       hiddenInput.value = teacherName;
       selectedName.innerText = teacherName;
+      if (nativeSelect) nativeSelect.value = teacherName;
       selectedBox.classList.remove("hidden");
       pillSelected.classList.remove("hidden");
       searchContainer.classList.add("hidden");
@@ -500,6 +588,15 @@ document.addEventListener("DOMContentLoaded", function() {
       if (clearBtn) clearBtn.classList.add("hidden");
 
       updateProgress();
+    }
+
+    if (nativeSelect) {
+      nativeSelect.addEventListener("change", function() {
+        const val = nativeSelect.value;
+        if (val) {
+          selectTeacher(val);
+        }
+      });
     }
 
     searchInput.addEventListener("focus", function() {
@@ -531,6 +628,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (changeBtn) {
       changeBtn.addEventListener("click", function() {
         hiddenInput.value = "";
+        if (nativeSelect) nativeSelect.value = "";
         selectedBox.classList.add("hidden");
         pillSelected.classList.add("hidden");
         searchContainer.classList.remove("hidden");
@@ -667,10 +765,6 @@ document.addEventListener("DOMContentLoaded", function() {
       btnSubmit.disabled = false;
       btnSubmit.innerText = "Kirim Seluruh Pilihan Voting Sekarang";
     }
-      showSubmitAlert("Terjadi kesalahan jaringan: " + err.message, "error");
-      btnSubmit.disabled = false;
-      btnSubmit.innerText = "Kirim Seluruh Pilihan Voting Sekarang";
-    }
   });
 
   function showSubmitAlert(msg, type) {
@@ -681,6 +775,50 @@ document.addEventListener("DOMContentLoaded", function() {
       submitAlert.classList.add("bg-rose-950/70", "text-rose-300", "border-rose-500/50", "border");
     }
     submitAlert.innerText = msg;
+  }
+
+  // 5. Modal Roster Seluruh Guru IGS
+  const btnOpenRoster = document.getElementById("btn-open-teacher-roster");
+  const modalAllTeachers = document.getElementById("modal-all-teachers");
+  const btnCloseAllTeachers = document.getElementById("btn-close-all-teachers");
+  const btnCloseAllTeachersBottom = document.getElementById("btn-close-all-teachers-bottom");
+  const modalTeacherSearch = document.getElementById("modal-teacher-search");
+  const modalTeacherItems = document.querySelectorAll(".modal-teacher-item");
+
+  if (btnOpenRoster && modalAllTeachers) {
+    const openModal = function() {
+      modalAllTeachers.classList.remove("hidden");
+      if (modalTeacherSearch) {
+        modalTeacherSearch.value = "";
+        modalTeacherItems.forEach(function(el) { el.style.display = ""; });
+        setTimeout(function() { modalTeacherSearch.focus(); }, 100);
+      }
+    };
+    const closeModal = function() {
+      modalAllTeachers.classList.add("hidden");
+    };
+
+    btnOpenRoster.addEventListener("click", openModal);
+    if (btnCloseAllTeachers) btnCloseAllTeachers.addEventListener("click", closeModal);
+    if (btnCloseAllTeachersBottom) btnCloseAllTeachersBottom.addEventListener("click", closeModal);
+
+    modalAllTeachers.addEventListener("click", function(e) {
+      if (e.target === modalAllTeachers) closeModal();
+    });
+
+    if (modalTeacherSearch) {
+      modalTeacherSearch.addEventListener("input", function() {
+        const q = modalTeacherSearch.value.trim().toLowerCase();
+        modalTeacherItems.forEach(function(el) {
+          const text = (el.querySelector(".teacher-label")?.textContent || "").toLowerCase();
+          if (!q || text.includes(q)) {
+            el.style.display = "";
+          } else {
+            el.style.display = "none";
+          }
+        });
+      });
+    }
   }
 });
 </script>
