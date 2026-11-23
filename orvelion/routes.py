@@ -302,7 +302,20 @@ def api_reset_ballots():
     if pwd != RESULTS_PASSWORD and not session.get("voting_results_authed"):
         return jsonify({"ok": False, "message": "Akses ditolak. Password panitia diperlukan."}), 403
     ok, msg = voting_storage.reset_ballots()
-    return jsonify({"ok": ok, "message": msg})
+    session.pop("eduvella_has_voted", None)
+    session.pop("google_user", None)
+    resp = jsonify({"ok": ok, "message": msg})
+    resp.delete_cookie("eduvella_voted_token")
+    return resp
+
+
+@bp.post("/api/voting/reset-my-device")
+def api_reset_my_device():
+    session.pop("eduvella_has_voted", None)
+    session.pop("google_user", None)
+    resp = jsonify({"ok": True, "message": "Batas suara di perangkat Anda telah berhasil di-reset!"})
+    resp.delete_cookie("eduvella_voted_token")
+    return resp
 
 
 @bp.get("/api/voting/db-status")

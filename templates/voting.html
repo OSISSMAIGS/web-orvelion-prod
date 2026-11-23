@@ -437,8 +437,15 @@ document.addEventListener("DOMContentLoaded", function() {
     const prevName = localStorage.getItem("eduvella_voted_user") || "";
     if (voterStatusAlert) {
       voterStatusAlert.classList.remove("hidden");
-      voterStatusAlert.className = "p-3.5 rounded-xl text-xs font-bold bg-amber-950/70 text-amber-300 border border-amber-500/40";
-      voterStatusAlert.innerHTML = `⚠️ Perangkat ini telah mencatat pengiriman suara${prevName ? ' atas nama <strong>' + prevName + '</strong>' : ''}. Setiap orang hanya berhak memberikan 1 kali suara!`;
+      voterStatusAlert.className = "p-3.5 rounded-xl text-xs font-bold bg-amber-950/70 text-amber-300 border border-amber-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3";
+      voterStatusAlert.innerHTML = `
+        <div>
+          ⚠️ Perangkat ini telah mencatat pengiriman suara${prevName ? ' atas nama <strong>' + prevName + '</strong>' : ''}. Setiap orang hanya berhak memberikan 1 kali suara!
+        </div>
+        <button type="button" id="btn-reset-this-device" class="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/35 text-amber-200 border border-amber-500/40 text-[11px] font-bold shrink-0 transition-all flex items-center gap-1.5 cursor-pointer">
+          <span>🔄 Reset Testing Perangkat Ini</span>
+        </button>
+      `;
     }
     if (inputVoterName && prevName) {
       inputVoterName.value = prevName;
@@ -450,6 +457,28 @@ document.addEventListener("DOMContentLoaded", function() {
       btnSubmit.innerText = "Anda Sudah Pernah Mengirimkan Suara (1 Orang = 1x Vote)";
     }
   }
+
+  // Handler tombol reset perangkat testing
+  document.addEventListener("click", async function(e) {
+    const btnResetDevice = e.target.closest("#btn-reset-this-device");
+    if (!btnResetDevice) return;
+    
+    btnResetDevice.disabled = true;
+    btnResetDevice.innerText = "Mereset...";
+
+    try {
+      await fetch("/api/voting/reset-my-device", { method: "POST" });
+    } catch(err) {}
+
+    try {
+      localStorage.removeItem("eduvella_voted_flag");
+      localStorage.removeItem("eduvella_voted_user");
+    } catch(e) {}
+    document.cookie = "eduvella_voted_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+    alert("✓ Status pengiriman di perangkat Anda telah di-reset! Halaman akan dimuat ulang agar Anda dapat mencoba mengirim suara kembali.");
+    window.location.reload();
+  });
 
   // Realtime Check Nama Pemilih di Database
   let nameCheckTimer = null;
