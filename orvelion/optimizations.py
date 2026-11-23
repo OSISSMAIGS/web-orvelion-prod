@@ -158,7 +158,7 @@ def _start_sync_retry_thread() -> None:
     retry_unsynced() yang sudah ada (sebelumnya tidak pernah dipanggil)."""
     global _sync_thread_started
 
-    if os.environ.get("ORVELION_SYNC_RETRY", "1").strip().lower() in ("0", "false", "off"):
+    if os.environ.get("ORVELION_SYNC_RETRY", "0").strip().lower() in ("0", "false", "off"):
         return
 
     with _sync_thread_lock:

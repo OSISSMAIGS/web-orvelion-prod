@@ -132,7 +132,6 @@ class NordeliaStorage:
         """
         conn = sqlite3.connect(self.db_path, timeout=10.0)
         try:
-            conn.execute("PRAGMA journal_mode=WAL")
             conn.execute("PRAGMA busy_timeout=5000")
             conn.execute("PRAGMA synchronous=NORMAL")
         except Exception:
@@ -143,6 +142,7 @@ class NordeliaStorage:
         try:
             conn = self._connect()
             c = conn.cursor()
+            c.execute("PRAGMA journal_mode=WAL")
             c.execute("""
                 CREATE TABLE IF NOT EXISTS registrations (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -345,6 +345,7 @@ class NordeliaStorage:
         }
 
         # Simpan ke SQLite
+        conn = None
         try:
             conn = self._connect()
             c = conn.cursor()
@@ -366,7 +367,6 @@ class NordeliaStorage:
             ))
             entry["id"] = c.lastrowid
             conn.commit()
-            conn.close()
         except Exception as e:
             print(f"[DB] Gagal insert sqlite: {e}")
             next_id = 1
@@ -380,6 +380,9 @@ class NordeliaStorage:
                 except Exception:
                     next_id = 1
             entry["id"] = next_id
+        finally:
+            if conn:
+                conn.close()
 
         # Simpan juga ke file JSON sebagai cadangan
         self._append_json(entry)
@@ -400,6 +403,7 @@ class NordeliaStorage:
         Query langsung dengan flag synced_to_sheets=0 — tidak memuat seluruh
         tabel, aman dipanggil berkala oleh thread background."""
         results: List[Dict[str, Any]] = []
+        conn = None
         try:
             conn = self._connect()
             conn.row_factory = sqlite3.Row
@@ -414,9 +418,11 @@ class NordeliaStorage:
             rows = c.fetchall()
             for r in rows:
                 results.append(self._row_to_registration(r))
-            conn.close()
         except Exception as e:
             print(f"[DB] Gagal query unsynced: {e}")
+        finally:
+            if conn:
+                conn.close()
         return results
 
     def retry_unsynced(self, limit: Optional[int] = None) -> int:
@@ -437,14 +443,17 @@ class NordeliaStorage:
         return sent
 
     def _mark_synced(self, reg_id: int):
+        conn = None
         try:
             conn = self._connect()
             c = conn.cursor()
             c.execute("UPDATE registrations SET synced_to_sheets = 1 WHERE id = ?", (reg_id,))
             conn.commit()
-            conn.close()
         except Exception as e:
             print(f"[DB] Gagal update sync status: {e}")
+        finally:
+            if conn:
+                conn.close()
         self._mark_json_synced(reg_id)
 
     def _mark_json_synced(self, reg_id: int):
@@ -481,6 +490,7 @@ class NordeliaStorage:
 
     def delete_registration(self, reg_id: int) -> bool:
         deleted = False
+        conn = None
         try:
             conn = self._connect()
             c = conn.cursor()
@@ -488,9 +498,11 @@ class NordeliaStorage:
             conn.commit()
             if c.rowcount > 0:
                 deleted = True
-            conn.close()
         except Exception as e:
             print(f"[DB] Gagal delete sqlite: {e}")
+        finally:
+            if conn:
+                conn.close()
 
         if os.path.exists(self.json_path):
             try:
@@ -529,6 +541,7 @@ class NordeliaStorage:
 
     def _get_local_registrations(self, category_id: Optional[str] = None) -> List[Dict[str, Any]]:
         results = []
+        conn = None
         try:
             conn = self._connect()
             conn.row_factory = sqlite3.Row
@@ -543,7 +556,6 @@ class NordeliaStorage:
             rows = c.fetchall()
             for r in rows:
                 results.append(self._row_to_registration(r))
-            conn.close()
         except Exception as e:
             print(f"[DB] Gagal query sqlite: {e}")
             if os.path.exists(self.json_path):
@@ -556,6 +568,9 @@ class NordeliaStorage:
                             results = items
                 except Exception:
                     results = []
+        finally:
+            if conn:
+                conn.close()
         return results
 
     def _get_local_counts_by_cabang(self) -> Dict[str, int]:
@@ -563,6 +578,7 @@ class NordeliaStorage:
         # menghitung baris satu per satu di Python, tanpa memuat seluruh isi
         # tabel + parse details_json pada setiap request).
         counts: Dict[str, int] = {}
+        conn = None
         try:
             conn = self._connect()
             c = conn.cursor()
@@ -571,7 +587,6 @@ class NordeliaStorage:
                 "WHERE cabang_id IS NOT NULL AND cabang_id != '' "
                 "GROUP BY cabang_id"
             ).fetchall()
-            conn.close()
             for cid, n in grouped:
                 counts[cid] = n
                 cb = get_cabang_by_id(cid)
@@ -580,6 +595,9 @@ class NordeliaStorage:
             return counts
         except Exception as e:
             print(f"[DB] Gagal hitung per cabang (fallback ke Python): {e}")
+        finally:
+            if conn:
+                conn.close()
 
         counts = {}
         all_regs = self._get_local_registrations()
@@ -595,6 +613,7 @@ class NordeliaStorage:
     def _get_local_summary_stats(self) -> Dict[str, Any]:
         # Optimasi: hitungan kategori via GROUP BY + 5 data terakhir via LIMIT,
         # tanpa memuat seluruh tabel ke memori (hasil identik).
+        conn = None
         try:
             conn = self._connect()
             conn.row_factory = sqlite3.Row
@@ -607,7 +626,6 @@ class NordeliaStorage:
             latest_rows = c.execute(
                 "SELECT * FROM registrations ORDER BY id DESC LIMIT 5"
             ).fetchall()
-            conn.close()
             return {
                 "counts": {
                     "total": sum(by_cat.values()),
@@ -622,6 +640,9 @@ class NordeliaStorage:
             }
         except Exception as e:
             print(f"[DB] Gagal ringkasan statistik (fallback ke Python): {e}")
+        finally:
+            if conn:
+                conn.close()
 
         all_regs = self._get_local_registrations()
         counts = {

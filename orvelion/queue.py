@@ -13,6 +13,10 @@ from flask import Flask, g, jsonify, redirect, request
 # DB Path untuk persistensi multi-worker (Passenger / Gunicorn)
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "nordelia.db")
 
+# Flag kontrol: antrean dinonaktifkan secara default saat pendaftaran ditutup
+# agar seluruh request portal berjalan 100% cepat tanpa hambatan disk I/O SQLite.
+ENABLE_QUEUE = os.environ.get("ENABLE_QUEUE", "0").strip().lower() in ("1", "true", "yes", "on")
+
 _mem_lock = threading.Lock()
 _mem_sessions: dict[str, float] = {}
 
@@ -30,24 +34,31 @@ def _now() -> float:
 
 
 def _get_db():
-    conn = sqlite3.connect(DB_PATH, timeout=3.0)
-    conn.execute("PRAGMA journal_mode=WAL")
+    conn = sqlite3.connect(DB_PATH, timeout=5.0)
+    conn.execute("PRAGMA busy_timeout=5000")
     conn.execute("PRAGMA synchronous=NORMAL")
     return conn
 
 
 def _init_queue_db():
+    conn = None
     try:
-        with _get_db() as conn:
-            conn.execute("""
-                CREATE TABLE IF NOT EXISTS queue_active_sessions (
-                    session_id TEXT PRIMARY KEY,
-                    last_seen REAL NOT NULL
-                )
-            """)
-            conn.commit()
+        conn = sqlite3.connect(DB_PATH, timeout=5.0)
+        conn.execute("PRAGMA journal_mode=WAL")
+        conn.execute("PRAGMA busy_timeout=5000")
+        conn.execute("PRAGMA synchronous=NORMAL")
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS queue_active_sessions (
+                session_id TEXT PRIMARY KEY,
+                last_seen REAL NOT NULL
+            )
+        """)
+        conn.commit()
     except Exception as e:
         print(f"[QueueDB] Init table error: {e}")
+    finally:
+        if conn:
+            conn.close()
 
 
 def cleanup_expired(ttl: int) -> int:
@@ -56,18 +67,22 @@ def cleanup_expired(ttl: int) -> int:
     cutoff = now - ttl
 
     # 1. Bersihkan SQLite (hanya jika sudah melewati interval 30s agar disk tidak terbebani)
+    conn = None
     try:
-        with _get_db() as conn:
-            if now - _last_cleanup_time > _cleanup_interval:
-                conn.execute("DELETE FROM queue_active_sessions WHERE last_seen < ?", (cutoff,))
-                _last_cleanup_time = now
-            cur = conn.execute("SELECT COUNT(*) FROM queue_active_sessions")
-            count = cur.fetchone()[0]
-            conn.commit()
-            _cached_active_count = count
-            return count
+        conn = _get_db()
+        if now - _last_cleanup_time > _cleanup_interval:
+            conn.execute("DELETE FROM queue_active_sessions WHERE last_seen < ?", (cutoff,))
+            _last_cleanup_time = now
+        cur = conn.execute("SELECT COUNT(*) FROM queue_active_sessions")
+        count = cur.fetchone()[0]
+        conn.commit()
+        _cached_active_count = count
+        return count
     except Exception:
         pass
+    finally:
+        if conn:
+            conn.close()
 
     # 2. Fallback memory
     with _mem_lock:
@@ -94,44 +109,48 @@ def try_acquire_slot(session_id: str, max_users: int, ttl: int) -> dict[str, Any
 
     cutoff = now - ttl
 
+    conn = None
     try:
-        with _get_db() as conn:
-            # Hapus yang kedaluwarsa secara berkala (bukan di setiap request)
-            if now - _last_cleanup_time > _cleanup_interval:
-                conn.execute("DELETE FROM queue_active_sessions WHERE last_seen < ?", (cutoff,))
-                _last_cleanup_time = now
+        conn = _get_db()
+        # Hapus yang kedaluwarsa secara berkala (bukan di setiap request)
+        if now - _last_cleanup_time > _cleanup_interval:
+            conn.execute("DELETE FROM queue_active_sessions WHERE last_seen < ?", (cutoff,))
+            _last_cleanup_time = now
 
-            # Cek apakah session_id ini sudah terdaftar
-            cur = conn.execute("SELECT session_id FROM queue_active_sessions WHERE session_id = ?", (session_id,))
-            exists = cur.fetchone() is not None
+        # Cek apakah session_id ini sudah terdaftar
+        cur = conn.execute("SELECT session_id FROM queue_active_sessions WHERE session_id = ?", (session_id,))
+        exists = cur.fetchone() is not None
 
-            if exists:
-                conn.execute("UPDATE queue_active_sessions SET last_seen = ? WHERE session_id = ?", (now, session_id))
-                cur_cnt = conn.execute("SELECT COUNT(*) FROM queue_active_sessions").fetchone()[0]
-                conn.commit()
-                with _verified_lock:
-                    _session_verified[session_id] = now
-                    _cached_active_count = cur_cnt
-                    if len(_session_verified) > 2000:
-                        _session_verified.clear()
-                return {"allowed": True, "activeCount": cur_cnt, "maxAllowed": max_users}
-
-            # Cek total active
+        if exists:
+            conn.execute("UPDATE queue_active_sessions SET last_seen = ? WHERE session_id = ?", (now, session_id))
             cur_cnt = conn.execute("SELECT COUNT(*) FROM queue_active_sessions").fetchone()[0]
-            if cur_cnt < max_users:
-                conn.execute("INSERT OR REPLACE INTO queue_active_sessions (session_id, last_seen) VALUES (?, ?)", (session_id, now))
-                conn.commit()
-                with _verified_lock:
-                    _session_verified[session_id] = now
-                    _cached_active_count = cur_cnt + 1
-                    if len(_session_verified) > 2000:
-                        _session_verified.clear()
-                return {"allowed": True, "activeCount": cur_cnt + 1, "maxAllowed": max_users}
-
             conn.commit()
-            return {"allowed": False, "activeCount": cur_cnt, "maxAllowed": max_users}
+            with _verified_lock:
+                _session_verified[session_id] = now
+                _cached_active_count = cur_cnt
+                if len(_session_verified) > 2000:
+                    _session_verified.clear()
+            return {"allowed": True, "activeCount": cur_cnt, "maxAllowed": max_users}
+
+        # Cek total active
+        cur_cnt = conn.execute("SELECT COUNT(*) FROM queue_active_sessions").fetchone()[0]
+        if cur_cnt < max_users:
+            conn.execute("INSERT OR REPLACE INTO queue_active_sessions (session_id, last_seen) VALUES (?, ?)", (session_id, now))
+            conn.commit()
+            with _verified_lock:
+                _session_verified[session_id] = now
+                _cached_active_count = cur_cnt + 1
+                if len(_session_verified) > 2000:
+                    _session_verified.clear()
+            return {"allowed": True, "activeCount": cur_cnt + 1, "maxAllowed": max_users}
+
+        conn.commit()
+        return {"allowed": False, "activeCount": cur_cnt, "maxAllowed": max_users}
     except Exception:
         pass
+    finally:
+        if conn:
+            conn.close()
 
     # Fallback In-Memory Thread-Safe jika SQLite sibuk atau terkunci
     cleanup_expired(ttl)
@@ -155,15 +174,19 @@ def get_status(session_id: str | None, max_users: int, ttl: int) -> dict[str, An
     cutoff = now - ttl
 
     if session_id:
+        conn = None
         try:
-            with _get_db() as conn:
-                cur = conn.execute("SELECT session_id FROM queue_active_sessions WHERE session_id = ? AND last_seen >= ?", (session_id, cutoff))
-                if cur.fetchone() is not None:
-                    return {"allowed": True, "activeCount": active, "maxAllowed": max_users}
+            conn = _get_db()
+            cur = conn.execute("SELECT session_id FROM queue_active_sessions WHERE session_id = ? AND last_seen >= ?", (session_id, cutoff))
+            if cur.fetchone() is not None:
+                return {"allowed": True, "activeCount": active, "maxAllowed": max_users}
         except Exception:
             with _mem_lock:
                 if session_id in _mem_sessions and _mem_sessions[session_id] >= cutoff:
                     return {"allowed": True, "activeCount": active, "maxAllowed": max_users}
+        finally:
+            if conn:
+                conn.close()
 
     allowed = active < max_users
     return {
@@ -193,11 +216,19 @@ def _is_exempt(path: str) -> bool:
 
 
 def init_queue(app: Flask) -> None:
+    if not ENABLE_QUEUE:
+        # Pendaftaran Nordelia telah selesai. Sistem antrean pasif agar server tidak
+        # melakukan disk I/O berlebihan dan tidak pernah terkena timeout/403.
+        @app.get("/api/queue-status")
+        def queue_status():
+            return jsonify({"allowed": True, "activeCount": 1, "maxAllowed": 9999})
+        return
+
     _init_queue_db()
 
     @app.before_request
     def protect_capacity():
-        if _is_exempt(request.path):
+        if not ENABLE_QUEUE or _is_exempt(request.path):
             return None
 
         cookie_name = app.config.get("SESSION_COOKIE_NAME", "orvelion_session")
@@ -219,6 +250,8 @@ def init_queue(app: Flask) -> None:
 
     @app.after_request
     def attach_capacity_headers(response):
+        if not ENABLE_QUEUE:
+            return response
         slot = getattr(g, "orvelion_slot", None)
         if slot:
             max_users = app.config.get("MAX_ACTIVE_USERS", 150)

@@ -11,6 +11,7 @@ import secrets
 import sqlite3
 import string
 import threading
+import time
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -35,19 +36,29 @@ def is_valid_school_email(email: str) -> bool:
     return domain == SCHOOL_DOMAIN
 
 
+_last_mysql_fail_time = 0.0
+
+
 def _get_mysql_connection():
     """Mencoba koneksi ke MySQL cPanel JagoanHosting jika pustaka pymysql terpasang."""
+    global _last_mysql_fail_time
+
+    user = get_config("DB_USER", "")
+    db_name = get_config("DB_NAME", "")
+    if not user or not db_name:
+        return None
+
+    now = time.time()
+    # Cooldown 30 detik jika sebelumnya gagal konek agar request web tidak lagging
+    if now - _last_mysql_fail_time < 30.0:
+        return None
+
     try:
         import pymysql
 
         host = get_config("DB_HOST", "localhost")
         port = int(get_config("DB_PORT", "3306"))
-        user = get_config("DB_USER", "")
         password = get_config("DB_PASSWORD", "")
-        db_name = get_config("DB_NAME", "")
-
-        if not user or not db_name:
-            return None
 
         conn = pymysql.connect(
             host=host,
@@ -57,10 +68,11 @@ def _get_mysql_connection():
             database=db_name,
             charset="utf8mb4",
             cursorclass=pymysql.cursors.DictCursor,
-            connect_timeout=3,
+            connect_timeout=2,
         )
         return conn
     except Exception:
+        _last_mysql_fail_time = now
         return None
 
 
@@ -75,9 +87,9 @@ class VotingStorage:
             return "mysql", mysql_conn
 
         # Fallback ke SQLite lokal
-        sqlite_conn = sqlite3.connect(LOCAL_SQLITE_PATH, timeout=15)
+        sqlite_conn = sqlite3.connect(LOCAL_SQLITE_PATH, timeout=10)
         sqlite_conn.row_factory = sqlite3.Row
-        sqlite_conn.execute("PRAGMA journal_mode=WAL")
+        sqlite_conn.execute("PRAGMA busy_timeout=5000")
         sqlite_conn.execute("PRAGMA synchronous=NORMAL")
         return "sqlite", sqlite_conn
 
@@ -121,6 +133,7 @@ class VotingStorage:
                     conn.commit()
                 else:
                     cur = conn.cursor()
+                    cur.execute("PRAGMA journal_mode=WAL")
                     cur.execute("""
                         CREATE TABLE IF NOT EXISTS voting_coupons (
                             id INTEGER PRIMARY KEY AUTOINCREMENT,
