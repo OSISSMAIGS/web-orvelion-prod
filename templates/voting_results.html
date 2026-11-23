@@ -1,0 +1,654 @@
+{% extends "base.html" %}
+
+{% block title %}Hasil Voting Guru Eduvella 2026 - OSIS Orvelion SMA IGS{% endblock %}
+
+{% block content %}
+<div class="relative min-h-screen py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-white">
+
+  <!-- Background Glow & Stars -->
+  <div class="pointer-events-none fixed inset-0 overflow-hidden -z-10">
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-[#F5D061]/10 rounded-full blur-[120px]"></div>
+    <div class="absolute top-1/3 -right-40 w-96 h-96 bg-[#38BDF8]/10 rounded-full blur-[130px]"></div>
+    <div class="absolute bottom-10 left-1/3 w-96 h-96 bg-emerald-500/10 rounded-full blur-[140px]"></div>
+  </div>
+
+  <!-- Breadcrumbs & Quick Back -->
+  <div class="mb-6 flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm">
+    <nav class="flex items-center gap-2 text-stone-400">
+      <a href="/" class="hover:text-white transition-colors">Beranda</a>
+      <span>/</span>
+      <a href="/event" class="hover:text-white transition-colors">Event</a>
+      <span>/</span>
+      <a href="/voting" class="hover:text-[#FDE68A] transition-colors">Voting Eduvella</a>
+      <span>/</span>
+      <span class="text-[#F5D061] font-semibold">Hasil & Grafik</span>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="/voting" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-medium text-stone-300 hover:text-white transition-all">
+        <span>&larr; Formulir Voting</span>
+      </a>
+      {% if is_authed %}
+      <button id="btn-refresh-data" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#F5D061]/15 hover:bg-[#F5D061]/25 border border-[#F5D061]/40 text-xs font-bold text-[#FDE68A] transition-all cursor-pointer">
+        <svg id="refresh-icon" class="w-3.5 h-3.5 text-[#F5D061]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+        </svg>
+        <span id="refresh-text">Refresh Data</span>
+      </button>
+      <form action="/voting/hasil/logout" method="POST" class="inline m-0">
+        <button type="submit" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/35 text-xs font-bold text-rose-300 transition-all cursor-pointer">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+          <span>Kunci Hasil</span>
+        </button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Hero Event Banner -->
+  <div class="relative w-full h-44 sm:h-64 md:h-72 rounded-3xl overflow-hidden border border-[#F5D061]/35 shadow-2xl mb-8 group bg-slate-900">
+    <img src="{{ url_for('static', filename='images/eduvella_banner.jpg') }}"
+         alt="Official Banner Eduvella 2026"
+         class="w-full h-full object-cover object-center filter brightness-95 group-hover:scale-102 transition-transform duration-700" />
+    <div class="absolute inset-0 bg-gradient-to-t from-[#0B1120] via-black/35 to-transparent"></div>
+    <div class="absolute top-3.5 left-4 sm:left-6 flex items-center gap-2">
+      <span class="px-3.5 py-1.5 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider bg-[#0B1120]/85 backdrop-blur-md text-[#FDE68A] border border-[#F5D061]/40 shadow-lg flex items-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#F5D061] animate-ping"></span>
+        Official Results &bull; Eduvella 2026
+      </span>
+    </div>
+    <div class="absolute bottom-4 left-4 sm:left-8 right-4 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+      <div>
+        <h1 class="text-2xl sm:text-4xl font-black text-white tracking-tight">
+          HASIL REAL-TIME <span class="bg-gradient-to-r from-white via-[#FDE68A] to-[#F5D061] bg-clip-text text-transparent">VOTING GURU</span>
+        </h1>
+        <p class="text-xs sm:text-sm text-stone-300 font-medium">
+          Apresiasi Penganugerahan Guru Favorit SMA Ignatius Global School
+        </p>
+      </div>
+      <div class="text-[11px] text-stone-300 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 self-start sm:self-auto">
+        Update: <span id="last-updated-time" class="text-[#FDE68A] font-bold">{{ results_data.last_updated }}</span>
+      </div>
+    </div>
+  </div>
+
+  {% if not is_authed %}
+  <!-- ========================================================================= -->
+  <!-- PASSWORD ACCESS GATE CARD (LOCKED STATE) -->
+  <!-- ========================================================================= -->
+  <div class="max-w-xl mx-auto my-12 p-6 sm:p-10 rounded-3xl border border-[#F5D061]/40 backdrop-blur-2xl shadow-2xl relative overflow-hidden"
+       style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.98) 0%, rgba(22, 34, 62, 0.95) 100%); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 45px rgba(245, 208, 97, 0.15);">
+    
+    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#F5D061] to-transparent"></div>
+
+    <div class="text-center space-y-4">
+      <div class="w-16 h-16 mx-auto rounded-2xl flex items-center justify-center text-3xl border border-[#F5D061]/50 shadow-lg"
+           style="background: linear-gradient(135deg, rgba(245, 208, 97, 0.2) 0%, rgba(15, 23, 42, 0.9) 100%);">
+        🔒
+      </div>
+
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-[#F5D061]/15 text-[#FDE68A] border border-[#F5D061]/35">
+        <span class="w-2 h-2 rounded-full bg-[#F5D061] animate-ping"></span>
+        Akses Terproteksi Panitia OSIS
+      </div>
+
+      <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
+        Akses Hasil & Rekapitulasi Terkunci
+      </h2>
+
+      <p class="text-xs sm:text-sm text-stone-300 max-w-md mx-auto leading-relaxed">
+        Demi menjaga kerahasiaan dan integritas penganugerahan Hari Guru Eduvella 2026, halaman grafik perolehan suara dilindungi password resmi panitia.
+      </p>
+
+      {% if error_message %}
+      <div class="p-3.5 rounded-xl bg-rose-950/70 text-rose-300 border border-rose-500/50 text-xs font-bold text-center">
+        ⚠️ {{ error_message }}
+      </div>
+      {% endif %}
+
+      <form method="POST" action="/voting/hasil" class="space-y-4 pt-2">
+        <div class="relative">
+          <input type="password"
+                 name="password"
+                 id="input-results-password"
+                 required
+                 placeholder="Ketik password hasil..."
+                 autocomplete="current-password"
+                 class="w-full px-4 py-3.5 rounded-2xl bg-black/60 border border-[#F5D061]/40 focus:border-[#F5D061] focus:ring-2 focus:ring-[#F5D061]/30 text-white placeholder-stone-500 text-sm focus:outline-none text-center tracking-wider transition-all" />
+        </div>
+
+        <button type="submit"
+                class="w-full py-3.5 px-6 rounded-2xl font-black text-xs uppercase tracking-wider text-[#0B1120] bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-lg hover:scale-[1.02] transition-all flex items-center justify-center gap-2 cursor-pointer">
+          <span>Buka Akses Hasil &rarr;</span>
+        </button>
+      </form>
+
+      <div class="pt-4 border-t border-white/10 text-[11px] text-stone-400">
+        Password khusus untuk panitia: <code class="text-[#FDE68A] font-mono px-2 py-0.5 rounded bg-black/50 border border-white/10">EduvellaVoting</code>
+      </div>
+    </div>
+  </div>
+
+  {% else %}
+  <!-- ========================================================================= -->
+  <!-- UNLOCKED VIEW (CHARTS & LEADERBOARDS) -->
+  <!-- ========================================================================= -->
+  <div class="mb-4 flex items-center justify-between p-3 rounded-2xl bg-emerald-950/50 border border-emerald-500/40 text-xs">
+    <div class="flex items-center gap-2 text-emerald-300 font-bold">
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+      <span>Autentikasi Terverifikasi &bull; Mode Panitia Aktif</span>
+    </div>
+    <button type="button"
+            id="btn-admin-reset-ballots"
+            class="px-3 py-1 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 font-bold text-[11px] transition-colors cursor-pointer">
+      🗑️ Hapus Data Testing (Reset Bersih)
+    </button>
+  </div>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    <div class="p-5 rounded-2xl border border-[#F5D061]/30 backdrop-blur-xl bg-slate-900/80 shadow-lg relative overflow-hidden">
+      <div class="absolute -right-3 -bottom-3 text-5xl opacity-15">🗳️</div>
+      <div class="text-[11px] uppercase tracking-wider font-bold text-stone-400">Total Suara Masuk</div>
+      <div class="text-2xl sm:text-3xl font-black text-[#FDE68A] mt-1" id="stat-total-ballots">
+        {{ results_data.total_ballots }}
+      </div>
+      <div class="text-[10px] text-stone-400 mt-0.5">Surat suara terekam</div>
+    </div>
+
+    <div class="p-5 rounded-2xl border border-sky-500/30 backdrop-blur-xl bg-slate-900/80 shadow-lg relative overflow-hidden">
+      <div class="absolute -right-3 -bottom-3 text-5xl opacity-15">🎓</div>
+      <div class="text-[11px] uppercase tracking-wider font-bold text-stone-400">Siswa Memilih</div>
+      <div class="text-2xl sm:text-3xl font-black text-[#38BDF8] mt-1" id="stat-total-students">
+        {{ results_data.total_students_voted }}
+      </div>
+      <div class="text-[10px] text-stone-400 mt-0.5">Akun Google terverifikasi</div>
+    </div>
+
+    <div class="p-5 rounded-2xl border border-emerald-500/30 backdrop-blur-xl bg-slate-900/80 shadow-lg relative overflow-hidden">
+      <div class="absolute -right-3 -bottom-3 text-5xl opacity-15">🏆</div>
+      <div class="text-[11px] uppercase tracking-wider font-bold text-stone-400">Kategori Nominasi</div>
+      <div class="text-2xl sm:text-3xl font-black text-emerald-400 mt-1">
+        10
+      </div>
+      <div class="text-[10px] text-stone-400 mt-0.5">Kategori apresiasi resmi</div>
+    </div>
+
+    <div class="p-5 rounded-2xl border border-amber-500/30 backdrop-blur-xl bg-slate-900/80 shadow-lg relative overflow-hidden">
+      <div class="absolute -right-3 -bottom-3 text-5xl opacity-15">🔒</div>
+      <div class="text-[11px] uppercase tracking-wider font-bold text-stone-400">Status Validitas</div>
+      <div class="text-sm sm:text-base font-black text-amber-300 mt-2 flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        1 Siswa = 1x Vote
+      </div>
+      <div class="text-[10px] text-stone-400 mt-0.5">@students.ignatiusglobal.sch.id</div>
+    </div>
+  </div>
+
+  <!-- Category Filter Tab Buttons -->
+  <div class="mb-8 p-2 rounded-2xl bg-slate-900/90 border border-white/10 backdrop-blur-xl">
+    <div class="text-[11px] font-bold uppercase tracking-wider text-stone-400 px-3 pt-1 pb-2">
+      Pilih Kategori Nominasi:
+    </div>
+    <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-white/20">
+      <button class="category-filter-btn active whitespace-nowrap px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2"
+              data-cat-target="all">
+        <span>🌟</span>
+        <span>Semua Nominasi</span>
+      </button>
+      {% for nom in results_data.categories %}
+      <button class="category-filter-btn whitespace-nowrap px-3.5 py-2 rounded-xl text-xs font-medium text-stone-300 hover:text-white hover:bg-white/5 border border-transparent transition-all flex items-center gap-1.5"
+              data-cat-target="cat-{{ nom.id }}">
+        <span>{{ nom.icon }}</span>
+        <span>{{ nom.number }}. {{ nom.title }}</span>
+      </button>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- If No Votes Yet in System -->
+  {% if results_data.total_ballots == 0 %}
+  <div class="p-12 text-center rounded-3xl border border-white/10 bg-slate-900/70 backdrop-blur-xl mb-12 space-y-4">
+    <div class="text-6xl animate-bounce">🗳️</div>
+    <h3 class="text-2xl font-black text-white">Belum Ada Suara yang Masuk</h3>
+    <p class="text-sm text-stone-300 max-w-md mx-auto">
+      Kotak suara digital untuk Eduvella 2026 masih kosong. Jadilah yang pertama memberikan suara apresiasi untuk bapak dan ibu guru SMA IGS!
+    </p>
+    <div class="pt-2">
+      <a href="/voting" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-black text-xs uppercase tracking-wider text-[#0B1120] bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-lg transition-transform hover:scale-105">
+        Mulai Voting Sekarang &rarr;
+      </a>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Categories Loop -->
+  <div class="space-y-12" id="categories-container">
+    {% for cat in results_data.categories %}
+    <section id="cat-{{ cat.id }}" class="category-section rounded-3xl border border-white/10 bg-slate-900/75 backdrop-blur-xl p-5 sm:p-8 shadow-2xl relative overflow-hidden transition-all duration-300 hover:border-[#F5D061]/40"
+             style="box-shadow: 0 15px 40px rgba(0,0,0,0.6);">
+      
+      <!-- Top Glow Accent -->
+      <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#F5D061] to-transparent opacity-60"></div>
+
+      <!-- Category Header -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/10">
+        <div class="flex items-start sm:items-center gap-4">
+          <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-3xl shadow-lg border border-white/15 shrink-0"
+               style="background: linear-gradient(135deg, rgba(245,208,97,0.2) 0%, rgba(15,23,42,0.9) 100%);">
+            {{ cat.icon }}
+          </div>
+          <div>
+            <div class="flex flex-wrap items-center gap-2 mb-1">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#F5D061]/20 text-[#FDE68A] border border-[#F5D061]/40">
+                Nominasi #{{ cat.number }}
+              </span>
+              {% if cat.badge %}
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-white/5 text-stone-300 border border-white/10">
+                {{ cat.badge }}
+              </span>
+              {% endif %}
+            </div>
+            <h2 class="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
+              {{ cat.title }}
+            </h2>
+            <div class="text-xs text-[#38BDF8] font-medium italic">{{ cat.subtitle }}</div>
+            <p class="text-xs text-stone-400 mt-1 max-w-2xl leading-relaxed">{{ cat.description }}</p>
+          </div>
+        </div>
+
+        <div class="text-left md:text-right shrink-0 bg-black/40 px-4 py-2.5 rounded-2xl border border-white/10 self-start md:self-auto">
+          <div class="text-[10px] uppercase tracking-wider font-bold text-stone-400">Total Suara Kategori</div>
+          <div class="text-xl sm:text-2xl font-black text-[#FDE68A]">
+            {{ cat.total_votes }} <span class="text-xs font-normal text-stone-400">suara</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top 3 Podium (If there are votes) -->
+      {% if cat.ranked_results %}
+      <div class="pt-6 pb-4">
+        <div class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-4 flex items-center gap-2">
+          <span>👑</span> <span>Peringkat 3 Teratas (Pemimpin Suara Sementara):</span>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Juara 1 (Gold) -->
+          {% if cat.top3|length >= 1 %}
+          {% set top1 = cat.top3[0] %}
+          <div class="p-4 rounded-2xl border-2 border-[#F5D061] bg-gradient-to-b from-[#F5D061]/15 to-slate-900/90 relative overflow-hidden shadow-[0_8px_30px_rgba(245,208,97,0.2)] order-1 md:order-2 md:-translate-y-2">
+            <div class="absolute top-2.5 right-3 text-2xl">🥇</div>
+            <div class="text-[10px] font-black uppercase tracking-wider text-[#FDE68A] flex items-center gap-1">
+              <span>👑 JUARA 1 SEMENTARA</span>
+            </div>
+            <div class="text-lg font-black text-white mt-1 pr-6 truncate" title="{{ top1.name }}">
+              {{ top1.name }}
+            </div>
+            <div class="flex items-baseline gap-2 mt-2">
+              <span class="text-2xl font-black text-[#FDE68A]">{{ top1.count }}</span>
+              <span class="text-xs text-stone-400">suara ({{ top1.percentage }}%)</span>
+            </div>
+            <div class="w-full bg-black/50 h-2 rounded-full overflow-hidden mt-3 border border-white/10">
+              <div class="bg-gradient-to-r from-[#FDE68A] to-[#F5D061] h-full rounded-full" style="width: {{ top1.percentage }}%"></div>
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Juara 2 (Silver) -->
+          {% if cat.top3|length >= 2 %}
+          {% set top2 = cat.top3[1] %}
+          <div class="p-4 rounded-2xl border border-slate-300/60 bg-gradient-to-b from-slate-400/10 to-slate-900/90 relative overflow-hidden shadow-lg order-2 md:order-1">
+            <div class="absolute top-2.5 right-3 text-2xl">🥈</div>
+            <div class="text-[10px] font-black uppercase tracking-wider text-slate-300 flex items-center gap-1">
+              <span>🥈 JUARA 2 SEMENTARA</span>
+            </div>
+            <div class="text-base font-black text-white mt-1 pr-6 truncate" title="{{ top2.name }}">
+              {{ top2.name }}
+            </div>
+            <div class="flex items-baseline gap-2 mt-2">
+              <span class="text-xl font-black text-slate-200">{{ top2.count }}</span>
+              <span class="text-xs text-stone-400">suara ({{ top2.percentage }}%)</span>
+            </div>
+            <div class="w-full bg-black/50 h-2 rounded-full overflow-hidden mt-3 border border-white/10">
+              <div class="bg-slate-300 h-full rounded-full" style="width: {{ top2.percentage }}%"></div>
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Juara 3 (Bronze) -->
+          {% if cat.top3|length >= 3 %}
+          {% set top3 = cat.top3[2] %}
+          <div class="p-4 rounded-2xl border border-amber-600/50 bg-gradient-to-b from-amber-700/10 to-slate-900/90 relative overflow-hidden shadow-lg order-3 md:order-3">
+            <div class="absolute top-2.5 right-3 text-2xl">🥉</div>
+            <div class="text-[10px] font-black uppercase tracking-wider text-amber-400 flex items-center gap-1">
+              <span>🥉 JUARA 3 SEMENTARA</span>
+            </div>
+            <div class="text-base font-black text-white mt-1 pr-6 truncate" title="{{ top3.name }}">
+              {{ top3.name }}
+            </div>
+            <div class="flex items-baseline gap-2 mt-2">
+              <span class="text-xl font-black text-amber-300">{{ top3.count }}</span>
+              <span class="text-xs text-stone-400">suara ({{ top3.percentage }}%)</span>
+            </div>
+            <div class="w-full bg-black/50 h-2 rounded-full overflow-hidden mt-3 border border-white/10">
+              <div class="bg-amber-500 h-full rounded-full" style="width: {{ top3.percentage }}%"></div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Main Visual Grid: Chart on Left, Full Ranking List on Right -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-6">
+        
+        <!-- CHART.JS CONTAINER -->
+        <div class="lg:col-span-7 bg-black/50 p-5 rounded-2xl border border-white/10 shadow-inner flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-4">
+            <div class="text-xs font-bold uppercase tracking-wider text-[#FDE68A] flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-[#F5D061]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+              </svg>
+              <span>Grafik Perolehan Suara (Top Kandidat)</span>
+            </div>
+            <span class="text-[10px] text-stone-400">Chart.js Visual</span>
+          </div>
+
+          <!-- Chart Canvas -->
+          <div class="relative w-full h-64 sm:h-72">
+            <canvas id="chart-cat-{{ cat.id }}"></canvas>
+          </div>
+          
+          <div class="text-[10px] text-stone-400 text-center mt-3 pt-2 border-t border-white/5">
+            *Menampilkan hingga 8 guru dengan suara terbanyak pada kategori ini
+          </div>
+        </div>
+
+        <!-- LEADERBOARD TABLE -->
+        <div class="lg:col-span-5 bg-black/40 p-4 rounded-2xl border border-white/10 shadow-inner flex flex-col">
+          <div class="flex items-center justify-between mb-3 px-1">
+            <div class="text-xs font-bold uppercase tracking-wider text-stone-300">
+              Daftar Lengkap Peringkat
+            </div>
+            <span class="text-[10px] text-stone-400">{{ cat.ranked_results|length }} Guru Mendapat Suara</span>
+          </div>
+
+          <div class="space-y-2 max-h-80 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-white/20">
+            {% for row in cat.ranked_results %}
+            <div class="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 transition-colors flex items-center justify-between gap-3">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <span class="w-6 h-6 rounded-lg flex items-center justify-center text-xs font-black shrink-0
+                             {% if row.rank == 1 %}bg-[#F5D061] text-[#0B1120]
+                             {% elif row.rank == 2 %}bg-slate-300 text-[#0B1120]
+                             {% elif row.rank == 3 %}bg-amber-600 text-white
+                             {% else %}bg-white/10 text-stone-400{% endif %}">
+                  {{ row.rank }}
+                </span>
+                <span class="text-xs font-bold text-white truncate" title="{{ row.name }}">
+                  {{ row.name }}
+                </span>
+              </div>
+              <div class="text-right shrink-0">
+                <div class="text-xs font-black text-[#FDE68A]">{{ row.count }} suara</div>
+                <div class="text-[10px] text-stone-400">{{ row.percentage }}%</div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+      </div>
+
+      {% else %}
+      <!-- Empty state if no votes for this category -->
+      <div class="py-8 text-center text-stone-400 text-xs">
+        Belum ada guru yang dipilih pada kategori ini.
+      </div>
+      {% endif %}
+
+    </section>
+    {% endfor %}
+  </div>
+
+  <!-- Bottom Action Card -->
+  <div class="mt-12 p-8 rounded-3xl border border-[#F5D061]/35 bg-gradient-to-r from-slate-900 via-[#0B1120] to-slate-900 text-center shadow-2xl relative overflow-hidden">
+    <div class="absolute -right-20 -bottom-20 w-60 h-60 bg-[#F5D061]/15 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="max-w-2xl mx-auto space-y-4">
+      <h3 class="text-2xl font-black text-white">Belum Ikut Memberikan Suara?</h3>
+      <p class="text-sm text-stone-300">
+        Setiap suara Anda sangat berarti sebagai wujud apresiasi mendalam bagi para guru SMA Ignatius Global School. Gunakan akun Google siswa resmi Anda untuk berpartisipasi.
+      </p>
+      <div class="pt-2 flex flex-wrap justify-center gap-3">
+        <a href="/voting" class="px-8 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider text-[#0B1120] bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-lg transition-transform hover:scale-105">
+          Buka Formulir Voting Sekarang &rarr;
+        </a>
+        <a href="/event" class="px-6 py-3.5 rounded-2xl font-bold text-xs uppercase tracking-wider text-white bg-white/10 hover:bg-white/15 border border-white/15 transition-all">
+          Kembali ke Halaman Event
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<style>
+  .category-filter-btn.active {
+    background: linear-gradient(135deg, #FDE68A 0%, #F5D061 100%) !important;
+    color: #0B1120 !important;
+    box-shadow: 0 4px 15px rgba(245, 208, 97, 0.35);
+  }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // 1. Data Kategori dari Backend Flask
+  const categoriesData = {{ results_data.categories|tojson|safe }};
+  const chartInstances = {};
+
+  // Warna Palet Orvelion Gelap & Mewah
+  const goldGradientColors = [
+    "rgba(245, 208, 97, 0.9)",
+    "rgba(56, 189, 248, 0.85)",
+    "rgba(16, 185, 129, 0.85)",
+    "rgba(253, 164, 175, 0.85)",
+    "rgba(167, 139, 250, 0.85)",
+    "rgba(251, 146, 60, 0.85)",
+    "rgba(244, 114, 182, 0.85)",
+    "rgba(148, 163, 184, 0.85)",
+  ];
+
+  // 2. Render Grafik Chart.js untuk setiap kategori
+  function initCharts() {
+    categoriesData.forEach(cat => {
+      const canvas = document.getElementById("chart-cat-" + cat.id);
+      if (!canvas) return;
+
+      if (chartInstances[cat.id]) {
+        chartInstances[cat.id].destroy();
+      }
+
+      const labels = cat.chart_labels || [];
+      const data = cat.chart_data || [];
+
+      if (labels.length === 0) {
+        // Tampilkan placeholder kosong jika belum ada suara
+        return;
+      }
+
+      const ctx = canvas.getContext("2d");
+
+      // Potong label nama jika terlalu panjang untuk tampilan grafik horizontal
+      const formattedLabels = labels.map(name => {
+        if (name.length > 25) {
+          return name.substring(0, 23) + "...";
+        }
+        return name;
+      });
+
+      chartInstances[cat.id] = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: formattedLabels,
+          datasets: [{
+            label: "Jumlah Suara",
+            data: data,
+            backgroundColor: function(context) {
+              const idx = context.dataIndex;
+              return goldGradientColors[idx % goldGradientColors.length];
+            },
+            borderRadius: 8,
+            borderSkipped: false,
+            maxBarThickness: 24,
+          }]
+        },
+        options: {
+          indexAxis: "y", // Horizontal Bar Chart
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              backgroundColor: "#0F172A",
+              titleColor: "#FDE68A",
+              bodyColor: "#FFFFFF",
+              borderColor: "#F5D061",
+              borderWidth: 1,
+              padding: 10,
+              boxPadding: 4,
+              callbacks: {
+                title: function(items) {
+                  const idx = items[0].dataIndex;
+                  return labels[idx]; // Tampilkan nama lengkap guru
+                },
+                label: function(context) {
+                  const val = context.raw;
+                  const total = cat.total_votes || 1;
+                  const pct = ((val / total) * 100).toFixed(1);
+                  return ` ${val} Suara (${pct}% dari total)`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: {
+                color: "rgba(255, 255, 255, 0.08)",
+              },
+              ticks: {
+                color: "#94A3B8",
+                precision: 0,
+                stepSize: 1,
+                font: {
+                  size: 11
+                }
+              }
+            },
+            y: {
+              grid: {
+                display: false
+              },
+              ticks: {
+                color: "#F1F5F9",
+                font: {
+                  size: 11,
+                  weight: "bold"
+                }
+              }
+            }
+          }
+        }
+      });
+    });
+  }
+
+  initCharts();
+
+  // 3. Tab Filter Logika (Semua vs Per Kategori)
+  const filterButtons = document.querySelectorAll(".category-filter-btn");
+  const categorySections = document.querySelectorAll(".category-section");
+
+  filterButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      filterButtons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      const target = btn.getAttribute("data-cat-target");
+      if (target === "all") {
+        categorySections.forEach(sec => sec.style.display = "block");
+      } else {
+        categorySections.forEach(sec => {
+          if (sec.id === target) {
+            sec.style.display = "block";
+            sec.scrollIntoView({ behavior: "smooth", block: "start" });
+          } else {
+            sec.style.display = "none";
+          }
+        });
+      }
+    });
+  });
+
+  // 4. Tombol Live Refresh Data (AJAX)
+  const btnRefresh = document.getElementById("btn-refresh-data");
+  const refreshIcon = document.getElementById("refresh-icon");
+  const refreshText = document.getElementById("refresh-text");
+
+  if (btnRefresh) {
+    btnRefresh.addEventListener("click", async () => {
+      refreshIcon.classList.add("animate-spin");
+      refreshText.innerText = "Memuat...";
+      btnRefresh.disabled = true;
+
+      try {
+        const resp = await fetch("/api/voting/results");
+        const json = await resp.json();
+        if (json.ok && json.data) {
+          // Reload halaman untuk merender seluruh komponen dengan data segar
+          window.location.reload();
+        } else {
+          alert("Gagal memuat data terbaru: " + (json.error || "Coba lagi nanti"));
+        }
+      } catch (err) {
+        alert("Koneksi gagal: " + err.message);
+      } finally {
+        refreshIcon.classList.remove("animate-spin");
+        refreshText.innerText = "Refresh Data";
+        btnRefresh.disabled = false;
+      }
+    });
+  }
+
+  // 5. Tombol Reset Data Testing (Admin Panitia)
+  const btnResetBallots = document.getElementById("btn-admin-reset-ballots");
+  if (btnResetBallots) {
+    btnResetBallots.addEventListener("click", async () => {
+      const confirmReset = confirm("PERINGATAN: Apakah Anda yakin ingin MENGHAPUS SEMUA data suara voting testing dan mereset status kupon? Tindakan ini akan mengosongkan kotak suara sehingga siap untuk live posting.");
+      if (!confirmReset) return;
+
+      btnResetBallots.disabled = true;
+      btnResetBallots.innerText = "Mereset data...";
+
+      try {
+        const resp = await fetch("/api/voting/reset-ballots", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password: "EduvellaVoting" })
+        });
+        const res = await resp.json();
+        alert(res.message);
+        if (res.ok) {
+          window.location.reload();
+        }
+      } catch (err) {
+        alert("Gagal mereset: " + err.message);
+      } finally {
+        btnResetBallots.disabled = false;
+        btnResetBallots.innerText = "🗑️ Hapus Data Testing (Reset Bersih)";
+      }
+    });
+  }
+});
+</script>
+{% endblock %}

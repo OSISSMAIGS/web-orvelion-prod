@@ -1,6 +1,7 @@
 import copy
 import json
 import os
+import secrets
 import threading
 import time
 from flask import Blueprint, Response, jsonify, redirect, render_template, request, session, url_for
@@ -33,6 +34,8 @@ from orvelion.sheets_service import (
     get_config,
     storage,
 )
+from orvelion.voting_data import NOMINATIONS, TEACHERS
+from orvelion.voting_db import SCHOOL_DOMAIN, is_valid_school_email, voting_storage
 
 
 def resolve_group_link(cabang_info=None):
@@ -167,6 +170,331 @@ def event():
         ttl=15.0,
         extra_key=("events_json", _f_mtime(_EVENTS_JSON_PATH)),
     )
+
+
+def _decode_jwt_payload(token_str: str) -> dict:
+    try:
+        import base64
+        parts = token_str.split(".")
+        if len(parts) >= 2:
+            payload_b64 = parts[1]
+            rem = len(payload_b64) % 4
+            if rem > 0:
+                payload_b64 += "=" * (4 - rem)
+            decoded = base64.urlsafe_b64decode(payload_b64.encode("utf-8")).decode("utf-8")
+            return json.loads(decoded)
+    except Exception:
+        pass
+    return {}
+
+
+@bp.get("/voting")
+@bp.get("/eduvella")
+@bp.get("/event/voting")
+def voting():
+    google_user = session.get("google_user")
+    has_voted = False
+    voted_at = None
+
+    # Lapisan Proteksi: Cookie perangkat atau flag sesi
+    cookie_token = request.cookies.get("eduvella_voted_token")
+    if cookie_token or session.get("eduvella_has_voted"):
+        has_voted = True
+        voted_at = "Perangkat ini telah mencatat pengiriman suara sebelumnya."
+
+    if google_user and not has_voted:
+        has_voted, voted_at = voting_storage.check_email_voted(google_user.get("email", ""))
+
+    return render_template(
+        "voting.html",
+        **_ctx(
+            active_page="voting",
+            nominations=NOMINATIONS,
+            teachers=TEACHERS,
+            stats=voting_storage.get_stats(),
+            google_client_id=get_config("GOOGLE_CLIENT_ID", ""),
+            school_domain=SCHOOL_DOMAIN,
+            current_user=google_user,
+            has_voted=has_voted,
+            voted_at=voted_at,
+        ),
+    )
+
+
+RESULTS_PASSWORD = get_config("VOTING_RESULTS_PASSWORD", "EduvellaVoting").strip()
+
+
+@bp.route("/voting/hasil", methods=["GET", "POST"])
+@bp.route("/eduvella/hasil", methods=["GET", "POST"])
+@bp.route("/event/voting/hasil", methods=["GET", "POST"])
+def voting_results():
+    error_message = ""
+    # Cek jika submit password form via POST
+    if request.method == "POST":
+        pwd = (request.form.get("password") or "").strip()
+        if pwd == RESULTS_PASSWORD:
+            session["voting_results_authed"] = True
+            return redirect("/voting/hasil")
+        else:
+            error_message = "Password akses salah! Pastikan menggunakan password resmi panitia Eduvella."
+
+    is_authed = bool(session.get("voting_results_authed"))
+    results_data = voting_storage.get_voting_results() if is_authed else {
+        "total_ballots": 0,
+        "total_students_voted": 0,
+        "categories": [],
+        "last_updated": "Terkunci",
+    }
+
+    return render_template(
+        "voting_results.html",
+        **_ctx(
+            active_page="event",
+            is_authed=is_authed,
+            error_message=error_message,
+            results_data=results_data,
+            nominations=NOMINATIONS,
+            stats=voting_storage.get_stats() if is_authed else {},
+        ),
+    )
+
+
+@bp.post("/voting/hasil/auth")
+def voting_results_auth_ajax():
+    data = request.get_json(silent=True) or {}
+    pwd = (data.get("password") or request.form.get("password") or "").strip()
+    if pwd == RESULTS_PASSWORD:
+        session["voting_results_authed"] = True
+        return jsonify({"ok": True, "message": "Autentikasi berhasil!"})
+    return jsonify({"ok": False, "message": "Password salah! Hanya panitia OSIS yang berhak melihat hasil."}), 401
+
+
+@bp.post("/voting/hasil/logout")
+def voting_results_logout():
+    session.pop("voting_results_authed", None)
+    return redirect("/voting/hasil")
+
+
+@bp.get("/api/voting/results")
+def api_voting_results():
+    pwd_query = request.args.get("password", "").strip()
+    pwd_header = request.headers.get("X-Voting-Password", "").strip()
+    is_authed = session.get("voting_results_authed") or (pwd_query == RESULTS_PASSWORD) or (pwd_header == RESULTS_PASSWORD)
+
+    if not is_authed:
+        return jsonify({
+            "ok": False,
+            "error": "Akses hasil voting terkunci. Password resmi diperlukan.",
+            "requires_password": True,
+        }), 401
+
+    data = voting_storage.get_voting_results()
+    return jsonify({
+        "ok": True,
+        "data": data,
+    })
+
+
+@bp.post("/api/voting/reset-ballots")
+def api_reset_ballots():
+    data = request.get_json(silent=True) or {}
+    pwd = (request.headers.get("X-Voting-Password") or data.get("password") or "").strip()
+    if pwd != RESULTS_PASSWORD and not session.get("voting_results_authed"):
+        return jsonify({"ok": False, "message": "Akses ditolak. Password panitia diperlukan."}), 403
+    ok, msg = voting_storage.reset_ballots()
+    return jsonify({"ok": ok, "message": msg})
+
+
+@bp.get("/api/voting/check-nis")
+def check_nis():
+    nis = (request.args.get("nis") or "").strip()
+    if not nis:
+        return jsonify({"ok": False, "message": "NIS wajib diisi."})
+    has_voted, voted_at = voting_storage.check_nis_voted(nis)
+    return jsonify({
+        "ok": True,
+        "nis": nis,
+        "has_voted": has_voted,
+        "voted_at": voted_at,
+    })
+
+
+@bp.get("/api/voting/check-name")
+def check_name():
+    name = (request.args.get("name") or "").strip()
+    if not name or len(name) < 2:
+        return jsonify({"ok": True, "has_voted": False})
+    has_voted, voted_at = voting_storage.check_name_voted(name)
+    return jsonify({
+        "ok": True,
+        "name": name,
+        "has_voted": has_voted,
+        "voted_at": voted_at,
+    })
+
+
+@bp.get("/api/auth/me")
+def auth_me():
+    user = session.get("google_user")
+    if not user:
+        return jsonify({"logged_in": False, "user": None, "has_voted": False})
+    has_voted, voted_at = voting_storage.check_email_voted(user.get("email", ""))
+    return jsonify({
+        "logged_in": True,
+        "user": user,
+        "has_voted": has_voted,
+        "voted_at": voted_at,
+    })
+
+
+@bp.post("/api/auth/google")
+def auth_google():
+    data = request.get_json(silent=True) or {}
+    credential = data.get("credential", "")
+    email = data.get("email", "").strip().lower()
+    name = data.get("name", "").strip()
+    picture = data.get("picture", "")
+
+    # Jika dikirim via Google Identity Services (JWT ID token)
+    if credential:
+        payload = _decode_jwt_payload(credential)
+        if payload:
+            email = payload.get("email", "").strip().lower()
+            name = payload.get("name", "").strip() or payload.get("given_name", "")
+            picture = payload.get("picture", "")
+
+    if not email:
+        return jsonify({"ok": False, "message": "Email Google tidak terdeteksi."}), 400
+
+    if not is_valid_school_email(email):
+        return jsonify({
+            "ok": False,
+            "message": f"Login ditolak. Hanya akun resmi siswa SMA IGS dengan domain @{SCHOOL_DOMAIN} yang berhak melakukan voting.",
+        }), 403
+
+    has_voted, voted_at = voting_storage.check_email_voted(email)
+    user_info = {
+        "email": email,
+        "name": name or email.split("@")[0].replace(".", " ").title(),
+        "picture": picture,
+        "domain": SCHOOL_DOMAIN,
+    }
+    session["google_user"] = user_info
+
+    msg = "Login berhasil dengan akun Google sekolah."
+    if has_voted:
+        msg = f"Anda login sebagai {user_info['name']}, namun akun ini sudah pernah digunakan untuk voting."
+
+    return jsonify({
+        "ok": True,
+        "user": user_info,
+        "has_voted": has_voted,
+        "voted_at": voted_at,
+        "message": msg,
+    })
+
+
+@bp.post("/api/auth/logout")
+def auth_logout():
+    session.pop("google_user", None)
+    return jsonify({"ok": True, "message": "Berhasil logout."})
+
+
+@bp.post("/api/voting/verify-coupon")
+def verify_voting_coupon():
+    data = request.get_json(silent=True) or {}
+    token = data.get("token", "")
+    valid, status, message = voting_storage.check_coupon(token)
+    return jsonify({"ok": valid, "status": status, "message": message})
+
+
+@bp.post("/api/voting/submit")
+def submit_vote():
+    data = request.get_json(silent=True) or {}
+    token = data.get("token", "")
+    votes = data.get("votes", {})
+    email = (data.get("email") or "").strip().lower()
+    name = (data.get("name") or "").strip()
+    nis = (data.get("nis") or "").strip()
+    class_name = (data.get("class_name") or "").strip()
+    device_fp = (data.get("device_fp") or "").strip()
+
+    # Lapisan Proteksi 1: Cek Cookie Keamanan Perangkat & Sesi
+    cookie_token = request.cookies.get("eduvella_voted_token")
+    if cookie_token or session.get("eduvella_has_voted"):
+        return jsonify({
+            "ok": False,
+            "message": "Perangkat atau browser ini sudah pernah digunakan untuk voting. Demi asas pemilu yang jujur dan adil, 1 siswa hanya berhak mengirim 1 kali.",
+            "already_voted": True,
+        }), 403
+
+    # Prioritaskan user yang sedang login di sesi
+    session_user = session.get("google_user")
+    if session_user:
+        email = session_user.get("email", "").lower()
+        name = session_user.get("name", "")
+
+    ip = request.headers.get("X-Forwarded-For", request.remote_addr or "")
+    if ip and "," in ip:
+        ip = ip.split(",")[0].strip()
+
+    ok = False
+    message = ""
+
+    # Sistem Utama: Cukup Masukkan Nama Pemilih / Siswa
+    if name and not (email or nis or token):
+        ok, message = voting_storage.submit_vote_by_name(name, votes, ip_address=ip, device_fp=device_fp)
+
+    # Sistem 1: Voting via Akun Google Resmi Siswa (@students.ignatiusglobal.sch.id)
+    elif email:
+        if not is_valid_school_email(email):
+            return jsonify({
+                "ok": False,
+                "message": f"Hanya akun Google resmi siswa @{SCHOOL_DOMAIN} yang diizinkan untuk voting.",
+            }), 403
+
+        ok, message = voting_storage.submit_vote_with_google(email, name, votes, ip_address=ip, device_fp=device_fp)
+
+    # Sistem 2: Voting via Nomor Induk Siswa (NIS) Resmi
+    elif nis:
+        ok, message = voting_storage.submit_vote_with_nis(nis, name or f"Siswa ({nis})", class_name, votes, ip_address=ip, device_fp=device_fp)
+
+    # Sistem 3: Voting via Kode Blind Kupon Unik OSIS
+    elif token:
+        ok, message = voting_storage.submit_vote(token, votes, ip_address=ip)
+
+    elif name:
+        ok, message = voting_storage.submit_vote_by_name(name, votes, ip_address=ip, device_fp=device_fp)
+
+    else:
+        return jsonify({
+            "ok": False,
+            "message": "Silakan masukkan nama lengkap Anda terlebih dahulu sebelum mengirim suara.",
+        }), 400
+
+    if ok:
+        session["eduvella_has_voted"] = True
+        resp = jsonify({"ok": True, "message": message, "already_voted": True})
+        # Set cookie proteksi 365 hari (1 tahun)
+        resp.set_cookie(
+            "eduvella_voted_token",
+            secrets.token_hex(16),
+            max_age=60 * 60 * 24 * 365,
+            httponly=True,
+            samesite="Lax",
+        )
+        return resp
+    else:
+        return jsonify({"ok": False, "message": message}), 400
+
+
+@bp.get("/api/voting/teachers")
+def search_teachers():
+    q = (request.args.get("q") or "").strip().lower()
+    if not q:
+        return jsonify({"results": TEACHERS[:30]})
+    filtered = [t for t in TEACHERS if q in t.lower()]
+    return jsonify({"results": filtered})
 
 
 

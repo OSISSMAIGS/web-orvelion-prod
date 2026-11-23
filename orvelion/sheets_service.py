@@ -644,13 +644,16 @@ class NordeliaStorage:
 
     def get_counts_by_cabang(self, force_refresh: bool = False) -> Dict[str, int]:
         """
-        Mengembalikan jumlah pendaftar per cabang secara real-time dari Google Spreadsheet
-        dengan fallback otomatis ke database lokal jika offline.
+        Mengembalikan jumlah pendaftar per cabang secara instan dari database lokal.
+        Hanya menghubungi Google Sheet jika force_refresh=True secara eksplisit.
         Menyertakan mapping ID kanonikal, nama, dan seluruh alias sub-event.
         """
-        sheet_data = self.fetch_from_google_sheet(force_refresh=force_refresh)
-        if sheet_data and "counts" in sheet_data:
-            base_counts = sheet_data["counts"]
+        if force_refresh:
+            sheet_data = self.fetch_from_google_sheet(force_refresh=True)
+            if sheet_data and "counts" in sheet_data:
+                base_counts = sheet_data["counts"]
+            else:
+                base_counts = self._get_local_counts_by_cabang()
         else:
             base_counts = self._get_local_counts_by_cabang()
 
@@ -713,20 +716,22 @@ class NordeliaStorage:
         return 0
 
     def get_summary_stats(self, force_refresh: bool = False) -> Dict[str, Any]:
-        """Statistik ringkasan pendaftaran langsung dari Google Spreadsheet (fallback lokal)."""
-        sheet_data = self.fetch_from_google_sheet(force_refresh=force_refresh)
-        if sheet_data and "summary" in sheet_data and sheet_data["summary"]:
-            return sheet_data["summary"]
+        """Statistik ringkasan pendaftaran instan dari database lokal (Google Sheet hanya jika force_refresh)."""
+        if force_refresh:
+            sheet_data = self.fetch_from_google_sheet(force_refresh=True)
+            if sheet_data and "summary" in sheet_data and sheet_data["summary"]:
+                return sheet_data["summary"]
         return self._get_local_summary_stats()
 
     def get_all_registrations(self, category_id: Optional[str] = None, force_refresh: bool = False) -> List[Dict[str, Any]]:
-        """Mengambil seluruh data pendaftar dari Google Spreadsheet (fallback lokal)."""
-        sheet_data = self.fetch_from_google_sheet(force_refresh=force_refresh)
-        if sheet_data and sheet_data.get("registrations") is not None:
-            regs = sheet_data["registrations"]
-            if category_id and category_id.lower() != "semua":
-                return [r for r in regs if r.get("category_id", "").lower() == category_id.lower()]
-            return regs
+        """Mengambil seluruh data pendaftar instan dari database lokal (Google Sheet hanya jika force_refresh)."""
+        if force_refresh:
+            sheet_data = self.fetch_from_google_sheet(force_refresh=True)
+            if sheet_data and sheet_data.get("registrations") is not None:
+                regs = sheet_data["registrations"]
+                if category_id and category_id.lower() != "semua":
+                    return [r for r in regs if r.get("category_id", "").lower() == category_id.lower()]
+                return regs
         return self._get_local_registrations(category_id)
 
 

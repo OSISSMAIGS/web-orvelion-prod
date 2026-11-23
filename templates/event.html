@@ -3,101 +3,264 @@
 {% block content %}
 <script id="events-data" type="application/json">{{ events | tojson | safe }}</script>
 <script id="nordelia-data" type="application/json">{{ nordelia_events | tojson | safe if nordelia_events else '{}' }}</script>
-<section class="relative pt-6 pb-14 border-b border-orvelion-coral/20">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="space-y-4 max-w-3xl">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orvelion-card border border-orvelion-coral/30 text-xs font-semibold text-orvelion-coral">
-        <svg class="w-3.5 h-3.5 text-orvelion-coral"><use href="#i-calendar"></use></svg>
-        Kalender Program Akbar {{ site.period }}
-      </div>
-      <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight">Event <span class="text-gradient-orvelion">Kabinet Orvelion</span></h1>
-      <p class="text-sm sm:text-base text-white/80">Jelajahi rangkaian agenda akbar OSIS {{ site.school }}.</p>
-    </div>
-  </div>
-</section>
 
-<!-- NORDELIA 2026 MAIN SECTION -->
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative">
-  <!-- Soft Glow Orbs Behind Section -->
-  <div class="absolute -top-10 left-10 w-72 h-72 rounded-full blur-[100px] bg-[#38BDF8]/15 pointer-events-none"></div>
-  <div class="absolute -bottom-10 right-10 w-80 h-80 rounded-full blur-[110px] bg-[#F5D061]/15 pointer-events-none"></div>
+<!-- Ambient Glow Background -->
+<div class="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-35">
+  <div class="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full blur-[140px]" style="background: radial-gradient(circle, #38BDF8 0%, rgba(56,189,248,0) 70%);"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full blur-[150px]" style="background: radial-gradient(circle, #F5D061 0%, rgba(245,208,97,0) 70%);"></div>
+  <div class="absolute bottom-10 -right-20 w-[600px] h-[600px] rounded-full blur-[140px]" style="background: radial-gradient(circle, #FDA4AF 0%, rgba(253,164,175,0) 70%);"></div>
+</div>
 
-  <div class="relative rounded-3xl p-8 sm:p-12 border overflow-hidden backdrop-blur-xl"
-       style="background: radial-gradient(circle at 10% 20%, rgba(56,189,248,0.18) 0%, transparent 40%), radial-gradient(circle at 90% 10%, rgba(245,208,97,0.22) 0%, transparent 45%), linear-gradient(135deg, rgba(11,17,32,0.96) 0%, rgba(18,28,52,0.92) 50%, rgba(15,23,42,0.98) 100%); border-color: rgba(245, 208, 97, 0.35); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 50px rgba(245, 208, 97, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.15);">
-    
-    <!-- Top Decorative Line -->
-    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#F5D061] to-transparent opacity-75"></div>
+<div class="relative z-10 space-y-12 pb-20">
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
-      <div class="lg:col-span-7 space-y-5">
-        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#F5D061]/15 text-[#FDE68A] border border-[#F5D061]/40 shadow-sm">
-          <span class="w-2 h-2 rounded-full bg-[#F5D061] animate-ping"></span>
-          <svg class="w-3.5 h-3.5 text-[#F5D061]"><use href="#i-sparkles"></use></svg>
-          Festival Bulan Bahasa & Prestasi SMA IGS 2026
+  <!-- HEADER PAGE BANNER -->
+  <section class="relative pt-6 pb-6 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="space-y-3 max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orvelion-card border border-orvelion-coral/30 text-xs font-semibold text-orvelion-coral">
+          <svg class="w-3.5 h-3.5 text-orvelion-coral"><use href="#i-calendar"></use></svg>
+          Agenda & Program Akbar {{ site.period }}
         </div>
-
-        <div class="space-y-1">
-          <h2 class="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
-            <span class="bg-gradient-to-r from-white via-[#FDE68A] to-[#F5D061] bg-clip-text text-transparent">NORDELIA 2026</span>
-          </h2>
-          <p class="text-base sm:text-lg font-bold text-stone-200">
-            Festival Kompetisi & Panggung Bakat Siswa IGS
-          </p>
-        </div>
-
-        <p class="text-sm text-stone-300 max-w-xl leading-relaxed">
-          Festival akbar tahunan mencakup 48 cabang kompetisi Olahraga, Akademik (OSN & AI), Seni Budaya, dan Bahasa bagi seluruh siswa SMA Ignatius Global School.
+        <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+          Event <span class="bg-gradient-to-r from-white via-[#FDE68A] to-[#F5D061] bg-clip-text text-transparent">Kabinet Orvelion</span>
+        </h1>
+        <p class="text-sm sm:text-base text-white/80">
+          Pusat kegiatan, kompetisi, dan program apresiasi resmi OSIS SMA Ignatius Global School.
         </p>
-
-        <div class="space-y-2.5 pt-2 text-sm text-stone-300">
-          <div class="flex items-center gap-2.5">
-            <div class="w-7 h-7 rounded-lg flex items-center justify-center bg-[#F5D061]/15 border border-[#F5D061]/30">
-              <svg class="w-4 h-4 text-[#F5D061]"><use href="#i-calendar"></use></svg>
-            </div>
-            <span class="text-white font-medium">20 - 21 November 2026</span>
-          </div>
-          <div class="flex items-center gap-2.5">
-            <div class="w-7 h-7 rounded-lg flex items-center justify-center bg-[#F5D061]/15 border border-[#F5D061]/30">
-              <svg class="w-4 h-4 text-[#F5D061]"><use href="#i-clock"></use></svg>
-            </div>
-            <span class="text-white font-medium">07.00 - 15.15 WIB</span>
-          </div>
-          <div class="flex items-center gap-2.5">
-            <div class="w-7 h-7 rounded-lg flex items-center justify-center bg-[#F5D061]/15 border border-[#F5D061]/30">
-              <svg class="w-4 h-4 text-[#F5D061]"><use href="#i-location"></use></svg>
-            </div>
-            <span class="text-white font-medium">SMA Ignatius Global School</span>
-          </div>
-        </div>
-
-        <div class="pt-2">
-          <a href="/nordelia" class="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-wider text-[#0B1120] bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-[0_12px_30px_rgba(245,208,97,0.35)] transition-all hover:scale-105 group">
-            <span>Daftar Lomba Sekarang</span>
-            <span class="text-base group-hover:translate-x-1 transition-transform">&rarr;</span>
-          </a>
-        </div>
-      </div>
-      
-      <div class="lg:col-span-5 flex items-center justify-center">
-        <div class="w-full max-w-md p-3.5 sm:p-4 rounded-3xl border backdrop-blur-xl group transition-all duration-300 hover:border-[#F5D061]/60 overflow-hidden"
-             style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.95) 0%, rgba(24, 34, 62, 0.88) 100%); border-color: rgba(245, 208, 97, 0.35); box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 35px rgba(245, 208, 97, 0.15);">
-          
-          <div class="relative w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black/40">
-            <img src="{{ url_for('static', filename='images/nordelia_banner.jpg') }}" 
-                 alt="Official Banner Nordelia 2026" 
-                 class="w-full h-auto object-cover filter drop-shadow-md transition-transform duration-500 group-hover:scale-105" loading="lazy" decoding="async" />
-            <div class="absolute top-2.5 left-2.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#0B1120]/80 backdrop-blur-md text-[#FDE68A] border border-[#F5D061]/40 shadow-lg">
-              Official Event Banner
-            </div>
-          </div>
-
-          <div class="pt-3 pb-1 text-center space-y-1">
-            <p class="text-xs text-[#FDE68A] font-black tracking-wide">Semangat Sang Pemenang!</p>
-            <p class="text-[11px] text-stone-300">Panggung Prestasi & Kreativitas Siswa SMA IGS</p>
-          </div>
-        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- SEGMENT 1: EVENT YANG SEKARANG (CURRENT / ACTIVE EVENTS) -->
+  <!-- ========================================================================= -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="space-y-6">
+      
+      <!-- Segment Title & Status Badge -->
+      <div class="flex items-center justify-between border-b border-white/10 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-3 h-3 rounded-full bg-emerald-400 animate-ping"></div>
+          <h2 class="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
+            <span>Event yang Sekarang</span>
+            <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+              Sedang Berlangsung
+            </span>
+          </h2>
+        </div>
+        <span class="text-xs text-stone-400 hidden sm:inline">Pilihan Suara Resmi Siswa</span>
+      </div>
+
+      <!-- MAIN CARD: EDUVELLA 2026 (TEACHER AWARDS VOTING) -->
+      <div class="relative rounded-3xl p-6 sm:p-12 border overflow-hidden backdrop-blur-xl group"
+           style="background: radial-gradient(circle at 10% 20%, rgba(245,208,97,0.18) 0%, transparent 45%), radial-gradient(circle at 90% 80%, rgba(56,189,248,0.15) 0%, transparent 45%), linear-gradient(135deg, rgba(11,17,32,0.96) 0%, rgba(18,28,52,0.92) 50%, rgba(15,23,42,0.98) 100%); border-color: rgba(245, 208, 97, 0.4); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 50px rgba(245, 208, 97, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15);">
+        
+        <!-- Top Shimmer Line -->
+        <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#F5D061] to-transparent opacity-80"></div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+          
+          <div class="lg:col-span-7 space-y-5">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#F5D061]/20 text-[#FDE68A] border border-[#F5D061]/40 shadow-sm">
+              <span class="w-2 h-2 rounded-full bg-[#F5D061] animate-ping"></span>
+              <svg class="w-3.5 h-3.5 text-[#F5D061]"><use href="#i-sparkles"></use></svg>
+              Hari Guru &bull; OSIS SMA IGS
+            </div>
+
+            <div class="space-y-2">
+              <h3 class="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
+                Eduvella 2026
+              </h3>
+              <p class="text-base sm:text-lg font-medium text-stone-300">
+                Apresiasi Hari Guru SMA Ignatius Global School
+              </p>
+            </div>
+
+            <p class="text-sm text-stone-300 max-w-xl leading-relaxed">
+              Pilih guru favoritmu untuk 10 kategori nominasi Eduvella 2026. Cukup masukkan nama Anda untuk mulai memilih.
+            </p>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-1 text-xs">
+              <div class="p-3 rounded-2xl bg-black/50 border border-white/10">
+                <div class="text-[10px] font-bold uppercase tracking-wider text-stone-400">Kategori</div>
+                <div class="text-sm font-black text-[#FDE68A]">10 Nominasi</div>
+              </div>
+              <div class="p-3 rounded-2xl bg-black/50 border border-white/10">
+                <div class="text-[10px] font-bold uppercase tracking-wider text-stone-400">Guru Terdata</div>
+                <div class="text-sm font-black text-[#38BDF8]">200+ Guru SMA</div>
+              </div>
+              <div class="p-3 rounded-2xl bg-black/50 border border-white/10 col-span-2 sm:col-span-1">
+                <div class="text-[10px] font-bold uppercase tracking-wider text-stone-400">Sistem</div>
+                <div class="text-sm font-black text-emerald-400">1 Orang = 1x Vote</div>
+              </div>
+            </div>
+
+            <div class="pt-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <a href="/voting"
+                 class="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-wider text-[#0B1120] bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-[0_12px_30px_rgba(245,208,97,0.38)] transition-all hover:scale-105 group text-center">
+                <span>Voting Nominasi Guru</span>
+                <span class="text-base group-hover:translate-x-1 transition-transform">&rarr;</span>
+              </a>
+              <a href="/voting/hasil"
+                 class="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl font-bold text-sm tracking-wider text-[#FDE68A] bg-white/5 hover:bg-white/10 border border-[#F5D061]/40 hover:border-[#F5D061] transition-all text-center">
+                <svg class="w-4 h-4 text-[#F5D061]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+                <span>Lihat Hasil & Grafik &rarr;</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Right Showcase Box: OFFICIAL EDUVELLA BANNER -->
+          <div class="lg:col-span-5 flex items-center justify-center">
+            <div class="w-full max-w-md p-3.5 sm:p-4 rounded-3xl border border-[#F5D061]/40 backdrop-blur-xl bg-slate-900/90 shadow-2xl overflow-hidden group hover:border-[#F5D061]/80 transition-all duration-300"
+                 style="box-shadow: 0 20px 50px rgba(0,0,0,0.7), 0 0 35px rgba(245, 208, 97, 0.15);">
+              
+              <div class="relative w-full rounded-2xl overflow-hidden border border-white/10 bg-black/40 shadow-inner">
+                <img src="{{ url_for('static', filename='images/eduvella_banner.jpg') }}" 
+                     alt="Official Banner Eduvella 2026" 
+                     class="w-full h-auto object-cover filter brightness-95 transition-transform duration-500 group-hover:scale-105" loading="lazy" decoding="async" />
+                <div class="absolute top-2.5 left-2.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-black/80 backdrop-blur-md text-[#FDE68A] border border-[#F5D061]/40 shadow-lg flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#F5D061] animate-ping"></span>
+                  Official Event Banner
+                </div>
+              </div>
+
+              <div class="pt-3 pb-1 text-center space-y-1">
+                <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider bg-[#F5D061]/15 text-[#FDE68A] border border-[#F5D061]/35">
+                  Eduvella 2026
+                </div>
+                <h4 class="text-base font-black text-white">Voting Nominasi Guru</h4>
+                <p class="text-xs text-stone-300">
+                  Pilih guru favoritmu untuk 10 kategori nominasi
+                </p>
+              </div>
+
+              <div class="pt-2 flex items-center gap-2">
+                <a href="/voting" class="flex-1 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider text-center text-[#0B1120] bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-md transition-transform hover:scale-[1.01]">
+                  Voting Nominasi Guru &rarr;
+                </a>
+                <a href="/voting/hasil" class="px-3.5 py-2.5 rounded-xl text-xs font-bold text-center text-[#FDE68A] bg-white/10 hover:bg-white/20 border border-[#F5D061]/40 transition-colors" title="Lihat Hasil Voting (Grafik)">
+                  📊 Hasil
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- SEGMENT 2: PAST EVENT (EVENT SEBELUMNYA) -->
+  <!-- ========================================================================= -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+    <div class="space-y-6">
+      
+      <!-- Segment Title & Status Badge -->
+      <div class="flex items-center justify-between border-b border-white/10 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-3 h-3 rounded-full bg-[#F5D061]"></div>
+          <h2 class="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
+            <span>Past Event</span>
+            <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-stone-800 text-stone-300 border border-white/15">
+              Event Sebelumnya &bull; Selesai
+            </span>
+          </h2>
+        </div>
+        <span class="text-xs text-stone-400 hidden sm:inline">Kilas Balik & Dokumentasi</span>
+      </div>
+
+      <!-- NORDELIA 2026 PAST EVENT CARD -->
+      <div class="relative rounded-3xl p-6 sm:p-12 border overflow-hidden backdrop-blur-xl"
+           style="background: radial-gradient(circle at 10% 20%, rgba(56,189,248,0.12) 0%, transparent 40%), radial-gradient(circle at 90% 10%, rgba(245,208,97,0.15) 0%, transparent 45%), linear-gradient(135deg, rgba(15,23,42,0.94) 0%, rgba(20,30,55,0.9) 100%); border-color: rgba(245, 208, 97, 0.3); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 35px rgba(245, 208, 97, 0.1);">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+          
+          <div class="lg:col-span-7 space-y-5">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-500/15 text-rose-300 border border-rose-500/30 shadow-sm">
+              <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+              Event Telah Selesai Dilaksanakan (20 - 21 November 2026)
+            </div>
+
+            <div class="space-y-1">
+              <h3 class="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
+                <span class="bg-gradient-to-r from-white via-[#FDE68A] to-[#F5D061] bg-clip-text text-transparent">NORDELIA 2026</span>
+              </h3>
+              <p class="text-base sm:text-lg font-bold text-stone-200">
+                Festival Kompetisi & Panggung Bakat Siswa SMA IGS
+              </p>
+            </div>
+
+            <p class="text-sm text-stone-300 max-w-xl leading-relaxed">
+              Festival akbar tahunan yang telah sukses mempertemukan <strong>786 peserta terdaftar</strong> di 48 cabang kompetisi Olahraga, Akademik (OSN & AI), Seni Budaya, dan Bahasa bagi seluruh siswa SMA Ignatius Global School.
+            </p>
+
+            <div class="flex flex-wrap items-center gap-3 pt-1 text-xs">
+              <div class="px-3.5 py-1.5 rounded-xl bg-black/60 border border-white/10 text-stone-300 flex items-center gap-2">
+                <svg class="w-4 h-4 text-[#F5D061]"><use href="#i-calendar"></use></svg>
+                <span>20 - 21 November 2026</span>
+              </div>
+              <div class="px-3.5 py-1.5 rounded-xl bg-black/60 border border-white/10 text-stone-300 flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-400"><use href="#i-check"></use></svg>
+                <span>786 Peserta Berpartisipasi</span>
+              </div>
+              <div class="px-3.5 py-1.5 rounded-xl bg-black/60 border border-white/10 text-stone-300 flex items-center gap-2">
+                <svg class="w-4 h-4 text-[#38BDF8]"><use href="#i-location"></use></svg>
+                <span>SMA Ignatius Global School</span>
+              </div>
+            </div>
+
+            <!-- ACTION BUTTONS: REVIEW & GOOGLE DRIVE DOKUMENTASI -->
+            <div class="pt-3 flex flex-wrap items-center gap-3">
+              <a href="/nordelia"
+                 class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider text-[#0B1120] bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-lg transition-all hover:scale-105">
+                <svg class="w-4 h-4 text-[#0B1120]"><use href="#i-sparkles"></use></svg>
+                <span>Review & Kilas Balik Event</span>
+              </a>
+
+              <a href="https://drive.google.com/drive/folders/1QjuO7vX9MhtvZt92LAbHpCFfwKd3IPGF?usp=sharing"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl font-bold text-xs uppercase tracking-wider text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-all hover:scale-105 shadow-md">
+                <svg class="w-4 h-4 text-[#38BDF8]"><use href="#i-download"></use></svg>
+                <span>Buka Google Drive Dokumentasi</span>
+              </a>
+
+              <a href="/nordelia#section-memories"
+                 class="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl font-bold text-xs uppercase tracking-wider text-[#FDE68A] bg-amber-400/10 hover:bg-amber-400/20 border border-amber-400/30 transition-all">
+                <span>Galeri Foto Wave &rarr;</span>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Banner Showcase -->
+          <div class="lg:col-span-5 flex items-center justify-center">
+            <div class="w-full max-w-md p-3.5 sm:p-4 rounded-3xl border border-[#F5D061]/35 backdrop-blur-xl bg-slate-900/90 shadow-2xl overflow-hidden group">
+              <div class="relative w-full rounded-2xl overflow-hidden border border-white/10 bg-black/40 shadow-inner">
+                <img src="{{ url_for('static', filename='images/nordelia_banner.jpg') }}" 
+                     alt="Official Banner Nordelia 2026" 
+                     class="w-full h-auto object-cover filter brightness-90 transition-transform duration-500 group-hover:scale-105" loading="lazy" decoding="async" />
+                <div class="absolute top-2.5 left-2.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-black/80 backdrop-blur-md text-emerald-400 border border-emerald-500/40 shadow-lg flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                  Event sudah selesai
+                </div>
+              </div>
+
+              <div class="pt-3 pb-1 text-center space-y-1">
+                <p class="text-xs text-[#FDE68A] font-black tracking-wide">Terima Kasih Atas Partisipasi Seluruh Siswa!</p>
+                <p class="text-[11px] text-stone-300">Panggung Prestasi & Bakat Siswa SMA IGS Palembang</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
 {% endblock %}

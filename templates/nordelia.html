@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Nordelia 2026 | {{ site.name }}{% endblock %}
+{% block title %}Nordelia 2026 | Kilas Balik & Dokumentasi | {{ site.name }}{% endblock %}
 {% block content %}
 <!-- Ambient Luxury Aurora Mesh Gradient (Soft Gold, Celestial Sky, Soft Rose) -->
 <div class="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-40">
@@ -16,7 +16,6 @@
   <div class="absolute top-[60%] left-[8%] text-[#F5D061] text-xl animate-pulse" style="animation-delay: 2s;">★</div>
   <div class="absolute top-[40%] right-[10%] text-[#FDA4AF] text-sm animate-pulse" style="animation-delay: 1.5s;">✨</div>
   <div class="absolute bottom-32 left-[25%] text-[#FDE68A] text-base animate-pulse" style="animation-delay: 2.5s;">✦</div>
-  <div class="absolute bottom-16 right-[30%] text-[#F5D061] text-lg animate-pulse" style="animation-delay: 3s;">★</div>
 </div>
 
 <div class="relative z-10">
@@ -28,10 +27,10 @@
         <!-- Left Hero Text -->
         <div class="lg:col-span-7 space-y-5 text-left">
           <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wider backdrop-blur-md"
-               style="background: rgba(244, 63, 94, 0.15); border-color: rgba(244, 63, 94, 0.4); color: #FDA4AF;">
-            <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
-            <svg class="w-4 h-4 text-rose-400"><use href="#i-sparkles"></use></svg>
-            Festival Bulan Bahasa & Prestasi SMA IGS 2026 &bull; Pendaftaran Resmi Ditutup
+               style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.4); color: #6EE7B7;">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <svg class="w-4 h-4 text-emerald-400"><use href="#i-sparkles"></use></svg>
+            Festival Bulan Bahasa & Prestasi SMA IGS 2026 &bull; Event Sudah Selesai
           </div>
 
           <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight leading-none">
@@ -54,11 +53,7 @@
               <strong class="text-[#F5D061] font-black">sports</strong>, 
               <strong class="text-[#38BDF8] font-black">academic</strong>, dan 
               <strong class="text-[#FDA4AF] font-black">arts</strong>. 
-              <strong>Nordelia</strong> menggambarkan kesempatan para siswa untuk memenangi bidang yang mereka dalami di berbagai kategori kompetisi yang hadir di festival ini, yaitu bidang 
-              <span class="text-[#F5D061] font-bold">Olahraga</span>, 
-              <span class="text-[#38BDF8] font-bold">Akademik</span>, 
-              <span class="text-[#FDA4AF] font-bold">Seni</span>, dan 
-              <span class="text-[#FDE68A] font-bold">Bahasa</span>.
+              <strong>Nordelia</strong> menggambarkan kesempatan para siswa untuk memenangi bidang yang mereka dalami di berbagai kategori kompetisi yang hadir di festival ini.
             </p>
 
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-center text-[11px] font-bold">
@@ -83,18 +78,42 @@
 
           <!-- Quick Stats Pills -->
           <div class="flex flex-wrap items-center gap-2 pt-2 text-xs text-stone-300">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-950/70 border border-rose-500/40 text-rose-300 font-bold shadow-sm">
-              <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-              Pendaftaran Telah Ditutup
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 font-bold shadow-sm">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              Event Selesai (20 - 21 Nov 2026)
             </span>
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 border border-[#F5D061]/40 shadow-sm">
               <strong class="text-white">{{ summary.total_cabang }} Cabang Lomba</strong>
             </span>
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 border border-white/20">
               <svg class="w-3.5 h-3.5 text-[#F5D061]"><use href="#i-check"></use></svg>
-              <span id="stat-total-reg">{{ summary.counts.total }} Peserta Terdaftar</span>
+              <span>{{ summary.counts.total }} Peserta Terdaftar</span>
             </span>
           </div>
+
+          <!-- HERO ACTION BUTTONS: REVIEW, DRIVE, & TIMELINE MEMORI -->
+          <div class="pt-3 flex flex-wrap items-center gap-3">
+            <button type="button"
+                    id="btn-open-review-modal"
+                    class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider text-[#0B1120] bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-lg shadow-amber-500/20 transition-all hover:scale-105">
+              <svg class="w-4 h-4 text-[#0B1120]"><use href="#i-sparkles"></use></svg>
+              <span>Review Event Nordelia 2026</span>
+            </button>
+
+            <a href="https://drive.google.com/drive/folders/1QjuO7vX9MhtvZt92LAbHpCFfwKd3IPGF?usp=sharing"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl font-bold text-xs uppercase tracking-wider text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-all hover:scale-105 shadow-md">
+              <svg class="w-4 h-4 text-[#38BDF8]"><use href="#i-download"></use></svg>
+              <span>Google Drive Dokumentasi</span>
+            </a>
+
+            <a href="#section-memories"
+               class="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl font-bold text-xs uppercase tracking-wider text-[#FDE68A] bg-amber-400/10 hover:bg-amber-400/20 border border-amber-400/30 transition-all">
+              <span>Galeri Foto Wave &darr;</span>
+            </a>
+          </div>
+
         </div>
 
         <!-- Right Hero: NORDELIA OFFICIAL BANNER -->
@@ -102,17 +121,13 @@
           <div class="relative w-full max-w-sm sm:max-w-md mx-auto p-3.5 sm:p-4 rounded-3xl border backdrop-blur-xl group overflow-hidden transition-all duration-300 hover:border-[#F5D061]/70"
                style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.95) 0%, rgba(24, 34, 62, 0.88) 100%); border-color: rgba(245, 208, 97, 0.38); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 45px rgba(245, 208, 97, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.15);">
             
-            <!-- Atmospheric glow behind banner -->
-            <div class="absolute -top-16 -left-16 w-48 h-48 rounded-full blur-2xl opacity-40 -z-10 bg-[#38BDF8]"></div>
-            <div class="absolute -bottom-16 -right-16 w-48 h-48 rounded-full blur-2xl opacity-40 -z-10 bg-[#F5D061]"></div>
-            
-            <!-- Official Banner Artwork -->
             <div class="relative w-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black/40">
               <img src="{{ url_for('static', filename='images/nordelia_banner.jpg') }}"
                    alt="Banner Resmi Nordelia 2026"
-                   class="w-full h-auto object-cover filter drop-shadow-[0_15px_25px_rgba(0,0,0,0.6)] transition-transform duration-500 group-hover:scale-105" fetchpriority="high" decoding="async" />
-              <div class="absolute top-2.5 left-2.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#0B1120]/80 backdrop-blur-md text-[#FDE68A] border border-[#F5D061]/40 shadow-lg">
-                Official Event Banner
+                   class="w-full h-auto object-cover filter brightness-95 transition-transform duration-500 group-hover:scale-105" fetchpriority="high" decoding="async" />
+              <div class="absolute top-2.5 left-2.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#0B1120]/80 backdrop-blur-md text-emerald-400 border border-emerald-500/40 shadow-lg flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                Event Sudah Selesai
               </div>
             </div>
 
@@ -122,14 +137,13 @@
               </div>
               <h3 class="text-lg font-black text-white">Semangat Sang Pemenang!</h3>
               <p class="text-xs text-stone-300 max-w-xs mx-auto">
-                "Pilih bidang favoritmu, isi formulirnya, dan jadilah juara di Nordelia 2026!"
+                "Terima kasih kepada 786 peserta yang telah memberikan performa terbaik di Nordelia 2026!"
               </p>
             </div>
 
-            <!-- Quick Action from Mascot -->
             <div class="mt-3">
-              <a href="#section-categories" class="p-3 rounded-xl bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 text-[#0B1120] font-black text-xs block text-center shadow-[0_8px_20px_rgba(245,208,97,0.3)] transition-transform hover:scale-[1.02]">
-                Lihat Kategori Lomba &rarr;
+              <a href="#section-memories" class="p-3 rounded-xl bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 text-[#0B1120] font-black text-xs block text-center shadow-md transition-transform hover:scale-[1.02]">
+                Lihat Dokumentasi & Memori Event &rarr;
               </a>
             </div>
           </div>
@@ -139,54 +153,227 @@
     </div>
   </section>
 
-  <!-- 9 MAIN CATEGORIES SELECTOR -->
-  <section id="section-categories" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8 scroll-mt-24">
-    <div class="text-center max-w-3xl mx-auto mb-10 space-y-2">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest text-[#FDE68A] bg-[#F5D061]/15 border border-[#F5D061]/35 shadow-sm">
-        Kategori Kompetisi Nordelia 2026
+  <!-- ========================================================================= -->
+  <!-- SECTION: DOKUMENTASI & MEMORI TIMELINE WAVE (BINGKAI-BINGKAI FOTO) -->
+  <!-- ========================================================================= -->
+  <section id="section-memories" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-16 scroll-mt-20">
+    <div class="text-center max-w-3xl mx-auto mb-14 space-y-3">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-widest text-[#FDE68A] bg-[#F5D061]/15 border border-[#F5D061]/40 shadow-sm">
+        <svg class="w-3.5 h-3.5 text-[#F5D061]"><use href="#i-sparkles"></use></svg>
+        Galeri Foto & Rekam Jejak Kegiatan
       </div>
-      <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight">
-        Pilih Kategori untuk Melihat <span class="bg-gradient-to-r from-white via-[#FDE68A] to-[#F5D061] bg-clip-text text-transparent">Cabang-Cabangnya</span>
+      <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight">
+        Timeline Wave <span class="bg-gradient-to-r from-white via-[#FDE68A] to-[#F5D061] bg-clip-text text-transparent">Dokumentasi & Memori</span>
       </h2>
-      <p class="text-xs sm:text-sm text-stone-300">
-        Klik salah satu tombol kategori di bawah ini. Kategori dengan sub-cabang akan masuk ke halaman pemilihan cabang.
+      <p class="text-xs sm:text-sm text-stone-300 max-w-xl mx-auto leading-relaxed">
+        Jelajahi alur gelombang momen bersejarah Nordelia 2026 dari upacara pembukaan, ketegangan kompetisi, hingga panggung penganugerahan sang juara.
       </p>
+
+      <!-- Google Drive Link Pill -->
+      <div class="pt-2">
+        <a href="https://drive.google.com/drive/folders/1QjuO7vX9MhtvZt92LAbHpCFfwKd3IPGF?usp=sharing"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold text-[#38BDF8] bg-[#38BDF8]/10 hover:bg-[#38BDF8]/20 border border-[#38BDF8]/30 transition-all hover:scale-105 shadow-sm">
+          <svg class="w-4 h-4"><use href="#i-download"></use></svg>
+          <span>Akses Folder Google Drive Dokumentasi Resmi &rarr;</span>
+        </a>
+      </div>
     </div>
 
-    <!-- Category Buttons Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      {% for cat in nordelia_categories %}
-        <button type="button"
-                data-category-select="{{ cat.id }}"
-                data-has-sub="{{ 'true' if cat.hasSubEvents else 'false' }}"
-                class="category-btn text-left p-5 rounded-2xl border transition-all duration-300 relative overflow-hidden group hover:-translate-y-1.5 hover:border-[#F5D061]/70 hover:shadow-[0_15px_35px_rgba(245,208,97,0.18),0_0_25px_rgba(56,189,248,0.12)]"
-                style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.92) 0%, rgba(22, 34, 62, 0.85) 100%); border-color: rgba(245, 208, 97, 0.25); box-shadow: 0 10px 25px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);">
-          <!-- Top subtle gold shimmer bar -->
-          <div class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#F5D061]/40 to-transparent group-hover:via-[#F5D061] transition-all"></div>
-          
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-xs font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#F5D061]/15 text-[#FDE68A] border border-[#F5D061]/30">
-              {% if cat.hasSubEvents %}{{ cat.subEvents|length }} Cabang{% else %}Direct{% endif %}
+    <!-- WAVE TIMELINE CONTAINER -->
+    <div class="relative">
+      
+      <!-- Sinuous Wave SVG Track (Desktop Only Ambient Curve) -->
+      <div class="hidden lg:block absolute left-1/2 top-10 bottom-10 -translate-x-1/2 w-32 pointer-events-none -z-0 opacity-40">
+        <svg viewBox="0 0 100 1200" preserveAspectRatio="none" class="w-full h-full stroke-[#F5D061]/40" fill="none" stroke-width="3" stroke-dasharray="8 6">
+          <path d="M 50 0 Q 10 200, 50 400 T 50 800 T 50 1200" />
+        </svg>
+      </div>
+
+      <!-- 6 Memory Photo Frame Nodes (Alternating Left/Right) -->
+      <div class="space-y-12 sm:space-y-16 relative z-10">
+
+        <!-- Frame 1: Opening Ceremony (Left) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <div class="lg:col-span-6 lg:text-right space-y-2 order-2 lg:order-1">
+            <span class="inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#F5D061]/20 text-[#FDE68A] border border-[#F5D061]/30">
+              Babak 01 &bull; 20 November 2026
             </span>
-            <div class="w-8 h-8 rounded-full flex items-center justify-center bg-black/60 text-[#F5D061] group-hover:scale-110 group-hover:bg-[#F5D061] group-hover:text-[#0B1120] transition-all shadow-sm">
-              <svg class="w-4 h-4"><use href="#i-chevron"></use></svg>
+            <h3 class="text-xl sm:text-2xl font-black text-white">Opening Ceremony & Parade Kontingen</h3>
+            <p class="text-xs text-stone-300 max-w-md lg:ml-auto leading-relaxed">
+              Pembukaan megah Festival Nordelia 2026 diawali dengan parade semarak kontingen siswa dari tiap angkatan kelas X, XI, dan XII SMA Ignatius Global School.
+            </p>
+          </div>
+          
+          <div class="lg:col-span-6 order-1 lg:order-2">
+            <div class="memory-frame group relative rounded-3xl p-3 sm:p-4 border border-[#F5D061]/40 backdrop-blur-xl bg-gradient-to-br from-black/80 to-slate-900/90 shadow-[0_15px_35px_rgba(0,0,0,0.6),0_0_25px_rgba(245,208,97,0.12)] hover:border-[#F5D061] transition-all hover:scale-[1.02]">
+              <div class="relative aspect-video rounded-2xl overflow-hidden bg-black/60 border border-white/10">
+                <img src="{{ url_for('static', filename='images/memories/opening.svg') }}"
+                     alt="Opening Ceremony Nordelia 2026"
+                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                <div class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-black/80 text-[#FDE68A] border border-[#F5D061]/40">
+                  Foto Dokumentasi #01
+                </div>
+              </div>
+              <div class="pt-2 text-center text-[11px] text-stone-400 font-medium">
+                Bingkai siap diisi foto dokumentasi pembukaan
+              </div>
             </div>
           </div>
-          <h3 class="text-lg font-black text-white tracking-tight leading-snug group-hover:text-[#FDE68A] transition-colors">
-            {{ cat.name }}
-          </h3>
-          <p class="text-xs text-stone-300 mt-2 line-clamp-2 leading-relaxed">
-            {% if cat.description %}{{ cat.description }}{% else %}Klik untuk melihat cabang lomba{% endif %}
-          </p>
-          <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#F5D061] group-hover:text-white transition-colors">
-            <span><strong>{% if cat.hasSubEvents %}Pilih Cabang{% else %}Daftar Langsung{% endif %}</strong></span>
-            <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
-          </div>
-        </button>
-      {% endfor %}
-    </div>
+        </div>
 
+        <!-- Frame 2: Olahraga (Right) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <div class="lg:col-span-6 order-1">
+            <div class="memory-frame group relative rounded-3xl p-3 sm:p-4 border border-[#F59E0B]/40 backdrop-blur-xl bg-gradient-to-br from-black/80 to-slate-900/90 shadow-[0_15px_35px_rgba(0,0,0,0.6),0_0_25px_rgba(245,158,11,0.12)] hover:border-[#F59E0B] transition-all hover:scale-[1.02]">
+              <div class="relative aspect-video rounded-2xl overflow-hidden bg-black/60 border border-white/10">
+                <img src="{{ url_for('static', filename='images/memories/sports.svg') }}"
+                     alt="Kompetisi Olahraga Nordelia 2026"
+                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                <div class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-black/80 text-amber-300 border border-amber-400/40">
+                  Foto Dokumentasi #02
+                </div>
+              </div>
+              <div class="pt-2 text-center text-[11px] text-stone-400 font-medium">
+                Bingkai siap diisi foto arena pertandingan olahraga
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-6 space-y-2 order-2">
+            <span class="inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/30">
+              Babak 02 &bull; 20 November 2026
+            </span>
+            <h3 class="text-xl sm:text-2xl font-black text-white">Gelora Kompetisi Olahraga</h3>
+            <p class="text-xs text-stone-300 max-w-md leading-relaxed">
+              Pertandingan sengit dan sportif di cabang Futsal, Bola Basket 3x3, Bulu Tangkis, dan Tenis Meja menyatukan semangat juang pantang menyerah.
+            </p>
+          </div>
+        </div>
+
+        <!-- Frame 3: Akademik & AI (Left) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <div class="lg:col-span-6 lg:text-right space-y-2 order-2 lg:order-1">
+            <span class="inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-sky-500/20 text-sky-300 border border-sky-500/30">
+              Babak 03 &bull; 20 - 21 November 2026
+            </span>
+            <h3 class="text-xl sm:text-2xl font-black text-white">Adu Prestasi: OSN 9 Cabang & AI Challenge</h3>
+            <p class="text-xs text-stone-300 max-w-md lg:ml-auto leading-relaxed">
+              Uji ketangkasan logika, daya nalar ilmiah, dan inovasi masa depan pada 9 bidang olimpiade sains serta kompetisi Kecerdasan Artifisial (AI).
+            </p>
+          </div>
+
+          <div class="lg:col-span-6 order-1 lg:order-2">
+            <div class="memory-frame group relative rounded-3xl p-3 sm:p-4 border border-sky-400/40 backdrop-blur-xl bg-gradient-to-br from-black/80 to-slate-900/90 shadow-[0_15px_35px_rgba(0,0,0,0.6),0_0_25px_rgba(56,189,248,0.12)] hover:border-sky-400 transition-all hover:scale-[1.02]">
+              <div class="relative aspect-video rounded-2xl overflow-hidden bg-black/60 border border-white/10">
+                <img src="{{ url_for('static', filename='images/memories/academic.svg') }}"
+                     alt="Olimpiade OSN & AI Nordelia 2026"
+                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                <div class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-black/80 text-sky-300 border border-sky-400/40">
+                  Foto Dokumentasi #03
+                </div>
+              </div>
+              <div class="pt-2 text-center text-[11px] text-stone-400 font-medium">
+                Bingkai siap diisi foto suasana olimpiade & lab AI
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Frame 4: Seni, Bahasa & Debat (Right) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <div class="lg:col-span-6 order-1">
+            <div class="memory-frame group relative rounded-3xl p-3 sm:p-4 border border-rose-400/40 backdrop-blur-xl bg-gradient-to-br from-black/80 to-slate-900/90 shadow-[0_15px_35px_rgba(0,0,0,0.6),0_0_25px_rgba(244,63,94,0.12)] hover:border-rose-400 transition-all hover:scale-[1.02]">
+              <div class="relative aspect-video rounded-2xl overflow-hidden bg-black/60 border border-white/10">
+                <img src="{{ url_for('static', filename='images/memories/arts.svg') }}"
+                     alt="Seni Bahasa & Debat Nordelia 2026"
+                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                <div class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-black/80 text-rose-300 border border-rose-400/40">
+                  Foto Dokumentasi #04
+                </div>
+              </div>
+              <div class="pt-2 text-center text-[11px] text-stone-400 font-medium">
+                Bingkai siap diisi foto panggung seni & debat
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-6 space-y-2 order-2">
+            <span class="inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-500/30">
+              Babak 04 &bull; 21 November 2026
+            </span>
+            <h3 class="text-xl sm:text-2xl font-black text-white">Harmoni Seni, Bulan Bahasa & Debat</h3>
+            <p class="text-xs text-stone-300 max-w-md leading-relaxed">
+              Kilau panggung vokal solo, tari kreasi tradisional, cipta puisi, dan argumentasi kritis debat bahasa Indonesia yang memukau dewan juri.
+            </p>
+          </div>
+        </div>
+
+        <!-- Frame 5: Awarding Night (Left) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <div class="lg:col-span-6 lg:text-right space-y-2 order-2 lg:order-1">
+            <span class="inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-400/20 text-[#FDE68A] border border-amber-400/30">
+              Babak 05 &bull; 21 November 2026
+            </span>
+            <h3 class="text-xl sm:text-2xl font-black text-white">Awarding & Penyerahan Medali Juara</h3>
+            <p class="text-xs text-stone-300 max-w-md lg:ml-auto leading-relaxed">
+              Momen sakral pengumuman para juara dari 48 cabang perlombaan serta penyerahan piala dan medali kehormatan bagi para sang pemenang.
+            </p>
+          </div>
+
+          <div class="lg:col-span-6 order-1 lg:order-2">
+            <div class="memory-frame group relative rounded-3xl p-3 sm:p-4 border border-[#F5D061]/50 backdrop-blur-xl bg-gradient-to-br from-black/80 to-slate-900/90 shadow-[0_15px_35px_rgba(0,0,0,0.6),0_0_30px_rgba(245,208,97,0.18)] hover:border-[#F5D061] transition-all hover:scale-[1.02]">
+              <div class="relative aspect-video rounded-2xl overflow-hidden bg-black/60 border border-white/10">
+                <img src="{{ url_for('static', filename='images/memories/awarding.svg') }}"
+                     alt="Awarding Nordelia 2026"
+                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                <div class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-black/80 text-[#FDE68A] border border-[#F5D061]/40">
+                  Foto Dokumentasi #05
+                </div>
+              </div>
+              <div class="pt-2 text-center text-[11px] text-stone-400 font-medium">
+                Bingkai siap diisi foto panggung penganugerahan medali
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Frame 6: Euforia & Kebersamaan (Right) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <div class="lg:col-span-6 order-1">
+            <div class="memory-frame group relative rounded-3xl p-3 sm:p-4 border border-emerald-400/40 backdrop-blur-xl bg-gradient-to-br from-black/80 to-slate-900/90 shadow-[0_15px_35px_rgba(0,0,0,0.6),0_0_25px_rgba(16,185,129,0.12)] hover:border-emerald-400 transition-all hover:scale-[1.02]">
+              <div class="relative aspect-video rounded-2xl overflow-hidden bg-black/60 border border-white/10">
+                <img src="{{ url_for('static', filename='images/memories/euphoria.svg') }}"
+                     alt="Euforia Nordelia 2026"
+                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                <div class="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-black/80 text-emerald-300 border border-emerald-400/40">
+                  Foto Dokumentasi #06
+                </div>
+              </div>
+              <div class="pt-2 text-center text-[11px] text-stone-400 font-medium">
+                Bingkai siap diisi foto kebersamaan panitia & peserta
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-6 space-y-2 order-2">
+            <span class="inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+              Babak 06 &bull; Kilas Balik
+            </span>
+            <h3 class="text-xl sm:text-2xl font-black text-white">Euforia & Kebersamaan Keluarga Besar IGS</h3>
+            <p class="text-xs text-stone-300 max-w-md leading-relaxed">
+              Tawa, kebanggaan, dan memori tak terlupakan yang terukir bersama jajaran panitia OSIS Kabinet Orvelion serta seluruh guru dan siswa tercinta.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </section>
+
+
+
   <!-- STRUKTUR PANITIA PELAKSANA NORDELIA 2026 -->
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-14">
     <div class="rounded-3xl p-8 sm:p-10 border border-[#F5D061]/35 backdrop-blur-xl relative overflow-hidden"
@@ -201,7 +388,7 @@
           Panitia Pelaksana <span class="bg-gradient-to-r from-white via-[#FDE68A] to-[#F5D061] bg-clip-text text-transparent">Nordelia 2026</span>
         </h3>
         <p class="text-xs sm:text-sm text-stone-300">
-          Tim inti kepengurusan OSIS SMA Ignatius Global School yang mengawal seluruh rangkaian kompetisi dan panggung bakat siswa.
+          Tim inti kepengurusan OSIS SMA Ignatius Global School yang telah mengawal suksesnya seluruh rangkaian kompetisi.
         </p>
       </div>
 
@@ -259,52 +446,60 @@
 </div>
 
 <!-- ========================================================================= -->
-<!-- DYNAMIC REGISTRATION FORM MODAL -->
+<!-- MODAL: REVIEW EVENT NORDELIA 2026 -->
 <!-- ========================================================================= -->
-<div id="modal-register" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-  <div class="relative w-full max-w-xl rounded-3xl p-6 sm:p-8 bg-[#0F172A] border border-[#F5D061]/40 shadow-[0_25px_60px_rgba(0,0,0,0.8),0_0_35px_rgba(245,208,97,0.15)] max-h-[92vh] overflow-y-auto shadow-2xl">
+<div id="modal-review" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+  <div class="relative w-full max-w-2xl rounded-3xl p-6 sm:p-8 bg-[#0F172A] border border-[#F5D061]/50 shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_40px_rgba(245,208,97,0.2)] max-h-[90vh] overflow-y-auto space-y-5">
     
-    <button type="button" id="btn-close-register-modal" class="absolute top-5 right-5 p-2 rounded-full bg-white/10 text-stone-300 hover:text-white" aria-label="Tutup">
+    <button type="button" id="btn-close-review-modal" class="absolute top-5 right-5 p-2 rounded-full bg-white/10 text-stone-300 hover:text-white" aria-label="Tutup">
       <svg class="w-5 h-5"><use href="#i-x"></use></svg>
     </button>
 
-    <div class="flex items-center gap-3 mb-4">
-      <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-gradient-to-tr from-[#38BDF8] via-[#FDE68A] to-[#F5D061] text-[#0B1120] font-black">
-        <svg class="w-5 h-5"><use href="#i-trophy"></use></svg>
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 rounded-2xl flex items-center justify-center bg-gradient-to-tr from-[#FDE68A] via-[#F5D061] to-[#E5B869] text-[#0B1120] font-black text-2xl shadow-lg">
+        🏆
       </div>
       <div>
-        <span id="form-badge-category" class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#F5D061]/15 text-[#FDE68A] border border-[#F5D061]/35">
-          Kategori
+        <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#F5D061]/20 text-[#FDE68A] border border-[#F5D061]/40">
+          Kilas Balik Resmi
         </span>
-        <h3 id="form-cabang-title" class="text-xl sm:text-2xl font-black text-white">Formulir Pendaftaran</h3>
+        <h3 class="text-xl sm:text-2xl font-black text-white">Review & Rekap Nordelia 2026</h3>
       </div>
     </div>
 
-    <div id="form-rule-box" class="p-3 rounded-xl bg-black/50 border border-white/10 text-xs text-stone-300 mb-5">
-      <!-- Rule injected dynamically -->
-    </div>
-
-    <!-- Alert status -->
-    <div id="form-alert" class="hidden p-3 rounded-xl mb-4 text-xs font-bold"></div>
-
-    <form id="nordelia-reg-form" class="space-y-4">
-      <input type="hidden" name="category_id" id="input-category-id" value="" />
-      <input type="hidden" name="cabang_id" id="input-cabang-id" value="" />
-
-      <!-- Dynamic Form Fields will be inserted here -->
-      <div id="dynamic-form-fields" class="space-y-4"></div>
-
-      <div class="pt-2">
-        <button type="submit" id="btn-submit-registration"
-                class="w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-wider text-black bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] text-[#0B1120] hover:brightness-110 shadow-[0_10px_25px_rgba(245,208,97,0.35)] hover:brightness-110 shadow-lg transition-all hover:scale-[1.01] flex items-center justify-center gap-2">
-          <span><strong>Kirim Pendaftaran</strong></span>
-        </button>
+    <!-- Review Content -->
+    <div class="space-y-4 text-xs sm:text-sm text-stone-200 leading-relaxed">
+      <div class="p-4 rounded-2xl bg-black/50 border border-white/10 space-y-2">
+        <h4 class="font-black text-[#FDE68A] text-sm">Pencapaian Akbar Nordelia 2026:</h4>
+        <ul class="space-y-1.5 text-stone-300 list-disc list-inside">
+          <li><strong>786 Peserta</strong> terdaftar resmi dari seluruh angkatan kelas X, XI, dan XII SMA IGS Palembang.</li>
+          <li><strong>48 Cabang Lomba</strong> tuntas dilaksanakan mencakup Olahraga, Olimpiade Sains, Kecerdasan Artifisial, Seni Musik & Tari, serta Bahasa.</li>
+          <li>Penyelenggaraan berjalan tertib, tepat waktu, dan penuh atmosfer sportivitas tinggi.</li>
+        </ul>
       </div>
 
-      <p class="text-[11px] text-center text-stone-400">
-        Data pendaftaran akan diverifikasi dan diproses oleh panitia cabang lomba terkait.
-      </p>
-    </form>
+      <div class="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/30 text-emerald-200 space-y-1">
+        <div class="font-black text-sm text-emerald-300">Pesan Apresiasi Panitia Pelaksana:</div>
+        <p class="text-xs text-stone-300 leading-relaxed">
+          "Terima kasih yang sebesar-besarnya kepada Bapak/Ibu Guru pembina, seluruh panitia OSIS Kabinet Orvelion, serta seluruh siswa SMA IGS yang telah berpartisipasi dan mengerahkan segenap daya terbaiknya. Nordelia 2026 telah membuktikan bahwa siswa IGS adalah para juara!"
+        </p>
+      </div>
+    </div>
+
+    <!-- Links -->
+    <div class="pt-2 flex flex-col sm:flex-row gap-3">
+      <a href="https://drive.google.com/drive/folders/1QjuO7vX9MhtvZt92LAbHpCFfwKd3IPGF?usp=sharing"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="w-full py-3 rounded-xl font-bold text-xs uppercase tracking-wider text-center bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all flex items-center justify-center gap-2">
+        <svg class="w-4 h-4 text-[#38BDF8]"><use href="#i-download"></use></svg>
+        <span>Buka Google Drive Dokumentasi</span>
+      </a>
+      <button type="button" id="btn-close-review-footer" class="w-full py-3 rounded-xl font-black text-xs uppercase tracking-wider text-center bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] text-[#0B1120] hover:brightness-110 transition-all">
+        Tutup Review
+      </button>
+    </div>
+
   </div>
 </div>
 
@@ -312,8 +507,7 @@
 <!-- MODAL PEMILIHAN JURUSAN IPA / IPS UNTUK OSN -->
 <!-- ========================================================================= -->
 <div id="modal-osn-jurusan" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-  <div class="relative w-full max-w-2xl rounded-3xl p-6 sm:p-8 bg-[#0F172A] border border-[#F5D061]/40 shadow-[0_25px_60px_rgba(0,0,0,0.8),0_0_35px_rgba(245,208,97,0.15)] max-h-[92vh] overflow-y-auto shadow-2xl">
-    
+  <div class="relative w-full max-w-2xl rounded-3xl p-6 sm:p-8 bg-[#0F172A] border border-[#F5D061]/40 shadow-2xl max-h-[92vh] overflow-y-auto">
     <button type="button" id="btn-close-osn-modal" class="absolute top-5 right-5 p-2 rounded-full bg-white/10 text-stone-300 hover:text-white" aria-label="Tutup">
       <svg class="w-5 h-5"><use href="#i-x"></use></svg>
     </button>
@@ -336,25 +530,15 @@
 
     <!-- 2 Pilihan Card: IPA vs IPS -->
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      
-      <!-- Card IPA -->
       <a href="/nordelia/osn?jurusan=ipa"
-         class="group p-5 rounded-2xl border border-white/15 bg-black/40 hover:bg-black/70 hover:border-[#38BDF8] transition-all duration-300 flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl">
+         class="group p-5 rounded-2xl border border-white/15 bg-black/40 hover:bg-black/70 hover:border-[#38BDF8] transition-all flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl">
         <div class="space-y-3">
           <div class="flex items-center justify-between">
-            <span class="w-10 h-10 rounded-xl flex items-center justify-center bg-[#38BDF8]/20 text-[#38BDF8] text-2xl font-black">
-              🔬
-            </span>
-            <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#38BDF8]/20 text-[#38BDF8] border border-[#38BDF8]/30">
-              Akses Penuh • 9 Cabang
-            </span>
+            <span class="w-10 h-10 rounded-xl flex items-center justify-center bg-[#38BDF8]/20 text-[#38BDF8] text-2xl font-black">🔬</span>
+            <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#38BDF8]/20 text-[#38BDF8] border border-[#38BDF8]/30">Akses Penuh • 9 Cabang</span>
           </div>
-          <h4 class="text-lg font-black text-white group-hover:text-[#38BDF8] transition-colors">
-            Kelas IPA (MIPA)
-          </h4>
-          <p class="text-xs text-stone-300 leading-relaxed">
-            Siswa kelas IPA diperbolehkan mendaftar di <strong>seluruh 9 cabang OSN</strong> (Matematika, Fisika, Kimia, Biologi, Astronomi, Informatika, Kebumian, Geografi, Ekonomi).
-          </p>
+          <h4 class="text-lg font-black text-white group-hover:text-[#38BDF8] transition-colors">Kelas IPA (MIPA)</h4>
+          <p class="text-xs text-stone-300">Seluruh 9 cabang OSN.</p>
         </div>
         <div class="mt-5 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#38BDF8]">
           <span>Pilih Kelas IPA</span>
@@ -362,31 +546,21 @@
         </div>
       </a>
 
-      <!-- Card IPS -->
       <a href="/nordelia/osn?jurusan=ips"
-         class="group p-5 rounded-2xl border border-white/15 bg-black/40 hover:bg-black/70 hover:border-[#FBBF24] transition-all duration-300 flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl">
+         class="group p-5 rounded-2xl border border-white/15 bg-black/40 hover:bg-black/70 hover:border-[#FBBF24] transition-all flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl">
         <div class="space-y-3">
           <div class="flex items-center justify-between">
-            <span class="w-10 h-10 rounded-xl flex items-center justify-center bg-[#FBBF24]/20 text-[#FBBF24] text-2xl font-black">
-              📚
-            </span>
-            <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FBBF24]/20 text-[#FBBF24] border border-[#FBBF24]/30">
-              4 Cabang Pilihan
-            </span>
+            <span class="w-10 h-10 rounded-xl flex items-center justify-center bg-[#FBBF24]/20 text-[#FBBF24] text-2xl font-black">📚</span>
+            <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FBBF24]/20 text-[#FBBF24] border border-[#FBBF24]/30">4 Cabang Pilihan</span>
           </div>
-          <h4 class="text-lg font-black text-white group-hover:text-[#FBBF24] transition-colors">
-            Kelas IPS (Sosial)
-          </h4>
-          <p class="text-xs text-stone-300 leading-relaxed">
-            Siswa kelas IPS diperbolehkan mendaftar pada cabang <strong>Matematika</strong>, <strong>Kebumian</strong>, <strong>Geografi</strong>, dan <strong>Ekonomi</strong>.
-          </p>
+          <h4 class="text-lg font-black text-white group-hover:text-[#FBBF24] transition-colors">Kelas IPS (Sosial)</h4>
+          <p class="text-xs text-stone-300">Matematika, Kebumian, Geografi, dan Ekonomi.</p>
         </div>
         <div class="mt-5 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#FBBF24]">
           <span>Pilih Kelas IPS</span>
           <span class="text-base group-hover:translate-x-1 transition-transform">&rarr;</span>
         </div>
       </a>
-
     </div>
 
     <div class="mt-6 pt-4 border-t border-white/10 text-center">
@@ -394,46 +568,58 @@
         Batal / Kembali
       </button>
     </div>
-
   </div>
 </div>
 
-{% include "partials/nordelia_success.html" %}
-{% include "partials/nordelia_jurusan_modal.html" %}
 {% include "partials/nordelia_ketentuan_modal.html" %}
 {% include "partials/nordelia_closed_modal.html" %}
 
-<!-- DATA JSON SCRIPT FOR INTERACTION -->
-<script id="nordelia-data-cabang" type="application/json">{{ cabang_lomba | tojson | safe }}</script>
-<script id="nordelia-data-formats" type="application/json">{{ format_registrasi | tojson | safe }}</script>
-<script id="nordelia-data-ketentuan" type="application/json">{{ (ketentuan_detail or {}) | tojson | safe }}</script>
-
 <script>
-  // Bridge to guarantee Juknis Drive button on AI modal
-  document.addEventListener("DOMContentLoaded", function() {
-    document.body.classList.remove("overflow-hidden");
-    const aiJuknisLink = "https://drive.google.com/drive/folders/1QjuO7vX9MhtvZt92LAbHpCFfwKd3IPGF?usp=drive_link";
-    
-    const origOpenReg = window.openRegisterModal;
-    window.openRegisterModal = function(cabangId) {
-      if (typeof origOpenReg === "function") {
-        origOpenReg(cabangId);
+document.addEventListener("DOMContentLoaded", function() {
+  // Review Modal Handlers
+  const modalReview = document.getElementById("modal-review");
+  const btnOpenReview = document.getElementById("btn-open-review-modal");
+  const btnCloseReview = document.getElementById("btn-close-review-modal");
+  const btnCloseReviewFooter = document.getElementById("btn-close-review-footer");
+
+  if (btnOpenReview && modalReview) {
+    btnOpenReview.addEventListener("click", function() {
+      modalReview.classList.remove("hidden");
+    });
+  }
+  if (btnCloseReview && modalReview) {
+    btnCloseReview.addEventListener("click", function() {
+      modalReview.classList.add("hidden");
+    });
+  }
+  if (btnCloseReviewFooter && modalReview) {
+    btnCloseReviewFooter.addEventListener("click", function() {
+      modalReview.classList.add("hidden");
+    });
+  }
+
+  // OSN Jurusan Modal Handlers
+  const modalOsn = document.getElementById("modal-osn-jurusan");
+  const btnCancelOsn = document.getElementById("btn-cancel-osn-modal");
+  const btnCloseOsn = document.getElementById("btn-close-osn-modal");
+
+  document.querySelectorAll("[data-category-select]").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      const catId = btn.getAttribute("data-category-select");
+      if (catId === "olimpiade-9-cabang" || catId === "osn") {
+        if (modalOsn) modalOsn.classList.remove("hidden");
+      } else {
+        window.location.href = "/nordelia/" + catId;
       }
-      if (cabangId === "ai" || cabangId === "olimpiade-ai") {
-        const ruleBox = document.getElementById("form-rule-box");
-        if (ruleBox && !ruleBox.querySelector("a[href*='drive.google.com']")) {
-          const juknisDiv = document.createElement("div");
-          juknisDiv.className = "mt-2.5 pt-2 border-t border-white/10";
-          juknisDiv.innerHTML = `
-            <a href="${aiJuknisLink}" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold text-[#FDE68A] bg-white/[0.06] hover:bg-white/[0.12] border border-[#F5D061]/35 hover:border-[#F5D061]/70 transition-all flex items-center justify-center gap-2 shadow-sm hover:scale-[1.01]">
-              <svg class="w-4 h-4 text-[#F5D061]"><use href="#i-sparkles"></use></svg>
-              <span>Lihat Ketentuan & Juknis Lengkap</span>
-            </a>
-          `;
-          ruleBox.appendChild(juknisDiv);
-        }
-      }
-    };
+    });
   });
+
+  if (btnCancelOsn && modalOsn) {
+    btnCancelOsn.addEventListener("click", function() { modalOsn.classList.add("hidden"); });
+  }
+  if (btnCloseOsn && modalOsn) {
+    btnCloseOsn.addEventListener("click", function() { modalOsn.classList.add("hidden"); });
+  }
+});
 </script>
 {% endblock %}
