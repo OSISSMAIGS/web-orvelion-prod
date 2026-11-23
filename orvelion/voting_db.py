@@ -97,21 +97,31 @@ def _get_mysql_connection():
 
 class VotingStorage:
     def __init__(self):
-        self._init_db()
+        try:
+            self._init_db()
+        except Exception as e:
+            print(f"[VOTING-DB Boot Info] {e}")
 
     def _get_db(self):
-        """Mengembalikan koneksi aktif database (Prioritas Mutlak: MySQL cPanel JagoanHosting)."""
+        """Mengembalikan koneksi aktif database. Mutlak menggunakan MySQL cPanel JagoanHosting."""
         mysql_conn = _get_mysql_connection()
         if mysql_conn:
             return "mysql", mysql_conn
 
-        # Jika konfigurasi MySQL sudah diset di .env
         user = get_config("DB_USER", "")
         db_name = get_config("DB_NAME", "")
-        if user and db_name:
-            print(f"[VOTING-DB] PERINGATAN: Konfigurasi MySQL ({user} @ {db_name}) aktif tapi gagal tersambung. Memeriksa status...")
+        disable_sqlite = get_config("DISABLE_SQLITE", "1").strip().lower() in ("1", "true", "yes", "on")
 
-        # Fallback cadangan hanya jika MySQL tidak aktif sama sekali
+        # Jika SQLite dinonaktifkan (default produksi agar server JagoanHosting bebas lag)
+        if disable_sqlite:
+            print(f"[VOTING-DB] Gagal membuka koneksi MySQL cPanel JagoanHosting ({user} @ {db_name}). Fallback SQLite dinonaktifkan.")
+            raise ConnectionError(
+                f"Koneksi ke MySQL cPanel JagoanHosting GAGAL untuk user '{user}' dan database '{db_name}'. "
+                "Sistem SQLite dinonaktifkan sepenuhnya agar server tidak mengalami lagging/disk lock. "
+                "Silakan periksa izin ALL PRIVILEGES pada user cPanel dan jalankan 'pip install pymysql cryptography'."
+            )
+
+        # Fallback cadangan hanya aktif jika secara manual di-set DISABLE_SQLITE=0
         sqlite_conn = sqlite3.connect(LOCAL_SQLITE_PATH, timeout=10)
         sqlite_conn.row_factory = sqlite3.Row
         sqlite_conn.execute("PRAGMA busy_timeout=5000")

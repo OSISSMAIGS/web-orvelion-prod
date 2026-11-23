@@ -114,22 +114,18 @@ class NordeliaStorage:
             "counts": {},
             "summary": None,
         }
-        self._init_db()
+        # Inisialisasi SQLite Nordelia dinonaktifkan jika pendaftaran ditutup (event selesai)
+        # agar tidak membuat file .db baru di disk server
+        if get_config("NORDELIA_REGISTRATION_OPEN", "0").strip() == "1" or os.path.exists(self.db_path):
+            self._init_db()
 
     def _connect(self):
-        """Koneksi SQLite dengan mode konkurensi tinggi (WAL).
-
-        Non-fungsional: skema tabel, data, dan hasil query TIDAK berubah.
-        Yang berubah hanya mode jurnal + ketahanan terhadap kuncian:
-        - journal_mode=WAL : penulis tidak lagi memblokir pembaca (dan
-          sebaliknya) — saat event ramai, penyimpanan pendaftaran baru
-          (POST) berjalan paralel dengan pembacaan kuota/statistik (GET).
-        - busy_timeout=5000 : dua penulisan bersamaan otomatis menunggu
-          antre (bukan langsung error "database is locked").
-        - synchronous=NORMAL : aman bersama WAL dan jauh lebih cepat.
-        (queue.py memakai file DB yang sama dan sudah memakai pengaturan
-        identik — kini selaras di seluruh aplikasi.)
+        """Koneksi SQLite. Jika file .db tidak ada dan pendaftaran ditutup,
+        jangan buat file .db baru di disk server (zero disk footprint).
         """
+        if not os.path.exists(self.db_path) and get_config("NORDELIA_REGISTRATION_OPEN", "0").strip() != "1":
+            return None
+
         conn = sqlite3.connect(self.db_path, timeout=10.0)
         try:
             conn.execute("PRAGMA busy_timeout=5000")
@@ -141,6 +137,8 @@ class NordeliaStorage:
     def _init_db(self):
         try:
             conn = self._connect()
+            if not conn:
+                return
             c = conn.cursor()
             c.execute("PRAGMA journal_mode=WAL")
             c.execute("""
@@ -544,6 +542,8 @@ class NordeliaStorage:
         conn = None
         try:
             conn = self._connect()
+            if not conn:
+                return []
             conn.row_factory = sqlite3.Row
             c = conn.cursor()
             if category_id and category_id.lower() != "semua":
@@ -574,13 +574,12 @@ class NordeliaStorage:
         return results
 
     def _get_local_counts_by_cabang(self) -> Dict[str, int]:
-        # Optimasi: agregasi GROUP BY langsung di SQL (hasil identik dengan
-        # menghitung baris satu per satu di Python, tanpa memuat seluruh isi
-        # tabel + parse details_json pada setiap request).
         counts: Dict[str, int] = {}
         conn = None
         try:
             conn = self._connect()
+            if not conn:
+                return {}
             c = conn.cursor()
             grouped = c.execute(
                 "SELECT cabang_id, COUNT(*) FROM registrations "
@@ -611,11 +610,15 @@ class NordeliaStorage:
         return counts
 
     def _get_local_summary_stats(self) -> Dict[str, Any]:
-        # Optimasi: hitungan kategori via GROUP BY + 5 data terakhir via LIMIT,
-        # tanpa memuat seluruh tabel ke memori (hasil identik).
         conn = None
         try:
             conn = self._connect()
+            if not conn:
+                return {
+                    "counts": {"total": 0, "akademik": 0, "bahasa": 0, "seni": 0, "cosplay": 0, "olahraga": 0},
+                    "latest": [],
+                    "total_cabang": len(CABANG_LOMBA),
+                }
             conn.row_factory = sqlite3.Row
             c = conn.cursor()
             grouped = c.execute(
