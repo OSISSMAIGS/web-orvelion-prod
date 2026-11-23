@@ -305,6 +305,22 @@ def api_reset_ballots():
     return jsonify({"ok": ok, "message": msg})
 
 
+@bp.get("/api/voting/db-status")
+def api_voting_db_status():
+    driver, conn = voting_storage._get_db()
+    conn.close()
+    user = get_config("DB_USER", "")
+    db_name = get_config("DB_NAME", "")
+    return jsonify({
+        "ok": True,
+        "driver": driver,
+        "is_jagoan_hosting_mysql": (driver == "mysql"),
+        "database_name": db_name if driver == "mysql" else "voting_eduvella.db",
+        "database_user": user if driver == "mysql" else "local",
+        "message": "Terhubung aktif ke MySQL JagoanHosting" if driver == "mysql" else "Saat ini menggunakan fallback SQLite (pastikan pymysql dan kredensial cPanel sudah aktif)"
+    })
+
+
 @bp.get("/api/voting/check-nis")
 def check_nis():
     nis = (request.args.get("nis") or "").strip()

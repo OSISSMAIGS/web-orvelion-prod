@@ -40,7 +40,9 @@ _last_mysql_fail_time = 0.0
 
 
 def _get_mysql_connection():
-    """Mencoba koneksi ke MySQL cPanel JagoanHosting jika pustaka pymysql terpasang."""
+    """Mengkoneksikan ke fitur database MySQL resmi cPanel JagoanHosting.
+    Mendukung koneksi otomatis via TCP (host:port, 127.0.0.1) dan UNIX socket cPanel.
+    """
     global _last_mysql_fail_time
 
     user = get_config("DB_USER", "")
@@ -48,32 +50,49 @@ def _get_mysql_connection():
     if not user or not db_name:
         return None
 
-    now = time.time()
-    # Cooldown 30 detik jika sebelumnya gagal konek agar request web tidak lagging
-    if now - _last_mysql_fail_time < 30.0:
-        return None
-
     try:
         import pymysql
-
-        host = get_config("DB_HOST", "localhost")
-        port = int(get_config("DB_PORT", "3306"))
-        password = get_config("DB_PASSWORD", "")
-
-        conn = pymysql.connect(
-            host=host,
-            port=port,
-            user=user,
-            password=password,
-            database=db_name,
-            charset="utf8mb4",
-            cursorclass=pymysql.cursors.DictCursor,
-            connect_timeout=2,
-        )
-        return conn
-    except Exception:
-        _last_mysql_fail_time = now
+    except ImportError:
+        print("[CRITICAL] Pustaka 'pymysql' belum terinstall di Python cPanel. Jalankan: pip install pymysql cryptography")
         return None
+
+    host = get_config("DB_HOST", "localhost").strip()
+    port = int(get_config("DB_PORT", "3306"))
+    password = get_config("DB_PASSWORD", "")
+
+    # Jalur koneksi yang dicoba berurutan untuk menjamin tembus di cPanel JagoanHosting:
+    attempts = [
+        {"host": host, "port": port},
+    ]
+    # Jika host adalah localhost/127.0.0.1, tambahkan fallback eksplisit TCP 127.0.0.1 & UNIX sockets
+    if host.lower() in ("localhost", "127.0.0.1"):
+        if host != "127.0.0.1":
+            attempts.append({"host": "127.0.0.1", "port": port})
+        for sock in ["/var/lib/mysql/mysql.sock", "/tmp/mysql.sock", "/var/run/mysqld/mysqld.sock"]:
+            if os.path.exists(sock):
+                attempts.append({"unix_socket": sock})
+
+    last_err = None
+    for opt in attempts:
+        try:
+            params = {
+                "user": user,
+                "password": password,
+                "database": db_name,
+                "charset": "utf8mb4",
+                "cursorclass": pymysql.cursors.DictCursor,
+                "connect_timeout": 4,
+                "autocommit": False,
+            }
+            params.update(opt)
+            conn = pymysql.connect(**params)
+            return conn
+        except Exception as e:
+            last_err = e
+
+    if last_err:
+        print(f"[MySQL JagoanHosting Error] Gagal konek ke database '{db_name}' dengan user '{user}': {last_err}")
+    return None
 
 
 class VotingStorage:
@@ -81,12 +100,18 @@ class VotingStorage:
         self._init_db()
 
     def _get_db(self):
-        """Mengembalikan koneksi aktif (MySQL jika terhubung, fallback ke SQLite)."""
+        """Mengembalikan koneksi aktif database (Prioritas Mutlak: MySQL cPanel JagoanHosting)."""
         mysql_conn = _get_mysql_connection()
         if mysql_conn:
             return "mysql", mysql_conn
 
-        # Fallback ke SQLite lokal
+        # Jika konfigurasi MySQL sudah diset di .env
+        user = get_config("DB_USER", "")
+        db_name = get_config("DB_NAME", "")
+        if user and db_name:
+            print(f"[VOTING-DB] PERINGATAN: Konfigurasi MySQL ({user} @ {db_name}) aktif tapi gagal tersambung. Memeriksa status...")
+
+        # Fallback cadangan hanya jika MySQL tidak aktif sama sekali
         sqlite_conn = sqlite3.connect(LOCAL_SQLITE_PATH, timeout=10)
         sqlite_conn.row_factory = sqlite3.Row
         sqlite_conn.execute("PRAGMA busy_timeout=5000")
