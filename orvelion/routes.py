@@ -227,6 +227,21 @@ def voting():
     )
 
 
+@bp.get("/voting/pemenang")
+@bp.get("/eduvella/pemenang")
+@bp.get("/event/voting/pemenang")
+def voting_winners():
+    from orvelion.voting_data import OFFICIAL_WINNERS_2026
+    return render_template(
+        "voting_winners.html",
+        **_ctx(
+            active_page="event",
+            winners=OFFICIAL_WINNERS_2026,
+            total_ballots=377,
+        ),
+    )
+
+
 RESULTS_PASSWORD = get_config("VOTING_RESULTS_PASSWORD", "EduvellaVoting").strip()
 
 

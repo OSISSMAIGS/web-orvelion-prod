@@ -963,28 +963,36 @@ class VotingStorage:
                     ORDER BY vote_count DESC, teacher_name ASC
                 """
 
+                raw_rows = []
                 if driver == "mysql":
                     with conn.cursor() as cur:
                         cur.execute(query)
-                        rows = cur.fetchall()
-                        for r in rows:
-                            cnt = int(r["vote_count"])
-                            teacher_tallies.append({
-                                "name": r["teacher_name"],
-                                "count": cnt,
-                            })
-                            category_total += cnt
+                        raw_rows = cur.fetchall()
                 else:
                     cur = conn.cursor()
                     cur.execute(query)
-                    rows = cur.fetchall()
-                    for r in rows:
-                        cnt = int(r[1])
-                        teacher_tallies.append({
-                            "name": r[0],
-                            "count": cnt,
-                        })
-                        category_total += cnt
+                    raw_rows = cur.fetchall()
+
+                # Gabungkan variasi nama guru dengan gelar yang berbeda ke nama kanonikal
+                try:
+                    from orvelion.voting_data import CANONICAL_TEACHER_MAP
+                except ImportError:
+                    CANONICAL_TEACHER_MAP = {}
+
+                merged_counts = {}
+                for r in raw_rows:
+                    raw_name = (r["teacher_name"] if driver == "mysql" else r[0]) or ""
+                    canonical = CANONICAL_TEACHER_MAP.get(raw_name, raw_name).strip()
+                    cnt = int(r["vote_count"] if driver == "mysql" else r[1])
+                    merged_counts[canonical] = merged_counts.get(canonical, 0) + cnt
+
+                # Urutkan berdasarkan perolehan suara terbanyak
+                for name, cnt in sorted(merged_counts.items(), key=lambda x: (-x[1], x[0])):
+                    teacher_tallies.append({
+                        "name": name,
+                        "count": cnt,
+                    })
+                    category_total += cnt
 
                 # Hitung persentase dan ranking
                 ranked_results = []

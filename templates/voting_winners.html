@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block title %}Pemenang Nominasi Guru Eduvella 2026 &bull; OSIS SMA IGS{% endblock %}
+
+{% block meta_description %}Pengumuman Resmi Pemenang 10 Kategori Nominasi Guru Terpilih pada Acara Hari Guru Eduvella 2026 Ignatius Global School Palembang.{% endblock %}
+
+{% block og_title %}Pemenang Nominasi Guru Eduvella 2026 &bull; OSIS SMA IGS{% endblock %}
+{% block og_description %}Inilah 10 guru Ignatius Global School terpilih sebagai pemenang resmi nominasi Hari Guru Eduvella 2026.{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 relative z-10">
+
+  <!-- Breadcrumbs -->
+  <div class="flex items-center gap-2 text-xs text-stone-400 mb-6 flex-wrap">
+    <a href="/" class="hover:text-white transition-colors">Beranda</a>
+    <span class="text-stone-500">/</span>
+    <a href="/event" class="hover:text-white transition-colors flex items-center gap-1.5">
+      <span>Halaman Event</span>
+    </a>
+    <span class="text-stone-500">/</span>
+    <a href="/voting" class="hover:text-white transition-colors">Eduvella 2026</a>
+    <span class="text-stone-500">/</span>
+    <span class="text-[#FDE68A] font-extrabold px-3 py-1 rounded-full bg-[#F5D061]/15 border border-[#F5D061]/35 text-[11px] uppercase tracking-wider">
+      Pemenang Nominasi
+    </span>
+  </div>
+
+  <!-- OFFICIAL EVENT BANNER COVER (EDUVELLA) -->
+  <div class="relative w-full h-48 sm:h-64 md:h-80 rounded-3xl overflow-hidden border border-[#F5D061]/40 mb-6 shadow-2xl bg-black/60 group">
+    <img src="{{ url_for('static', filename='images/eduvella_banner.jpg') }}"
+         alt="Official Banner Eduvella 2026"
+         class="w-full h-full object-cover object-center filter brightness-95 transform group-hover:scale-102 transition-transform duration-700" />
+    <div class="absolute inset-0 bg-gradient-to-t from-[#0B1120] via-black/20 to-transparent"></div>
+    <div class="absolute top-3.5 left-4 sm:left-6 flex items-center gap-2">
+      <span class="px-3.5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#0B1120]/85 backdrop-blur-md text-[#FDE68A] border border-[#F5D061]/40 shadow-lg flex items-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#F5D061] animate-ping"></span>
+        Pengumuman Pemenang Resmi &bull; Eduvella 2026
+      </span>
+    </div>
+  </div>
+
+  <!-- Header Card -->
+  <div class="relative rounded-3xl p-6 sm:p-10 border overflow-hidden backdrop-blur-xl mb-8 shadow-2xl"
+       style="background: linear-gradient(135deg, rgba(11,17,32,0.96) 0%, rgba(18,28,52,0.92) 50%, rgba(15,23,42,0.98) 100%); border-color: rgba(245, 208, 97, 0.4); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 45px rgba(245, 208, 97, 0.15);">
+    
+    <!-- Top Decorative Line -->
+    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#F5D061] to-transparent opacity-80"></div>
+
+    <div class="space-y-4 max-w-3xl">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-[#F5D061]/15 text-[#FDE68A] border border-[#F5D061]/40 shadow-sm">
+        <span>🏆</span>
+        Hasil Akhir Sah &bull; Hari Guru Eduvella 2026
+      </div>
+
+      <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+        Pemenang Nominasi Guru
+      </h1>
+
+      <p class="text-sm sm:text-base text-stone-300 leading-relaxed">
+        Selamat kepada bapak dan ibu guru Ignatius Global School yang terpilih sebagai pemenang utama pada 10 kategori nominasi Eduvella 2026 berdasarkan hasil voting resmi seluruh siswa-siswi IGS.
+      </p>
+
+      <div class="flex flex-wrap items-center gap-3 pt-2 text-xs">
+        <div class="px-3.5 py-1.5 rounded-xl bg-black/60 border border-[#F5D061]/40 text-[#FDE68A] flex items-center gap-2 font-bold">
+          <span>🏆</span>
+          <span>10 Pemenang Tunggal Terpilih</span>
+        </div>
+        <div class="px-3.5 py-1.5 rounded-xl bg-black/60 border border-white/10 text-stone-300 flex items-center gap-2">
+          <span class="text-[#38BDF8] font-bold">{{ total_ballots }}</span> Suara Masuk
+        </div>
+        <div class="px-3.5 py-1.5 rounded-xl bg-black/60 border border-emerald-500/30 text-emerald-300 flex items-center gap-2">
+          <svg class="w-3.5 h-3.5 text-emerald-400"><use href="#i-shield"></use></svg>
+          Hasil Suara Terverifikasi
+        </div>
+        <a href="/voting" class="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-stone-300 hover:text-white font-bold flex items-center gap-1.5 transition-colors">
+          <span>&larr; Halaman Voting</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 WINNER CARDS -->
+  <div class="space-y-6">
+    {% for nom in winners %}
+      <div class="rounded-3xl p-6 sm:p-8 border backdrop-blur-xl relative transition-all duration-300 hover:border-[#F5D061]/60"
+           style="background: linear-gradient(145deg, rgba(15, 23, 42, 0.94) 0%, rgba(22, 34, 62, 0.88) 100%); border-color: rgba(245, 208, 97, 0.28); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        
+        <!-- Header Info -->
+        <div class="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-5">
+          <div class="flex items-start gap-4">
+            <!-- Number & Icon Badge -->
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 border shadow-lg text-2xl"
+                 style="background: rgba(245, 208, 97, 0.15); border-color: rgba(245, 208, 97, 0.4);">
+              {{ nom.icon }}
+            </div>
+            
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#F5D061]/20 text-[#FDE68A] border border-[#F5D061]/35">
+                  Nominasi {{ nom.number }}
+                </span>
+                <span class="text-[10px] font-bold text-stone-400">
+                  {{ nom.badge }}
+                </span>
+              </div>
+              <h3 class="text-xl sm:text-2xl font-black text-white tracking-tight">
+                {{ nom.title }}
+              </h3>
+              <p class="text-xs text-[#38BDF8] font-semibold italic">
+                {{ nom.subtitle }}
+              </p>
+              <p class="text-xs text-stone-300 pt-1 leading-relaxed">
+                {{ nom.description }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Trophy badge pill -->
+          <div class="self-start md:self-auto px-3.5 py-1.5 rounded-full text-xs font-black bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-[#FDE68A] border border-[#F5D061]/50 flex items-center gap-1.5 shadow-sm">
+            <span>🏆</span>
+            <span>Juara 1 Terpilih</span>
+          </div>
+        </div>
+
+        <!-- WINNER SHOWCASE BOX (SINGLE WINNER) -->
+        <div class="mt-4 p-5 sm:p-6 rounded-2xl border border-[#F5D061]/50 bg-gradient-to-r from-amber-500/15 via-[#F5D061]/10 to-transparent shadow-[0_10px_25px_rgba(245,208,97,0.12)] flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative overflow-hidden">
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#FDE68A] via-[#F5D061] to-[#E5B869] text-[#0B1120] font-black flex items-center justify-center text-3xl shadow-lg ring-2 ring-[#FDE68A]/60 shrink-0">
+              🏆
+            </div>
+            <div class="space-y-1">
+              <div class="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-[#FDE68A]">
+                <span>✨ Pemenang Resmi Terpilih</span>
+              </div>
+              <h4 class="text-xl sm:text-2xl font-black text-white tracking-tight">
+                {{ nom.winner_name }}
+              </h4>
+              <p class="text-xs text-stone-300">
+                {{ nom.note }}
+              </p>
+            </div>
+          </div>
+          
+          <div class="shrink-0 flex sm:flex-col items-end justify-between sm:justify-center border-t sm:border-t-0 sm:border-l border-white/10 pt-3 sm:pt-0 sm:pl-6">
+            <span class="text-[10px] uppercase font-bold tracking-wider text-stone-400">Perolehan Suara</span>
+            <span class="text-2xl sm:text-3xl font-black text-[#FDE68A]">{{ nom.votes }} <span class="text-xs font-normal text-stone-300">Suara</span></span>
+            <span class="text-[11px] font-bold text-amber-300">({{ nom.percentage }}% dari total)</span>
+          </div>
+        </div>
+
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- CONGRATULATIONS & NAVIGATION FOOTER -->
+  <div class="mt-10 rounded-3xl p-6 sm:p-8 border border-[#F5D061]/40 backdrop-blur-xl bg-black/70 shadow-2xl text-center space-y-5">
+    <div class="max-w-xl mx-auto space-y-2">
+      <div class="w-12 h-12 rounded-full mx-auto flex items-center justify-center bg-gradient-to-tr from-[#FDE68A] to-[#F5D061] text-[#0B1120] text-2xl font-black shadow-lg">
+        🎉
+      </div>
+      <h3 class="text-xl sm:text-2xl font-black text-white">Terima Kasih Atas Partisipasi Anda!</h3>
+      <p class="text-xs sm:text-sm text-stone-300 leading-relaxed">
+        OSIS SMA Ignatius Global School Kabinet Orvelion 2026/2027 mengucapkan terima kasih sebesar-besarnya kepada seluruh siswa yang telah menyalurkan suaranya serta kepada seluruh bapak dan ibu guru atas dedikasi luar biasa yang tak terhingga.
+      </p>
+    </div>
+
+    <div class="pt-2 flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
+      <a href="/event" class="w-full py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all text-center">
+        &larr; Kembali ke Event
+      </a>
+      <a href="/voting/hasil" class="w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-wider text-[#0B1120] bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-lg transition-all text-center">
+        📊 Grafik & Rekapitulasi (Panitia) &rarr;
+      </a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

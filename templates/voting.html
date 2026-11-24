@@ -68,9 +68,8 @@
 
     <div class="space-y-4 max-w-3xl">
       <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm">
-        <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-        <svg class="w-3.5 h-3.5 text-amber-300"><use href="#i-sparkles"></use></svg>
-        Voting Resmi Ditutup &bull; Eduvella 2026
+        <span>🏆</span>
+        Pemenang Resmi Diumumkan &bull; Eduvella 2026
       </div>
 
       <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
@@ -78,8 +77,15 @@
       </h1>
 
       <p class="text-sm sm:text-base text-stone-300 leading-relaxed">
-        Periode pengumpulan suara Hari Guru Eduvella 2026 telah resmi berakhir. Terima kasih atas partisipasi aktif seluruh siswa-siswi IGS.
+        Periode voting telah berakhir dan rekapitulasi suara telah selesai. Saksikan daftar 10 guru pemenang Eduvella 2026.
       </p>
+
+      <div class="pt-1">
+        <a href="/voting/pemenang"
+           class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-black text-xs uppercase tracking-wider text-[#0B1120] bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-md transition-all hover:scale-105">
+          <span>🏆 Buka Halaman Pemenang &rarr;</span>
+        </a>
+      </div>
 
       <div class="flex flex-wrap items-center gap-3 pt-2 text-xs">
         <div class="px-3.5 py-1.5 rounded-xl bg-black/60 border border-white/10 text-stone-300 flex items-center gap-2">
@@ -279,21 +285,21 @@
     <div class="rounded-3xl p-6 sm:p-8 border border-[#F5D061]/40 backdrop-blur-xl bg-black/70 shadow-2xl text-center space-y-4 relative z-20">
       <div class="max-w-xl mx-auto space-y-2">
         <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40">
-          <span>⏳ Masa Voting Resmi Berakhir</span>
+          <span>🏆 Pengumuman Resmi Pemenang Telah Dibuka</span>
         </div>
-        <h3 class="text-xl sm:text-2xl font-black text-white">Sudah Selesai Mengisi 10 Nominasi?</h3>
+        <h3 class="text-xl sm:text-2xl font-black text-white">Masa Voting Telah Selesai</h3>
         <p class="text-xs text-stone-300">
-          Masa voting telah usai, nantikan hasilnya!
+          Rekapitulasi perolehan suara resmi telah rampung. Saksikan daftar 10 guru pemenang Eduvella 2026 melalui tombol di bawah ini:
         </p>
       </div>
 
       <div class="pt-2 max-w-md mx-auto">
-        <button type="button"
-                id="btn-submit-vote"
-                class="w-full py-4 rounded-2xl font-black text-sm uppercase tracking-wider text-[#0B1120] bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-[0_12px_30px_rgba(245,208,97,0.35)] transition-all hover:scale-[1.02] flex items-center justify-center gap-2 cursor-pointer">
-          <span>Kirim Seluruh Pilihan Voting Sekarang</span>
+        <a href="/voting/pemenang"
+           id="btn-submit-vote"
+           class="w-full py-4 rounded-2xl font-black text-sm uppercase tracking-wider text-[#0B1120] bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-[0_12px_30px_rgba(245,208,97,0.35)] transition-all hover:scale-[1.02] flex items-center justify-center gap-2 text-center cursor-pointer">
+          <span>🏆 Lihat Pengumuman Pemenang Voting</span>
           <span>&rarr;</span>
-        </button>
+        </a>
       </div>
 
       <div id="submit-alert" class="hidden max-w-md mx-auto p-3 rounded-xl text-xs font-bold"></div>
@@ -704,15 +710,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
   if (btnSubmit) {
     btnSubmit.addEventListener("click", function(e) {
-      e.preventDefault();
-      showVotingClosedPopup();
+      window.location.href = "/voting/pemenang";
     });
   }
 
   if (votingForm) {
     votingForm.addEventListener("submit", function(e) {
       e.preventDefault();
-      showVotingClosedPopup();
+      window.location.href = "/voting/pemenang";
     });
   }
 
