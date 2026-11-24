@@ -205,13 +205,19 @@ def voting():
     if google_user and not has_voted:
         has_voted, voted_at = voting_storage.check_email_voted(google_user.get("email", ""))
 
+    stats = {"total_votes": 0, "total_students": 0, "verified_coupons": 0}
+    try:
+        stats = voting_storage.get_stats()
+    except Exception as e:
+        print(f"[VOTING-STATS] Info: {e}")
+
     return render_template(
         "voting.html",
         **_ctx(
             active_page="voting",
             nominations=NOMINATIONS,
             teachers=TEACHERS,
-            stats=voting_storage.get_stats(),
+            stats=stats,
             google_client_id=get_config("GOOGLE_CLIENT_ID", ""),
             school_domain=SCHOOL_DOMAIN,
             current_user=google_user,
@@ -441,6 +447,13 @@ def verify_voting_coupon():
 
 @bp.post("/api/voting/submit")
 def submit_vote():
+    # Periode voting telah resmi ditutup
+    return jsonify({
+        "ok": False,
+        "closed": True,
+        "message": "Masa voting telah usai, nantikan hasilnya!"
+    }), 403
+
     data = request.get_json(silent=True) or {}
     token = data.get("token", "")
     votes = data.get("votes", {})

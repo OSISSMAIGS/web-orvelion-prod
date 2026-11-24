@@ -67,10 +67,10 @@
     <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#F5D061] to-transparent opacity-80"></div>
 
     <div class="space-y-4 max-w-3xl">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-[#F5D061]/15 text-[#FDE68A] border border-[#F5D061]/40 shadow-sm">
-        <span class="w-2 h-2 rounded-full bg-[#F5D061] animate-ping"></span>
-        <svg class="w-3.5 h-3.5 text-[#F5D061]"><use href="#i-sparkles"></use></svg>
-        Eduvella 2026 &bull; Hari Guru IGS
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+        <svg class="w-3.5 h-3.5 text-amber-300"><use href="#i-sparkles"></use></svg>
+        Voting Resmi Ditutup &bull; Eduvella 2026
       </div>
 
       <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
@@ -78,7 +78,7 @@
       </h1>
 
       <p class="text-sm sm:text-base text-stone-300 leading-relaxed">
-        Pilihlah 1 guru favorit Anda untuk masing-masing kategori di bawah ini. Cukup ketik nama Anda sebelum mengirim pilihan.
+        Periode pengumpulan suara Hari Guru Eduvella 2026 telah resmi berakhir. Terima kasih atas partisipasi aktif seluruh siswa-siswi IGS.
       </p>
 
       <div class="flex flex-wrap items-center gap-3 pt-2 text-xs">
@@ -278,16 +278,19 @@
     <!-- FINAL SUBMISSION BAR -->
     <div class="rounded-3xl p-6 sm:p-8 border border-[#F5D061]/40 backdrop-blur-xl bg-black/70 shadow-2xl text-center space-y-4 relative z-20">
       <div class="max-w-xl mx-auto space-y-2">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40">
+          <span>⏳ Masa Voting Resmi Berakhir</span>
+        </div>
         <h3 class="text-xl sm:text-2xl font-black text-white">Sudah Selesai Mengisi 10 Nominasi?</h3>
         <p class="text-xs text-stone-300">
-          Pastikan nama Anda sudah terisi di bagian atas. Setiap orang hanya dapat memberikan suara 1 kali.
+          Masa voting telah usai, nantikan hasilnya!
         </p>
       </div>
 
       <div class="pt-2 max-w-md mx-auto">
-        <button type="submit"
+        <button type="button"
                 id="btn-submit-vote"
-                class="w-full py-4 rounded-2xl font-black text-sm uppercase tracking-wider text-[#0B1120] bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-[0_12px_30px_rgba(245,208,97,0.35)] transition-all hover:scale-[1.02] flex items-center justify-center gap-2">
+                class="w-full py-4 rounded-2xl font-black text-sm uppercase tracking-wider text-[#0B1120] bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-[0_12px_30px_rgba(245,208,97,0.35)] transition-all hover:scale-[1.02] flex items-center justify-center gap-2 cursor-pointer">
           <span>Kirim Seluruh Pilihan Voting Sekarang</span>
           <span>&rarr;</span>
         </button>
@@ -297,6 +300,38 @@
     </div>
   </form>
 
+</div>
+
+<!-- VOTING CLOSED POP-UP MODAL -->
+<div id="modal-voting-closed" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md transition-opacity">
+  <div class="relative w-full max-w-md rounded-3xl p-6 sm:p-8 bg-[#0F172A] border border-[#F5D061]/50 shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_40px_rgba(245,208,97,0.2)] text-center space-y-5 animate-in fade-in zoom-in duration-200">
+    <div class="w-16 h-16 rounded-full mx-auto flex items-center justify-center bg-gradient-to-tr from-[#FDE68A] to-[#F5D061] text-[#0B1120] text-3xl font-black shadow-lg">
+      ⏳
+    </div>
+
+    <div class="space-y-2">
+      <span class="inline-block text-[10px] font-black uppercase tracking-wider px-3.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">
+        Informasi Panitia Eduvella 2026
+      </span>
+      <h3 class="text-2xl font-black text-white leading-tight">
+        Masa voting telah usai, nantikan hasilnya!
+      </h3>
+      <p class="text-xs text-stone-300 leading-relaxed pt-1">
+        Pengumpulan suara apresiasi untuk 10 nominasi guru Ignatius Global School telah resmi ditutup. Terima kasih atas partisipasi seluruh siswa-siswi IGS. Rekapitulasi suara sedang diproses.
+      </p>
+    </div>
+
+    <div class="pt-2 flex flex-col gap-2.5">
+      <button type="button"
+              id="btn-close-modal-closed"
+              class="w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-wider text-[#0B1120] bg-gradient-to-r from-[#FDE68A] via-[#F5D061] to-[#E5B869] hover:brightness-110 shadow-lg transition-all cursor-pointer">
+        Tutup Pop-Up &times;
+      </button>
+      <a href="/event" class="w-full py-3 rounded-xl font-bold text-xs uppercase tracking-wider bg-white/10 hover:bg-white/20 text-stone-300 hover:text-white border border-white/15 transition-all text-center">
+        Kembali ke Halaman Event &rarr;
+      </a>
+    </div>
+  </div>
 </div>
 
 <!-- SUCCESS MODAL -->
@@ -445,9 +480,8 @@ document.addEventListener("DOMContentLoaded", function() {
       inputVoterName.readOnly = true;
     }
     if (btnSubmit) {
-      btnSubmit.disabled = true;
-      btnSubmit.classList.add("opacity-50", "cursor-not-allowed");
-      btnSubmit.innerText = "Anda Sudah Pernah Mengirimkan Suara (1 Orang = 1x Vote)";
+      btnSubmit.disabled = false;
+      btnSubmit.classList.remove("opacity-50", "cursor-not-allowed");
     }
   }
 
@@ -467,16 +501,8 @@ document.addEventListener("DOMContentLoaded", function() {
           const res = await resp.json();
           if (res.has_voted) {
             showVoterAlert(`⚠️ Nama '${val}' sudah pernah digunakan untuk voting pada ${res.voted_at || 'sebelumnya'}. Setiap siswa hanya berhak memilih 1 kali!`, "error");
-            btnSubmit.disabled = true;
-            btnSubmit.classList.add("opacity-50", "cursor-not-allowed");
-            btnSubmit.innerText = "Nama Sudah Digunakan untuk Voting (1 Orang = 1x Vote)";
           } else {
             if (voterStatusAlert) voterStatusAlert.classList.add("hidden");
-            if (!userHasVoted) {
-              btnSubmit.disabled = false;
-              btnSubmit.classList.remove("opacity-50", "cursor-not-allowed");
-              btnSubmit.innerText = "Kirim Seluruh Pilihan Voting Sekarang";
-            }
           }
         } catch (e) {}
       }, 400);
@@ -664,110 +690,51 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("progress-bar").style.width = `${percent}%`;
   }
 
-  // 4. Form Submit
+  // 4. Pop-up Masa Voting Telah Usai
   const votingForm = document.getElementById("voting-form");
   const submitAlert = document.getElementById("submit-alert");
-  let isSubmittingVote = false;
 
-  votingForm.addEventListener("submit", async function(e) {
-    e.preventDefault();
-    if (isSubmittingVote) return;
-
-    const voterName = (inputVoterName ? inputVoterName.value : "").trim();
-    if (!voterName || voterName.length < 2) {
-      showSubmitAlert("Silakan ketik nama lengkap Anda pada kolom nama di atas sebelum mengirimkan suara!", "error");
-      if (inputVoterName) inputVoterName.focus();
-      window.scrollTo({ top: document.getElementById("auth-section").offsetTop - 100, behavior: "smooth" });
-      return;
+  function showVotingClosedPopup() {
+    const modal = document.getElementById("modal-voting-closed");
+    if (modal) {
+      modal.classList.remove("hidden");
     }
+    showSubmitAlert("Masa voting telah usai, nantikan hasilnya!", "error");
+  }
 
-    if (userHasVoted) {
-      showSubmitAlert("Anda / Perangkat ini sudah pernah mengirimkan suara. Setiap orang hanya dapat memilih 1 kali.", "error");
-      return;
-    }
-
-    // Check all 10 nominations
-    const votes = {};
-    let missingNom = null;
-    let missingNomId = null;
-    nominations.forEach(function(nom) {
-      const val = document.getElementById("input-nom-" + nom.id).value.trim();
-      if (!val && !missingNom) {
-        missingNom = nom.title;
-        missingNomId = nom.id;
-      }
-      votes[nom.id] = val;
+  if (btnSubmit) {
+    btnSubmit.addEventListener("click", function(e) {
+      e.preventDefault();
+      showVotingClosedPopup();
     });
+  }
 
-    if (missingNom) {
-      showSubmitAlert(`Anda belum memilih guru untuk '${missingNom}'. Mohon lengkapi seluruh 10 nominasi!`, "error");
-      if (missingNomId) {
-        const card = document.getElementById("nom-card-" + missingNomId);
-        if (card) {
-          card.scrollIntoView({ behavior: "smooth", block: "center" });
-          const searchInp = document.getElementById("search-input-" + missingNomId);
-          if (searchInp) searchInp.focus();
-        }
+  if (votingForm) {
+    votingForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      showVotingClosedPopup();
+    });
+  }
+
+  const btnCloseClosedModal = document.getElementById("btn-close-modal-closed");
+  if (btnCloseClosedModal) {
+    btnCloseClosedModal.addEventListener("click", function() {
+      const modal = document.getElementById("modal-voting-closed");
+      if (modal) modal.classList.add("hidden");
+    });
+  }
+
+  const modalVotingClosed = document.getElementById("modal-voting-closed");
+  if (modalVotingClosed) {
+    modalVotingClosed.addEventListener("click", function(e) {
+      if (e.target === modalVotingClosed) {
+        modalVotingClosed.classList.add("hidden");
       }
-      return;
-    }
-
-    isSubmittingVote = true;
-    btnSubmit.disabled = true;
-    btnSubmit.innerText = "Merekam Suara ke Database Resmi...";
-
-    try {
-      const payload = {
-        name: voterName,
-        votes: votes,
-        device_fp: getDeviceFingerprint()
-      };
-
-      const resp = await fetch("/api/voting/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-
-      const res = await resp.json();
-      if (res.ok) {
-        userHasVoted = true;
-        try {
-          localStorage.setItem("eduvella_voted_flag", "true");
-          localStorage.setItem("eduvella_voted_user", voterName);
-        } catch(e) {}
-        if (inputVoterName) inputVoterName.readOnly = true;
-        btnSubmit.disabled = true;
-        btnSubmit.classList.add("opacity-50", "cursor-not-allowed");
-        btnSubmit.innerText = "Suara Anda Telah Berhasil Terkirim (1 Orang = 1x Vote)";
-        showVoterAlert(`✓ Suara Anda atas nama ${voterName} telah berhasil direkam!`, "success");
-        document.getElementById("modal-success").classList.remove("hidden");
-      } else {
-        if (res.already_voted) {
-          userHasVoted = true;
-          try {
-            localStorage.setItem("eduvella_voted_flag", "true");
-            localStorage.setItem("eduvella_voted_user", voterName);
-          } catch(e) {}
-          btnSubmit.disabled = true;
-          btnSubmit.classList.add("opacity-50", "cursor-not-allowed");
-          btnSubmit.innerText = "Anda Sudah Pernah Mengirimkan Suara (1 Orang = 1x Vote)";
-        } else {
-          isSubmittingVote = false;
-          btnSubmit.disabled = false;
-          btnSubmit.innerText = "Kirim Seluruh Pilihan Voting Sekarang";
-        }
-        showSubmitAlert(res.message || "Gagal merekam suara.", "error");
-      }
-    } catch (err) {
-      isSubmittingVote = false;
-      showSubmitAlert("Terjadi kesalahan jaringan: " + err.message, "error");
-      btnSubmit.disabled = false;
-      btnSubmit.innerText = "Kirim Seluruh Pilihan Voting Sekarang";
-    }
-  });
+    });
+  }
 
   function showSubmitAlert(msg, type) {
+    if (!submitAlert) return;
     submitAlert.classList.remove("hidden", "bg-emerald-950/70", "text-emerald-300", "border-emerald-500/50", "bg-rose-950/70", "text-rose-300", "border-rose-500/50", "border");
     if (type === "success") {
       submitAlert.classList.add("bg-emerald-950/70", "text-emerald-300", "border-emerald-500/50", "border");
