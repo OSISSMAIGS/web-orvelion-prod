@@ -121,10 +121,6 @@
           <span>Buka Akses Hasil &rarr;</span>
         </button>
       </form>
-
-      <div class="pt-4 border-t border-white/10 text-[11px] text-stone-400">
-        Password khusus untuk panitia: <code class="text-[#FDE68A] font-mono px-2 py-0.5 rounded bg-black/50 border border-white/10">EduvellaVoting</code>
-      </div>
     </div>
   </div>
 
@@ -634,7 +630,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const resp = await fetch("/api/voting/reset-ballots", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ password: "EduvellaVoting" })
+          body: JSON.stringify({})
         });
         const res = await resp.json();
         alert(res.message);
